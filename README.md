@@ -3,6 +3,21 @@
 
 ## Getting Started
 
+### 初期インストール
+
+#### Node.jsのインストール
+
+#### pnpmのインストール
 ```
-npm start
+npm install -g pnpm
+```
+
+#### Dependenciesのインストール
+```
+pnpm install
+```
+
+### 実行
+```
+pnpm start
 ```
