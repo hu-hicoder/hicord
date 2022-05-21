@@ -2,12 +2,13 @@
   "name": "hicord",
   "version": "1.0.0",
   "description": "",
+  "author": "HiCoder",
+  "license": "MIT OR Apache-2.0",
+  "private": true,
+  "main": "main.js",
   "scripts": {
     "start": "electron ."
   },
-  "main": "main.js",
-  "author": "HiCoder",
-  "license": "MIT OR Apache-2.0",
   "devDependencies": {
     "electron": "^18.2.4"
   }
