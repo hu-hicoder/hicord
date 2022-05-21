@@ -10,8 +10,15 @@ Hicordは、「位置」の概念を取り入れた新感覚のビデオチャ�
 #### Node.jsのインストール
 
 #### pnpmのインストール
+
+npmを使用している人
 ```
 npm install -g pnpm
+```
+
+[volta](https://volta.sh/) を使用している人
+```
+volta install pnpm@latest
 ```
 
 #### Dependenciesのインストール
@@ -24,6 +31,7 @@ pnpm install
 pnpm dev
 ```
 
+Electronが立ち上がったらOKです
 
 ### Available commands
 Available commands:
