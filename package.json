@@ -1,7 +1,9 @@
 {
   "private": true,
+  "name": "hicord",
+  "author": "HiCoder",
+  "version": "0.1.0",
   "main": "main/index.js",
-  "productName": "ElectronTypescriptNext",
   "scripts": {
     "clean": "rimraf dist main renderer/out renderer/.next",
     "dev": "npm run build-electron && electron .",
