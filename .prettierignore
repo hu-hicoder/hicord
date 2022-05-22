@@ -2,5 +2,7 @@ node_modules
 # Ignore artifacts:
 build
 coverage
-main
-renderer/.next
+/main
+/renderer/.next
+/dist
+/renderer/out

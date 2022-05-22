@@ -6,10 +6,9 @@ module.exports = {
   },
   extends: [
     'eslint:recommended',
-    'plugin:react/recommended',
+    'plugin:@next/next/recommended',
     'plugin:@typescript-eslint/recommended',
     'prettier',
-    'plugin:prettier/recommended',
   ],
   parser: '@typescript-eslint/parser',
   parserOptions: {
@@ -19,17 +18,25 @@ module.exports = {
     ecmaVersion: 'latest',
     sourceType: 'module',
   },
-  plugins: ['react', '@typescript-eslint'],
+  plugins: ['@typescript-eslint'],
   rules: {
-    // indent: ['error', 2],
     'linebreak-style': ['error', 'unix'],
-    quotes: ['error', 'single'],
-    semi: ['error', 'never', { beforeStatementContinuationChars: 'never' }],
+    quotes: 'off',
+    '@typescript-eslint/quotes': ['error', 'single'],
+    semi: 'off',
+    '@typescript-eslint/semi': [
+      'error',
+      'never',
+      { beforeStatementContinuationChars: 'never' },
+    ],
     'react/react-in-jsx-scope': 'off',
   },
   settings: {
     react: {
       version: 'detect',
+    },
+    next: {
+      rootDir: 'renderer/',
     },
   },
 }
