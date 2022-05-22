@@ -15,14 +15,12 @@ Hicordは、「位置」の概念を取り入れた新感覚のビデオチャ�
 ```bash
 npm i -g corepack # Node.js < 16.10 の場合
 corepack enable
-yarn set version stable
 ```
 
 [Volta](https://volta.sh/) を使用する場合
 
 ```bash
 volta install yarn
-yarn set version stable
 ```
 
 #### Dependenciesのインストール
