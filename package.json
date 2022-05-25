@@ -18,7 +18,8 @@
     "electron-is-dev": "^1.1.0",
     "electron-next": "^3.1.5",
     "react": "^17.0.2",
-    "react-dom": "^17.0.2"
+    "react-dom": "^17.0.2",
+    "skyway-js": "^4.4.4"
   },
   "devDependencies": {
     "@types/node": "^14.14.6",

@@ -1,6 +1,7 @@
 import { useEffect } from 'react'
 import Link from 'next/link'
 import Layout from '../components/Layout'
+import { Room } from '../components/Room'
 
 const IndexPage = () => {
   useEffect(() => {
@@ -23,6 +24,7 @@ const IndexPage = () => {
       <h1>Hello Next.js 👋</h1>
       <button onClick={onSayHiClick}>Say hi to electron</button>
       <p>
+        <Room roomId="test"></Room>
         <Link href="/about">
           <a>About</a>
         </Link>
