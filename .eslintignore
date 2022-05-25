@@ -1,9 +1,3 @@
-# next.js
-/renderer/.next/
-/renderer/out/
-
 # production
-/main
-/dist
 
 /node_modules

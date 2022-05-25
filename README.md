@@ -1,6 +1,6 @@
 # Hicord
 
-Hicordは、「位置」の概念を取り入れた新感覚のビデオチャットツールです。
+Hicord は、「位置」の概念を取り入れた新感覚のビデオチャットツールです。
 
 使いやすさを追及した様々な新機能を備えています。
 
@@ -8,9 +8,9 @@ Hicordは、「位置」の概念を取り入れた新感覚のビデオチャ�
 
 ### 初期インストール
 
-#### Node.jsのインストール
+#### Node.js のインストール
 
-#### Yarnのインストール
+#### Yarn のインストール
 
 ```bash
 npm i -g corepack # Node.js < 16.10 の場合
@@ -23,7 +23,7 @@ corepack enable
 volta install yarn
 ```
 
-#### Dependenciesのインストール
+#### Dependencies のインストール
 
 ```bash
 yarn install
@@ -32,20 +32,13 @@ yarn install
 ### 実行
 
 ```bash
-yarn dev
+
 ```
 
-Electronが立ち上がったらOKです
+### スクリプト
 
-### Available commands
-
-Available commands:
+使用可能なスクリプト:
 
 ```bash
-"build-renderer": build and transpile Next.js layer
-"build-electron": transpile electron layer
-"build": build both layers
-"dev": start dev version
-"dist": create production electron build
-"type-check": check TypeScript in project
+
 ```
