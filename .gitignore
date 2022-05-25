@@ -8,14 +8,6 @@
 # testing
 /coverage
 
-# next.js
-/renderer/.next/
-/renderer/out/
-
-# production
-/main
-/dist
-
 # misc
 .DS_Store
 *.pem
