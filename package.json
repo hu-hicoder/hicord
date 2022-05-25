@@ -19,6 +19,7 @@
     "format:check": "prettier --check ."
   },
   "dependencies": {
+    "@headlessui/react": "latest",
     "electron-is-dev": "^1.1.0",
     "electron-next": "^3.1.5",
     "react": "^17.0.2",
@@ -31,13 +32,16 @@
     "@types/react-dom": "^16.9.9",
     "@typescript-eslint/eslint-plugin": "latest",
     "@typescript-eslint/parser": "latest",
+    "autoprefixer": "^10.4.7",
     "electron": "^13",
     "electron-builder": "^23.0.3",
     "eslint": "latest",
     "eslint-config-prettier": "^8.5.0",
     "next": "latest",
+    "postcss": "^8.4.14",
     "prettier": "^2.6.2",
     "rimraf": "^3.0.0",
+    "tailwindcss": "^3.0.24",
     "typescript": "^4.0.5"
   },
   "build": {
