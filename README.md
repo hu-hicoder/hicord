@@ -29,10 +29,15 @@ volta install yarn
 yarn install
 ```
 
+#### .envの設定
+1. `.env.example`ファイルを複製
+2. ファイル名を`.env.local`に変更
+3. APIキーを入力する
+
 ### 実行
 
 ```bash
-
+yarn start
 ```
 
 ### スクリプト
