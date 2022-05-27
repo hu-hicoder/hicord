@@ -13,23 +13,25 @@ Hicord は、「位置」の概念を取り入れた新感覚のビデオチャ�
 #### Yarn のインストール
 
 ```bash
-npm i -g corepack # Node.js < 16.10 の場合
-corepack enable
+npm install -g pnpm
+pnpm add -g pnpm
 ```
 
 [Volta](https://volta.sh/) を使用する場合
 
 ```bash
-volta install yarn
+volta install pnpm
+pnpm add -g pnpm
 ```
 
 #### Dependencies のインストール
 
 ```bash
-yarn install
+pnpm install
 ```
 
 #### .envの設定
+
 1. `.env.example`ファイルを複製
 2. ファイル名を`.env.local`に変更
 3. APIキーを入力する
@@ -37,7 +39,7 @@ yarn install
 ### 実行
 
 ```bash
-yarn start
+pnpm start
 ```
 
 ### スクリプト
