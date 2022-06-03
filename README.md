@@ -30,11 +30,11 @@ pnpm add -g pnpm
 pnpm install
 ```
 
-#### .envの設定
+#### .env の設定
 
 1. `.env.example`ファイルを複製
 2. ファイル名を`.env.local`に変更
-3. APIキーを入力する
+3. API キーを入力する
 
 ### 実行
 
