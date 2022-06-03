@@ -1,5 +1,4 @@
-import React from 'react'
-import { Room } from './components/Room.tsx'
+import { Room } from './components/Room'
 import { Menu } from '@headlessui/react'
 
 function App() {

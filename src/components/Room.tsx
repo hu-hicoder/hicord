@@ -1,7 +1,7 @@
 import Peer, { SfuRoom } from 'skyway-js'
 import React from 'react'
 
-const KEY = process.env.REACT_APP_SKY_WAY_API_KEY
+const KEY = process.env['REACT_APP_SKY_WAY_API_KEY']
 
 type VideoStream = {
   stream: MediaStream
@@ -32,6 +32,9 @@ export const Room: React.FC<{ roomId: string }> = ({ roomId }) => {
   const onStart = () => {
     if (peer.current) {
       if (!peer.current.open) {
+        return
+      }
+      if (localStream === undefined) {
         return
       }
       const tmpRoom = peer.current.joinRoom<SfuRoom>(roomId, {

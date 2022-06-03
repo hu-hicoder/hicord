@@ -8,6 +8,7 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
+    "type-check":"tsc --noEmit",
     "lint": "eslint --fix --cache .",
     "lint:no-fix": "eslint --cache .",
     "format": "prettier --write .",
