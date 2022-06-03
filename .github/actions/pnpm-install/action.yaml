@@ -1,0 +1,16 @@
+name: pnpm install
+description: pnpm install Composite Action
+
+runs:
+  using: composite
+  steps:
+    - uses: actions/checkout@v3
+    - uses: pnpm/action-setup@v2.2.2
+      with:
+        version: 7.0.0
+    - uses: actions/setup-node@v3
+      with:
+        node-version: 16
+        cache: pnpm
+    - run: pnpm install
+      shell: bash
