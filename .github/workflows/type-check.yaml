@@ -1,3 +1,5 @@
+name: type-check
+
 on:
   push:
     branches: [main]
