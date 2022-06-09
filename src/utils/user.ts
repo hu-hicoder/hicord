@@ -4,5 +4,6 @@ export type UserInfo = {
     // Coodinates
     x: number
     y: number
+    deg: number
   }
   

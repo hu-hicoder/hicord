@@ -14,7 +14,7 @@ const UserIcon = (props: { info: UserInfo }) => {
     }
   }, [props.info])
   return (
-    <div className='absolute bg-blue-600 top-3 left-5' style={{ clipPath: 'polygon(0% 0%, 100% 0, 100% 75%, 50% 100%, 0 75%)', width:`${USER_ICON_WIDTH}px`, height:`${USER_ICON_HEIGHT}px`, top:`${props.info.y}px`, left:`${props.info.x}px` }}>
+    <div className='absolute bg-blue-600 top-3 left-5' style={{ clipPath: 'polygon(0% 0%, 100% 0, 100% 75%, 50% 100%, 0 75%)', width:`${USER_ICON_WIDTH}px`, height:`${USER_ICON_HEIGHT}px`, top:`${props.info.y}px`, left:`${props.info.x}px`, transform: `rotate(${props.info.deg}deg)` }}>
       <video ref={videoRef} playsInline controls></video>
     </div>
   )

@@ -42,7 +42,8 @@ export const Room: React.FC<{ roomId: string }> = ({ roomId }) => {
         stream: localStream,
         peerId: peer.current.id,
         x: ROOM_WIDTH / 2,
-        y: ROOM_HEIGHT / 2
+        y: ROOM_HEIGHT / 2,
+        deg: 0
       })
       const tmpRoom = peer.current.joinRoom<SfuRoom>(roomId, {
         mode: 'sfu',
@@ -57,7 +58,13 @@ export const Room: React.FC<{ roomId: string }> = ({ roomId }) => {
       tmpRoom.on('stream', async (stream) => {
         setUsersInfo((prev) => [
           ...prev,
-          { stream: stream, peerId: stream.peerId, x: Math.floor(Math.random() * ROOM_WIDTH - USER_ICON_WIDTH), y: Math.floor(Math.random() * ROOM_HEIGHT - USER_ICON_HEIGHT) },
+          {
+            stream: stream,
+            peerId: stream.peerId,
+            x: Math.floor(Math.random() * ROOM_WIDTH - USER_ICON_WIDTH),
+            y: Math.floor(Math.random() * ROOM_HEIGHT - USER_ICON_HEIGHT),
+            deg: Math.floor(Math.random() * 359),
+          },
         ])
       })
       tmpRoom.on('peerLeave', (peerId) => {
