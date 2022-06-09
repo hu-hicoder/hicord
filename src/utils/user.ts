@@ -1,5 +1,8 @@
-export type UserData = {
+export type UserInfo = {
     stream: MediaStream
     peerId: string
+    // Coodinates
+    x: number
+    y: number
   }
   
