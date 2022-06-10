@@ -1,24 +1,27 @@
 import Peer, { SfuRoom } from 'skyway-js'
 import React from 'react'
 import { UserInfo } from 'utils/user'
-import UserIcon, { USER_ICON_WIDTH, USER_ICON_HEIGHT } from './UserIcon'
+import UserIcon from './UserIcon'
+// import { audioProcessing } from 'utils/audio'
 
 const KEY = process.env['REACT_APP_SKY_WAY_API_KEY']
-const ROOM_WIDTH = 2048
-const ROOM_HEIGHT = 2048
+const ROOM_X = 2048
+const ROOM_Y = 2048
 
 export const Room: React.FC<{ roomId: string }> = ({ roomId }) => {
+  // Local user
   const peer = React.useRef(new Peer({ key: KEY as string }))
-  const [usersInfo, setUsersInfo] = React.useState<UserInfo[]>([])
-  // Local
   const [localStream, setLocalStream] = React.useState<MediaStream>()
   const [localUserInfo, setLocalUserInfo] = React.useState<UserInfo>()
-  const [room, setRoom] = React.useState<SfuRoom>()
   const localVideoRef = React.useRef<HTMLVideoElement>(null)
+  // Remote users
+  const [usersInfo, setUsersInfo] = React.useState<UserInfo[]>([])
+  // Room
+  const [room, setRoom] = React.useState<SfuRoom>()
   const [isStarted, setIsStarted] = React.useState(false)
   React.useEffect(() => {
     navigator.mediaDevices
-      .getUserMedia({ video: true, audio: true })
+      .getUserMedia({ video: false, audio: true })
       .then((stream) => {
         setLocalStream(stream)
         if (localVideoRef.current) {
@@ -41,8 +44,8 @@ export const Room: React.FC<{ roomId: string }> = ({ roomId }) => {
       setLocalUserInfo({
         stream: localStream,
         peerId: peer.current.id,
-        x: ROOM_WIDTH / 2,
-        y: ROOM_HEIGHT / 2,
+        x: ROOM_X / 2,
+        y: ROOM_Y / 2,
         deg: 0
       })
       const tmpRoom = peer.current.joinRoom<SfuRoom>(roomId, {
@@ -56,15 +59,19 @@ export const Room: React.FC<{ roomId: string }> = ({ roomId }) => {
         console.log(`=== ${peerId} が入室しました ===\n`)
       })
       tmpRoom.on('stream', async (stream) => {
+        const remoteUserInfo = {
+          stream: stream,
+          peerId: stream.peerId,
+          x: Math.floor(Math.random() * 500) + ROOM_X / 2 - 250,
+          y: Math.floor(Math.random() * 500) + ROOM_X / 2 - 250,
+          deg: Math.floor(Math.random() * 359),
+        }
+        // if (localUserInfo) {
+        //   audioProcessing(localUserInfo, remoteUserInfo)
+        // }
         setUsersInfo((prev) => [
           ...prev,
-          {
-            stream: stream,
-            peerId: stream.peerId,
-            x: Math.floor(Math.random() * ROOM_WIDTH - USER_ICON_WIDTH),
-            y: Math.floor(Math.random() * ROOM_HEIGHT - USER_ICON_HEIGHT),
-            deg: Math.floor(Math.random() * 359),
-          },
+          remoteUserInfo,
         ])
       })
       tmpRoom.on('peerLeave', (peerId) => {
@@ -107,8 +114,9 @@ export const Room: React.FC<{ roomId: string }> = ({ roomId }) => {
       <button onClick={() => onEnd()} disabled={!isStarted}>
         停止
       </button>
-      <div className='relative bg-orange-100' style={{width:`${ROOM_WIDTH}px`, height:`${ROOM_HEIGHT}px`}}>
-        {localUserInfo ? <UserIcon info={localUserInfo} /> : '' }
+      <div className='relative bg-orange-100' style={{height:`${ROOM_X}px`, width:`${ROOM_Y}px`}}>
+        {localUserInfo ? '' : '' }
+        {/* {localUserInfo ? <UserIcon info={localUserInfo} /> : '' } */}
         {castVideo()}
       </div>
     </div>

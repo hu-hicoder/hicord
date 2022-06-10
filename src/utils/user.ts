@@ -1,7 +1,7 @@
 export type UserInfo = {
     stream: MediaStream
     peerId: string
-    // Coodinates
+    // right-handed coordinate system
     x: number
     y: number
     deg: number
