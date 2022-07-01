@@ -1,43 +1,12 @@
+import type { Component } from 'solid-js';
 import { Room } from './components/Room'
-import { Menu } from '@headlessui/react'
 
-function App() {
+const App: Component = () => {
   return (
-    <div className="App">
-      <header className="App-header">
-        <div className="text-lg underline">Hello</div>
-        <Room roomId="test" />
-      </header>
-      <Menu>
-        <Menu.Button>More</Menu.Button>
-        <Menu.Items>
-          <Menu.Item>
-            {({ active }) => (
-              <a
-                className={`${active && 'bg-blue-500'}`}
-                href="/account-settings"
-              >
-                Account settings
-              </a>
-            )}
-          </Menu.Item>
-          <Menu.Item>
-            {({ active }) => (
-              <a
-                className={`${active && 'bg-blue-500'}`}
-                href="/account-settings"
-              >
-                Documentation
-              </a>
-            )}
-          </Menu.Item>
-          <Menu.Item disabled>
-            <span className="opacity-75">Invite a friend (coming soon!)</span>
-          </Menu.Item>
-        </Menu.Items>
-      </Menu>
+    <div>
+      <Room roomId="test" />
     </div>
-  )
-}
+  );
+};
 
-export default App
+export default App;

@@ -1,56 +1,55 @@
 import Peer, { SfuRoom } from 'skyway-js'
-import React from 'react'
-import { UserInfo } from 'utils/user'
+import type { Component } from 'solid-js';
+import { createEffect, createSignal } from 'solid-js';
+import { UserInfo } from '../utils/user'
 import UserIcon from './UserIcon'
-// import { audioProcessing } from 'utils/audio'
 
-const KEY = process.env['REACT_APP_SKY_WAY_API_KEY']
+const KEY = import.meta.env.VITE_SKY_WAY_API_KEY
 const ROOM_X = 2048
 const ROOM_Y = 2048
 
-export const Room: React.FC<{ roomId: string }> = ({ roomId }) => {
+export const Room: Component<{ roomId: string }> = ({ roomId }) => {
   // Local user
-  const peer = React.useRef(new Peer({ key: KEY as string }))
-  const [localStream, setLocalStream] = React.useState<MediaStream>()
-  const [localUserInfo, setLocalUserInfo] = React.useState<UserInfo>()
-  const localVideoRef = React.useRef<HTMLVideoElement>(null)
+  let peer = new Peer({ key: KEY as string })
+  const [localStream, setLocalStream] = createSignal<MediaStream>()
+  const [localUserInfo, setLocalUserInfo] = createSignal<UserInfo>()
+  const localVideoRef: HTMLVideoElement = null
   // Remote users
-  const [usersInfo, setUsersInfo] = React.useState<UserInfo[]>([])
+  const [usersInfo, setUsersInfo] = createSignal<UserInfo[]>([])
   // Room
-  const [room, setRoom] = React.useState<SfuRoom>()
-  const [isStarted, setIsStarted] = React.useState(false)
-  React.useEffect(() => {
+  const [room, setRoom] = createSignal<SfuRoom>()
+  const [isStarted, setIsStarted] = createSignal(false)
+  createEffect(() => {
     navigator.mediaDevices
       .getUserMedia({ video: false, audio: true })
       .then((stream) => {
         setLocalStream(stream)
-        if (localVideoRef.current) {
-          localVideoRef.current.srcObject = stream
-          localVideoRef.current.play().catch((e) => console.log(e))
-        }
+        // Local video
+          localVideoRef.srcObject = stream
+          localVideoRef.play().catch((e) => console.log(e))
       })
       .catch((e) => {
         console.log(e)
       })
   }, [])
   const onStart = () => {
-    if (peer.current) {
-      if (!peer.current.open) {
+    if (peer) {
+      if (!peer.open) {
         return
       }
-      if (localStream === undefined) {
+      if (localStream() === undefined) {
         return
       }
       setLocalUserInfo({
-        stream: localStream,
-        peerId: peer.current.id,
+        stream: localStream(),
+        peerId: peer.id,
         x: ROOM_X / 2,
         y: ROOM_Y / 2,
         deg: 0
       })
-      const tmpRoom = peer.current.joinRoom<SfuRoom>(roomId, {
+      const tmpRoom = peer.joinRoom<SfuRoom>(roomId, {
         mode: 'sfu',
-        stream: localStream,
+        stream: localStream(),
       })
       tmpRoom.once('open', () => {
         console.log('=== あなたが参加しました ===\n')
@@ -90,8 +89,8 @@ export const Room: React.FC<{ roomId: string }> = ({ roomId }) => {
     setIsStarted((prev) => !prev)
   }
   const onEnd = () => {
-    if (room) {
-      room.close()
+    if (room()) {
+      room().close()
       setUsersInfo((prev) => {
         return prev.filter((userInfo) => {
           userInfo.stream.getTracks().forEach((track) => track.stop())
@@ -102,20 +101,20 @@ export const Room: React.FC<{ roomId: string }> = ({ roomId }) => {
     setIsStarted((prev) => !prev)
   }
   const castVideo = () => {
-    return usersInfo.map((userInfo) => {
-      return <UserIcon info={userInfo} key={userInfo.peerId} />
+    return usersInfo().map((userInfo) => {
+      return <UserIcon info={userInfo} />
     })
   }
   return (
     <div>
-      <button onClick={() => onStart()} disabled={isStarted}>
+      <button onClick={() => onStart()} disabled={isStarted()}>
         開始
       </button>
-      <button onClick={() => onEnd()} disabled={!isStarted}>
+      <button onClick={() => onEnd()} disabled={!isStarted()}>
         停止
       </button>
-      <div className='relative bg-orange-100' style={{height:`${ROOM_X}px`, width:`${ROOM_Y}px`}}>
-        {localUserInfo ? '' : '' }
+      <div class='relative bg-orange-100' style={{height:`${ROOM_X}px`, width:`${ROOM_Y}px`}}>
+        {localUserInfo() ? '' : '' }
         {/* {localUserInfo ? <UserIcon info={localUserInfo} /> : '' } */}
         {castVideo()}
       </div>
