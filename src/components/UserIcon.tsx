@@ -1,30 +1,29 @@
-import React from 'react'
-import {UserInfo} from 'utils/user'
-import { audioProcessing } from 'utils/audio'
+import type { Component } from 'solid-js';
+import { createEffect, createSignal } from 'solid-js';
+import { audioProcessing } from '../utils/audio'
+import { UserInfo } from '../utils/user'
 export const USER_ICON_X = 128
 export const USER_ICON_Y = 128
 
-const UserIcon = (props: { info: UserInfo }) => {
-  const videoRef = React.useRef<HTMLVideoElement>(null)
+const UserIcon: Component<{ info: UserInfo }> = ({ info }) => {
+  let videoRef:HTMLVideoElement = null
 
-  React.useEffect(() => {
-    if (videoRef.current) {
+  createEffect(() => {
       // Audio processing
       audioProcessing({
-        stream: props.info.stream,
-        peerId: props.info.peerId,
+        stream: info.stream,
+        peerId: info.peerId,
         x: 2048 / 2,
         y: 2048 / 2,
         deg: 0
-      }, props.info)
+      }, info)
       // Set stream to video element
-      videoRef.current.srcObject = props.info.stream
-      videoRef.current.play().catch((e) => console.log(e))
-    }
-  }, [props.info])
+      videoRef.srcObject = info.stream
+      videoRef.play().catch((e) => console.log(e))
+  }, [info])
   return (
-    <div className='absolute bg-blue-600 top-3 left-5' style={{ clipPath: 'polygon(0% 0%, 100% 0, 100% 75%, 50% 100%, 0 75%)', height:`${USER_ICON_X}px`, width:`${USER_ICON_Y}px`, top:`${props.info.x}px`, left:`${props.info.y}px`, transform: `rotate(${props.info.deg}deg)` }}>
-      <video ref={videoRef} playsInline controls></video>
+    <div class='absolute bg-blue-600 top-3 left-5' style={{ clipPath: 'polygon(0% 0%, 100% 0, 100% 75%, 50% 100%, 0 75%)', height:`${USER_ICON_X}px`, width:`${USER_ICON_Y}px`, top:`${info.x}px`, left:`${info.y}px`, transform: `rotate(${info.deg}deg)` }}>
+      <video ref={videoRef} playsinline controls></video>
     </div>
   )
 }

@@ -1,11 +1,7 @@
-import React from 'react'
-import ReactDOM from 'react-dom/client'
-import App from './App'
-import './index.css'
+/* @refresh reload */
+import './index.css';
+import { render } from 'solid-js/web';
 
-const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement)
-root.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>
-)
+import App from './App';
+
+render(() => <App />, document.getElementById('root') as HTMLElement);
