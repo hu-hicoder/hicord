@@ -1,8 +1,9 @@
 import Peer, { SfuRoom } from 'skyway-js'
 import type { Component } from 'solid-js';
-import { createEffect, createSignal } from 'solid-js';
+import { createEffect, createSignal, For } from 'solid-js';
 import { UserInfo } from '../utils/user'
-import UserIcon from './UserIcon'
+import LocalUserIcon from './LocalUserIcon'
+import RemoteUserIcon from './RemoteUserIcon'
 
 const KEY = import.meta.env.VITE_SKY_WAY_API_KEY
 const ROOM_X = 2048
@@ -13,7 +14,6 @@ export const Room: Component<{ roomId: string }> = ({ roomId }) => {
   let peer = new Peer({ key: KEY as string })
   const [localStream, setLocalStream] = createSignal<MediaStream>()
   const [localUserInfo, setLocalUserInfo] = createSignal<UserInfo>()
-  const localVideoRef: HTMLVideoElement = null
   // Remote users
   const [usersInfo, setUsersInfo] = createSignal<UserInfo[]>([])
   // Room
@@ -24,9 +24,6 @@ export const Room: Component<{ roomId: string }> = ({ roomId }) => {
       .getUserMedia({ video: false, audio: true })
       .then((stream) => {
         setLocalStream(stream)
-        // Local video
-          localVideoRef.srcObject = stream
-          localVideoRef.play().catch((e) => console.log(e))
       })
       .catch((e) => {
         console.log(e)
@@ -100,11 +97,7 @@ export const Room: Component<{ roomId: string }> = ({ roomId }) => {
     }
     setIsStarted((prev) => !prev)
   }
-  const castVideo = () => {
-    return usersInfo().map((userInfo) => {
-      return <UserIcon info={userInfo} />
-    })
-  }
+
   return (
     <div>
       <button onClick={() => onStart()} disabled={isStarted()}>
@@ -114,9 +107,10 @@ export const Room: Component<{ roomId: string }> = ({ roomId }) => {
         停止
       </button>
       <div class='relative bg-orange-100' style={{height:`${ROOM_X}px`, width:`${ROOM_Y}px`}}>
-        {localUserInfo() ? '' : '' }
-        {/* {localUserInfo ? <UserIcon info={localUserInfo} /> : '' } */}
-        {castVideo()}
+        {/* Local User Icon */}
+        { localUserInfo() ? <LocalUserIcon info={localUserInfo()} /> : null }
+        {/* Remote User Icons */}
+        <For each={usersInfo()}>{info => <RemoteUserIcon info={info} />}</For>
       </div>
     </div>
   )
