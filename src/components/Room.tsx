@@ -2,7 +2,7 @@ import Peer, { SfuRoom } from 'skyway-js'
 import type { Component } from 'solid-js';
 import { createEffect, createSignal, For } from 'solid-js';
 import { UserInfo } from '../utils/user'
-import LocalUserIcon from './LocalUserIcon'
+import LocalUserIcon, {localUserInfo, setLocalUserInfo} from './LocalUserIcon'
 import RemoteUserIcon from './RemoteUserIcon'
 
 const KEY = import.meta.env.VITE_SKY_WAY_API_KEY
@@ -13,7 +13,6 @@ export const Room: Component<{ roomId: string }> = ({ roomId }) => {
   // Local user
   let peer = new Peer({ key: KEY as string })
   const [localStream, setLocalStream] = createSignal<MediaStream>()
-  const [localUserInfo, setLocalUserInfo] = createSignal<UserInfo>()
   // Remote users
   const [usersInfo, setUsersInfo] = createSignal<UserInfo[]>([])
   // Room
@@ -95,20 +94,23 @@ export const Room: Component<{ roomId: string }> = ({ roomId }) => {
         })
       })
     }
+    setLocalUserInfo()
     setIsStarted((prev) => !prev)
+    console.log('=== あなたが退出しました ===\n')
   }
 
   return (
     <div>
-      <button onClick={() => onStart()} disabled={isStarted()}>
-        開始
-      </button>
-      <button onClick={() => onEnd()} disabled={!isStarted()}>
-        停止
-      </button>
       <div class='relative bg-orange-100' style={{height:`${ROOM_X}px`, width:`${ROOM_Y}px`}}>
+        {/* buttons */}
+        <button class='sticky top-0 left-0' onClick={() => onStart()} disabled={isStarted()}>
+          開始
+        </button>
+        <button class='sticky top-0 left-8' onClick={() => onEnd()} disabled={!isStarted()}>
+          停止
+        </button>
         {/* Local User Icon */}
-        { localUserInfo() ? <LocalUserIcon info={localUserInfo()} /> : null }
+        { localUserInfo() ? <LocalUserIcon /> : null }
         {/* Remote User Icons */}
         <For each={usersInfo()}>{info => <RemoteUserIcon info={info} />}</For>
       </div>
