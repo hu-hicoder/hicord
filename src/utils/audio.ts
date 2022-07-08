@@ -8,8 +8,9 @@ function directionY(deg: number) {
     return Math.sin(deg * Math.PI / 180)
 }
 
+const audioCtx = new AudioContext()
+
 export function audioProcessing(localUserInfo: UserInfo, remoteUserInfo: UserInfo) {
-    const audioCtx = new AudioContext()
     const source = audioCtx.createMediaStreamSource(remoteUserInfo.stream)
 
     // Filter
