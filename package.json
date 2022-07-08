@@ -6,6 +6,7 @@
     "dev": "vite",
     "build": "vite build",
     "serve": "vite preview",
+    "type-check": "tsc -p tsconfig.json",
     "lint": "eslint . --cache --ext .ts,.tsx",
     "lint:fix": "eslint . --cache --fix --ext .ts,.tsx",
     "fmt": "prettier --write .",
