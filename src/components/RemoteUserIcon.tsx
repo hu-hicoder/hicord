@@ -1,11 +1,11 @@
-import type { Component } from "solid-js";
-import { createEffect, createSignal } from "solid-js";
-import { audioProcessing } from "../utils/audio";
-import UserIcon from "./UserIcon";
-import { UserInfo } from "../utils/user";
+import type { Component } from 'solid-js'
+import { createEffect, createSignal } from 'solid-js'
+import { audioProcessing } from '../utils/audio'
+import UserIcon from './UserIcon'
+import { UserInfo } from '../utils/user'
 
 const RemoteUserIcon: Component<{ info: UserInfo }> = ({ info }) => {
-  const videoRef: HTMLVideoElement = null;
+  const videoRef: HTMLVideoElement = null
 
   createEffect(() => {
     // Audio processing
@@ -18,16 +18,16 @@ const RemoteUserIcon: Component<{ info: UserInfo }> = ({ info }) => {
         deg: 0,
       },
       info
-    );
+    )
     // Set stream to video element
-    videoRef.srcObject = info.stream;
-    videoRef.play().catch((e) => console.log(e));
-  }, [info]);
+    videoRef.srcObject = info.stream
+    videoRef.play().catch((e) => console.log(e))
+  }, [info])
   return (
     <UserIcon info={info}>
       <video ref={videoRef} playsinline controls></video>
     </UserIcon>
-  );
-};
+  )
+}
 
-export default RemoteUserIcon;
+export default RemoteUserIcon

@@ -1,7 +1,7 @@
-import Peer, { DataConnection, SfuRoom } from "skyway-js";
-import type { Component } from "solid-js";
-import { createEffect, createSignal, For } from "solid-js";
-import LocalUserIcon from "./LocalUserIcon";
+import Peer, { DataConnection, SfuRoom } from 'skyway-js'
+import type { Component } from 'solid-js'
+import { createEffect, createSignal, For } from 'solid-js'
+import LocalUserIcon from './LocalUserIcon'
 import {
   localUserInfo,
   setLocalUserInfo,
@@ -9,38 +9,38 @@ import {
   setRemoteUserInfos,
   UserCoord,
   UserInfo,
-} from "../utils/user";
-import RemoteUserIcon from "./RemoteUserIcon";
+} from '../utils/user'
+import RemoteUserIcon from './RemoteUserIcon'
 
-const KEY = import.meta.env.VITE_SKY_WAY_API_KEY;
-export const PEER = new Peer({ key: KEY as string });
+const KEY = import.meta.env.VITE_SKY_WAY_API_KEY
+export const PEER = new Peer({ key: KEY as string })
 
-const ROOM_X = 2048;
-const ROOM_Y = 2048;
+const ROOM_X = 2048
+const ROOM_Y = 2048
 
 export const Room: Component<{ roomId: string }> = ({ roomId }) => {
   // Local
-  const [localStream, setLocalStream] = createSignal<MediaStream>();
+  const [localStream, setLocalStream] = createSignal<MediaStream>()
   // Room
-  const [room, setRoom] = createSignal<SfuRoom>();
-  const [isStarted, setIsStarted] = createSignal(false);
+  const [room, setRoom] = createSignal<SfuRoom>()
+  const [isStarted, setIsStarted] = createSignal(false)
   createEffect(() => {
     navigator.mediaDevices
       .getUserMedia({ video: false, audio: true })
       .then((stream) => {
-        setLocalStream(stream);
+        setLocalStream(stream)
       })
       .catch((e) => {
-        console.log(e);
-      });
-  }, []);
+        console.log(e)
+      })
+  }, [])
   const onStart = () => {
     if (PEER) {
       if (!PEER.open) {
-        return;
+        return
       }
       if (localStream() === undefined) {
-        return;
+        return
       }
       setLocalUserInfo({
         stream: localStream(),
@@ -48,47 +48,47 @@ export const Room: Component<{ roomId: string }> = ({ roomId }) => {
         x: ROOM_X / 2,
         y: ROOM_Y / 2,
         deg: 0,
-      });
+      })
       const tmpRoom = PEER.joinRoom<SfuRoom>(roomId, {
-        mode: "sfu",
+        mode: 'sfu',
         stream: localStream(),
-      });
-      tmpRoom.once("open", () => {
-        console.log("=== あなたが参加しました ===\n");
-      });
-      tmpRoom.on("peerJoin", (peerId) => {
-        console.log(`=== ${peerId} が入室しました ===\n`);
-      });
-      tmpRoom.on("stream", async (stream) => {
+      })
+      tmpRoom.once('open', () => {
+        console.log('=== あなたが参加しました ===\n')
+      })
+      tmpRoom.on('peerJoin', (peerId) => {
+        console.log(`=== ${peerId} が入室しました ===\n`)
+      })
+      tmpRoom.on('stream', async (stream) => {
         const remoteUserInfo = {
           stream: stream,
           peerId: stream.peerId,
           x: ROOM_X / 2,
           y: ROOM_Y / 2,
           deg: 0,
-        };
+        }
         // if (localUserInfo) {
         //   audioProcessing(localUserInfo, remoteUserInfo)
         // }
-        setRemoteUserInfos((prev) => [...prev, remoteUserInfo]);
-      });
-      tmpRoom.on("peerLeave", (peerId) => {
+        setRemoteUserInfos((prev) => [...prev, remoteUserInfo])
+      })
+      tmpRoom.on('peerLeave', (peerId) => {
         setRemoteUserInfos((prev) => {
           return prev.filter((userInfo) => {
             if (userInfo.peerId === peerId) {
-              userInfo.stream.getTracks().forEach((track) => track.stop());
+              userInfo.stream.getTracks().forEach((track) => track.stop())
             }
-            return userInfo.peerId !== peerId;
-          });
-        });
-        console.log(`=== ${peerId} が退出しました ===\n`);
-      });
-      setRoom(tmpRoom);
+            return userInfo.peerId !== peerId
+          })
+        })
+        console.log(`=== ${peerId} が退出しました ===\n`)
+      })
+      setRoom(tmpRoom)
       // DataConnection
-      PEER.on("connection", (dataConnection) => {
-        dataConnection.on("data", (data) => {
-          console.log(data);
-          const userCoord = data as UserCoord;
+      PEER.on('connection', (dataConnection) => {
+        dataConnection.on('data', (data) => {
+          console.log(data)
+          const userCoord = data as UserCoord
           setRemoteUserInfos((prev) => {
             return prev.map((userInfo) => {
               if (userInfo.peerId === dataConnection.remoteId) {
@@ -97,30 +97,30 @@ export const Room: Component<{ roomId: string }> = ({ roomId }) => {
                   x: userCoord.x,
                   y: userCoord.y,
                   deg: userCoord.deg,
-                } as UserInfo;
+                } as UserInfo
               }
-              return userInfo;
-            });
-          });
-        });
-      });
+              return userInfo
+            })
+          })
+        })
+      })
     }
-    setIsStarted((prev) => !prev);
-  };
+    setIsStarted((prev) => !prev)
+  }
   const onEnd = () => {
     if (room()) {
-      room().close();
+      room().close()
       setRemoteUserInfos((prev) => {
         return prev.filter((userInfo) => {
-          userInfo.stream.getTracks().forEach((track) => track.stop());
-          return false;
-        });
-      });
+          userInfo.stream.getTracks().forEach((track) => track.stop())
+          return false
+        })
+      })
     }
-    setLocalUserInfo();
-    setIsStarted((prev) => !prev);
-    console.log("=== あなたが退出しました ===\n");
-  };
+    setLocalUserInfo()
+    setIsStarted((prev) => !prev)
+    console.log('=== あなたが退出しました ===\n')
+  }
 
   return (
     <div>
@@ -151,5 +151,5 @@ export const Room: Component<{ roomId: string }> = ({ roomId }) => {
         {localUserInfo() ? <LocalUserIcon /> : null}
       </div>
     </div>
-  );
-};
+  )
+}
