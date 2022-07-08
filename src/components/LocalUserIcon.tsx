@@ -7,7 +7,6 @@ const LocalUserIcon: Component = () => {
 
 // mouse down
 function mdown(e) {
-  console.log(`mouse down`)
   // mouse and touch event
   if(e.type === "mousedown") {
       var event = e;
@@ -21,7 +20,10 @@ function mdown(e) {
 }
 
 // mouse move
+let mouseMoveCount = 0;
 function mmove(e) {
+  mouseMoveCount+=1;
+
   // mouse and touch event
   if(e.type === "mousemove") {
       var event = e;
@@ -34,30 +36,35 @@ function mmove(e) {
 
   // set info
   setLocalUserInfo((prev) =>{ 
-    if (prev) {
-      const x = event.pageX - USER_ICON_X / 2
-      const y = event.pageY - USER_ICON_Y / 2
+      if (prev) {
+        const x = event.pageX - USER_ICON_X / 2
+        const y = event.pageY - USER_ICON_Y / 2
 
-      const dx = x - prev.x
-      const dy = y - prev.y
-      let deg = prev.deg
-      if (5< Math.abs(dx) || 5 < Math.abs(dy)) {
-        let r = Math.atan2(dy, dx)
-        if (r < 0) {
-          r = r + 2 * Math.PI
+        const dx = x - prev.x
+        const dy = y - prev.y
+        let deg = prev.deg
+        if (5< Math.abs(dx) || 5 < Math.abs(dy)) {
+          let r = Math.atan2(dy, dx)
+          if (r < 0) {
+            r = r + 2 * Math.PI
+          }
+          deg = Math.floor(r * 360 / (2 * Math.PI)) - 90
         }
-        deg = Math.floor(r * 360 / (2 * Math.PI)) - 90
-      }
 
-      return {
-        ...prev,
-        x: x,
-        y: y,
-        deg: deg,
+        return {
+          ...prev,
+          x: x,
+          y: y,
+          deg: deg,
+      }
     }
+      return prev
+  })
+
+  if (mouseMoveCount % 32 === 0) {
+    // send user info
+    sendUserInfo()
   }
-    return prev
-})
 
   // add mouse up event
   localDiv.addEventListener("mouseup", mup, false);
@@ -69,21 +76,8 @@ function mmove(e) {
 
 // mouse up
 function mup(e) {
-  console.log(`mouse up`)
-
   // send user info
-  remoteUserInfos().forEach(rInfo=>{
-    const dataConnection = PEER.connect(rInfo.peerId);
-
-    dataConnection.on("open", () => {
-      const data: UserCoord = {
-        x: localUserInfo().x,
-        y: localUserInfo().y,
-        deg: localUserInfo().deg,
-      };
-      dataConnection.send(data);
-    });
-  })
+  sendUserInfo()
 
   // delete move event
   document.body.removeEventListener("mousemove", mmove, false);
@@ -100,6 +94,22 @@ function mup(e) {
       </div>
     </UserIcon>
   )
+}
+
+function sendUserInfo() {
+    // send user info
+    remoteUserInfos().forEach(rInfo=>{
+      const dataConnection = PEER.connect(rInfo.peerId);
+  
+      dataConnection.on("open", () => {
+        const data: UserCoord = {
+          x: localUserInfo().x,
+          y: localUserInfo().y,
+          deg: localUserInfo().deg,
+        };
+        dataConnection.send(data);
+      });
+    })
 }
 
 export default LocalUserIcon
