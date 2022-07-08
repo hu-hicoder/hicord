@@ -1,10 +1,7 @@
 import type { Component } from 'solid-js';
-import { createSignal } from 'solid-js';
 import UserIcon, {USER_ICON_X, USER_ICON_Y} from './UserIcon'
-import { UserInfo } from '../utils/user'
-
-export const [localUserInfo, setLocalUserInfo] = createSignal<UserInfo>()
-
+import { localUserInfo, setLocalUserInfo, remoteUserInfos, UserCoord } from '../utils/user'
+import {PEER} from './Room'
 const LocalUserIcon: Component = () => {
   let localDiv;
 
@@ -73,6 +70,21 @@ function mmove(e) {
 // mouse up
 function mup(e) {
   console.log(`mouse up`)
+
+  // send user info
+  remoteUserInfos().forEach(rInfo=>{
+    const dataConnection = PEER.connect(rInfo.peerId);
+
+    dataConnection.on("open", () => {
+      const data: UserCoord = {
+        x: localUserInfo().x,
+        y: localUserInfo().y,
+        deg: localUserInfo().deg,
+      };
+      dataConnection.send(data);
+    });
+  })
+
   // delete move event
   document.body.removeEventListener("mousemove", mmove, false);
   localDiv.removeEventListener("mouseup", mup, false);

@@ -1,20 +1,19 @@
-import Peer, { SfuRoom } from 'skyway-js'
+import Peer, { DataConnection, SfuRoom } from 'skyway-js'
 import type { Component } from 'solid-js';
 import { createEffect, createSignal, For } from 'solid-js';
-import { UserInfo } from '../utils/user'
-import LocalUserIcon, {localUserInfo, setLocalUserInfo} from './LocalUserIcon'
+import LocalUserIcon from './LocalUserIcon'
+import { localUserInfo, setLocalUserInfo, remoteUserInfos, setRemoteUserInfos, UserCoord, UserInfo } from '../utils/user'
 import RemoteUserIcon from './RemoteUserIcon'
 
 const KEY = import.meta.env.VITE_SKY_WAY_API_KEY
+export const PEER = new Peer({ key: KEY as string })
+
 const ROOM_X = 2048
 const ROOM_Y = 2048
 
 export const Room: Component<{ roomId: string }> = ({ roomId }) => {
-  // Local user
-  let peer = new Peer({ key: KEY as string })
+  // Local
   const [localStream, setLocalStream] = createSignal<MediaStream>()
-  // Remote users
-  const [usersInfo, setUsersInfo] = createSignal<UserInfo[]>([])
   // Room
   const [room, setRoom] = createSignal<SfuRoom>()
   const [isStarted, setIsStarted] = createSignal(false)
@@ -29,8 +28,8 @@ export const Room: Component<{ roomId: string }> = ({ roomId }) => {
       })
   }, [])
   const onStart = () => {
-    if (peer) {
-      if (!peer.open) {
+    if (PEER) {
+      if (!PEER.open) {
         return
       }
       if (localStream() === undefined) {
@@ -38,12 +37,12 @@ export const Room: Component<{ roomId: string }> = ({ roomId }) => {
       }
       setLocalUserInfo({
         stream: localStream(),
-        peerId: peer.id,
+        peerId: PEER.id,
         x: ROOM_X / 2,
         y: ROOM_Y / 2,
         deg: 0
       })
-      const tmpRoom = peer.joinRoom<SfuRoom>(roomId, {
+      const tmpRoom = PEER.joinRoom<SfuRoom>(roomId, {
         mode: 'sfu',
         stream: localStream(),
       })
@@ -57,20 +56,20 @@ export const Room: Component<{ roomId: string }> = ({ roomId }) => {
         const remoteUserInfo = {
           stream: stream,
           peerId: stream.peerId,
-          x: Math.floor(Math.random() * 500) + ROOM_X / 2 - 250,
-          y: Math.floor(Math.random() * 500) + ROOM_X / 2 - 250,
-          deg: Math.floor(Math.random() * 359),
+          x: ROOM_X / 2,
+          y: ROOM_Y / 2,
+          deg: 0,
         }
         // if (localUserInfo) {
         //   audioProcessing(localUserInfo, remoteUserInfo)
         // }
-        setUsersInfo((prev) => [
+        setRemoteUserInfos((prev) => [
           ...prev,
           remoteUserInfo,
         ])
       })
       tmpRoom.on('peerLeave', (peerId) => {
-        setUsersInfo((prev) => {
+        setRemoteUserInfos((prev) => {
           return prev.filter((userInfo) => {
             if (userInfo.peerId === peerId) {
               userInfo.stream.getTracks().forEach((track) => track.stop())
@@ -81,13 +80,33 @@ export const Room: Component<{ roomId: string }> = ({ roomId }) => {
         console.log(`=== ${peerId} が退出しました ===\n`)
       })
       setRoom(tmpRoom)
+      // DataConnection
+      PEER.on('connection', dataConnection => {
+        dataConnection.on('data', data => {
+          console.log(data)
+          const userCoord = data as UserCoord
+          setRemoteUserInfos((prev) => {
+            return prev.map((userInfo) => {
+              if (userInfo.peerId === dataConnection.remoteId) {
+                return {
+                  ...userInfo,
+                  x: userCoord.x,
+                  y: userCoord.y,
+                  deg: userCoord.deg,
+                } as UserInfo
+              }
+              return userInfo
+            })
+          })
+        });
+      });
     }
     setIsStarted((prev) => !prev)
   }
   const onEnd = () => {
     if (room()) {
       room().close()
-      setUsersInfo((prev) => {
+      setRemoteUserInfos((prev) => {
         return prev.filter((userInfo) => {
           userInfo.stream.getTracks().forEach((track) => track.stop())
           return false
@@ -109,10 +128,10 @@ export const Room: Component<{ roomId: string }> = ({ roomId }) => {
         <button class='sticky top-0 left-8' onClick={() => onEnd()} disabled={!isStarted()}>
           停止
         </button>
+        {/* Remote User Icons */}
+        <For each={remoteUserInfos()}>{info => <RemoteUserIcon info={info} />}</For>
         {/* Local User Icon */}
         { localUserInfo() ? <LocalUserIcon /> : null }
-        {/* Remote User Icons */}
-        <For each={usersInfo()}>{info => <RemoteUserIcon info={info} />}</For>
       </div>
     </div>
   )
