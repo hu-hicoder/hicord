@@ -1,8 +1,15 @@
 import Peer, { DataConnection, SfuRoom } from 'skyway-js'
-import type { Component } from 'solid-js';
-import { createEffect, createSignal, For } from 'solid-js';
+import type { Component } from 'solid-js'
+import { createEffect, createSignal, For } from 'solid-js'
 import LocalUserIcon from './LocalUserIcon'
-import { localUserInfo, setLocalUserInfo, remoteUserInfos, setRemoteUserInfos, UserCoord, UserInfo } from '../utils/user'
+import {
+  localUserInfo,
+  setLocalUserInfo,
+  remoteUserInfos,
+  setRemoteUserInfos,
+  UserCoord,
+  UserInfo,
+} from '../utils/user'
 import RemoteUserIcon from './RemoteUserIcon'
 
 const KEY = import.meta.env.VITE_SKY_WAY_API_KEY
@@ -40,7 +47,7 @@ export const Room: Component<{ roomId: string }> = ({ roomId }) => {
         peerId: PEER.id,
         x: ROOM_X / 2,
         y: ROOM_Y / 2,
-        deg: 0
+        deg: 0,
       })
       const tmpRoom = PEER.joinRoom<SfuRoom>(roomId, {
         mode: 'sfu',
@@ -63,10 +70,7 @@ export const Room: Component<{ roomId: string }> = ({ roomId }) => {
         // if (localUserInfo) {
         //   audioProcessing(localUserInfo, remoteUserInfo)
         // }
-        setRemoteUserInfos((prev) => [
-          ...prev,
-          remoteUserInfo,
-        ])
+        setRemoteUserInfos((prev) => [...prev, remoteUserInfo])
       })
       tmpRoom.on('peerLeave', (peerId) => {
         setRemoteUserInfos((prev) => {
@@ -81,8 +85,8 @@ export const Room: Component<{ roomId: string }> = ({ roomId }) => {
       })
       setRoom(tmpRoom)
       // DataConnection
-      PEER.on('connection', dataConnection => {
-        dataConnection.on('data', data => {
+      PEER.on('connection', (dataConnection) => {
+        dataConnection.on('data', (data) => {
           console.log(data)
           const userCoord = data as UserCoord
           setRemoteUserInfos((prev) => {
@@ -98,8 +102,8 @@ export const Room: Component<{ roomId: string }> = ({ roomId }) => {
               return userInfo
             })
           })
-        });
-      });
+        })
+      })
     }
     setIsStarted((prev) => !prev)
   }
@@ -120,18 +124,31 @@ export const Room: Component<{ roomId: string }> = ({ roomId }) => {
 
   return (
     <div>
-      <div class='relative bg-orange-100' style={{height:`${ROOM_X}px`, width:`${ROOM_Y}px`}}>
+      <div
+        class="relative bg-orange-100"
+        style={{ height: `${ROOM_X}px`, width: `${ROOM_Y}px` }}
+      >
         {/* buttons */}
-        <button class='sticky top-0 left-0' onClick={() => onStart()} disabled={isStarted()}>
+        <button
+          class="sticky top-0 left-0"
+          onClick={() => onStart()}
+          disabled={isStarted()}
+        >
           開始
         </button>
-        <button class='sticky top-0 left-8' onClick={() => onEnd()} disabled={!isStarted()}>
+        <button
+          class="sticky top-0 left-8"
+          onClick={() => onEnd()}
+          disabled={!isStarted()}
+        >
           停止
         </button>
         {/* Remote User Icons */}
-        <For each={remoteUserInfos()}>{info => <RemoteUserIcon info={info} />}</For>
+        <For each={remoteUserInfos()}>
+          {(info) => <RemoteUserIcon info={info} />}
+        </For>
         {/* Local User Icon */}
-        { localUserInfo() ? <LocalUserIcon /> : null }
+        {localUserInfo() ? <LocalUserIcon /> : null}
       </div>
     </div>
   )

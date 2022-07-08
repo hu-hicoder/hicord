@@ -1,4 +1,4 @@
-import type { Component } from 'solid-js';
+import type { Component } from 'solid-js'
 import { Room } from './components/Room'
 
 const App: Component = () => {
@@ -6,7 +6,7 @@ const App: Component = () => {
     <div>
       <Room roomId="test" />
     </div>
-  );
-};
+  )
+}
 
-export default App;
+export default App
