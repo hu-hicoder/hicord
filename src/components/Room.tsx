@@ -128,27 +128,29 @@ export const Room: Component<{ roomId: string }> = (props) => {
         class="relative bg-orange-100"
         style={{ height: `${ROOM_X}px`, width: `${ROOM_Y}px` }}
       >
-        {/* buttons */}
-        <button
-          class="sticky top-0 left-0"
-          onClick={() => onStart()}
-          disabled={isStarted()}
-        >
-          開始
-        </button>
-        <button
-          class="sticky top-0 left-8"
-          onClick={() => onEnd()}
-          disabled={!isStarted()}
-        >
-          停止
-        </button>
         {/* Remote User Icons */}
         <For each={remoteUserInfos()}>
           {(info) => <RemoteUserIcon info={info} />}
         </For>
         {/* Local User Icon */}
         {localUserInfo() ? <LocalUserIcon /> : null}
+        {/* buttons */}
+        <div class="sticky left-0 top-0 inline-flex">
+          <button
+            class="bg-cyan-400 hover:bg-cyan-500 disabled:bg-cyan-700 disabled:opacity-60 rounded py-2 px-4 m-2"
+            onClick={() => onStart()}
+            disabled={isStarted()}
+          >
+            開始
+          </button>
+          <button
+            class="bg-cyan-400 hover:bg-cyan-500 disabled:bg-cyan-700 disabled:opacity-60 rounded py-2 px-4 m-2"
+            onClick={() => onEnd()}
+            disabled={!isStarted()}
+          >
+            停止
+          </button>
+        </div>
       </div>
     </div>
   )
