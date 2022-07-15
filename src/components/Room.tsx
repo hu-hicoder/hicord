@@ -7,7 +7,7 @@ import {
   setLocalUserInfo,
   remoteUserInfos,
   setRemoteUserInfos,
-  UserCoord,
+  UserCoordinate,
   UserInfo,
 } from '../utils/user'
 import RemoteUserIcon from './RemoteUserIcon'
@@ -88,7 +88,7 @@ export const Room: Component<{ roomId: string }> = (props) => {
       PEER.on('connection', (dataConnection) => {
         dataConnection.on('data', (data) => {
           console.log(data)
-          const userCoord = data as UserCoord
+          const userCoord = data as UserCoordinate
           setRemoteUserInfos((prev) => {
             return prev.map((userInfo) => {
               if (userInfo.peerId === dataConnection.remoteId) {

@@ -1,10 +1,10 @@
 import type { Component } from 'solid-js'
-import UserIcon, { USER_ICON_X, USER_ICON_Y } from './UserIcon'
+import UserIcon, { USER_ICON_WIDTH, USER_ICON_HEIGHT } from './UserIcon'
 import {
   localUserInfo,
   setLocalUserInfo,
   remoteUserInfos,
-  UserCoord,
+  UserCoordinate,
 } from '../utils/user'
 import { PEER } from './Room'
 
@@ -23,8 +23,8 @@ const LocalUserIcon: Component = () => {
     event.preventDefault()
     // set info
     setLocalUserInfo((prev) => {
-      const x = event.pageX - USER_ICON_X / 2
-      const y = event.pageY - USER_ICON_Y / 2
+      const x = event.pageX - USER_ICON_WIDTH / 2
+      const y = event.pageY - USER_ICON_HEIGHT / 2
 
       const dx = x - prev.x
       const dy = y - prev.y
@@ -88,7 +88,7 @@ function sendUserInfo() {
     const dataConnection = PEER.connect(rInfo.peerId)
 
     dataConnection.on('open', () => {
-      const data: UserCoord = {
+      const data: UserCoordinate = {
         x: localUserInfo().x,
         y: localUserInfo().y,
         deg: localUserInfo().deg,
