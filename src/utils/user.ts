@@ -5,12 +5,12 @@ export const [remoteUserInfos, setRemoteUserInfos] = createSignal<UserInfo[]>(
   []
 )
 
-export type UserInfo = UserCoord & {
+export type UserInfo = UserCoordinate & {
   stream: MediaStream
   peerId: string
 }
 
-export type UserCoord = {
+export type UserCoordinate = {
   // right-handed coordinate system
   x: number
   y: number

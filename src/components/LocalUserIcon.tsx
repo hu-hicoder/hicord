@@ -1,103 +1,82 @@
 import type { Component } from 'solid-js'
-import UserIcon, { USER_ICON_X, USER_ICON_Y } from './UserIcon'
+import UserIcon, { USER_ICON_WIDTH, USER_ICON_HEIGHT } from './UserIcon'
 import {
   localUserInfo,
   setLocalUserInfo,
   remoteUserInfos,
-  UserCoord,
+  UserCoordinate,
 } from '../utils/user'
 import { PEER } from './Room'
+
 const LocalUserIcon: Component = () => {
-  let localDiv
+  let localDiv: HTMLDivElement
 
-  // mouse down
-  function mdown(e) {
-    // mouse and touch event
-    // if(e.type === "mousedown") {
-    //     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    //     let event = e;
-    // } else {
-    //     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    //     let event = e.changedTouches[0];
-    // }
-
-    // add move event
-    document.body.addEventListener('mousemove', mmove, false)
-    document.body.addEventListener('touchmove', mmove, false)
-  }
+  let isMoving = false
 
   // mouse move
   let mouseMoveCount = 0
-  function mmove(e) {
+  function onMouseMove(event: MouseEvent) {
+    if (!isMoving) return
+
     mouseMoveCount += 1
-
-    // mouse and touch event
-    let event
-    if (e.type === 'mousemove') {
-      event = e
-    } else {
-      event = e.changedTouches[0]
-    }
-
     // prevent
-    e.preventDefault()
-
+    event.preventDefault()
     // set info
     setLocalUserInfo((prev) => {
-      if (prev) {
-        const x = event.pageX - USER_ICON_X / 2
-        const y = event.pageY - USER_ICON_Y / 2
+      const x = event.pageX - USER_ICON_WIDTH / 2
+      const y = event.pageY - USER_ICON_HEIGHT / 2
 
-        const dx = x - prev.x
-        const dy = y - prev.y
-        let deg = prev.deg
-        if (5 < Math.abs(dx) || 5 < Math.abs(dy)) {
-          let r = Math.atan2(dy, dx)
-          if (r < 0) {
-            r = r + 2 * Math.PI
-          }
-          deg = Math.floor((r * 360) / (2 * Math.PI)) - 90
+      const dx = x - prev.x
+      const dy = y - prev.y
+      let deg = prev.deg
+      if (25 < Math.abs(dx ** 2 + dy ** 2)) {
+        let r = Math.atan2(dy, dx)
+        if (r < 0) {
+          r = r + 2 * Math.PI
         }
-
-        return {
-          ...prev,
-          x: x,
-          y: y,
-          deg: deg,
-        }
+        deg = Math.floor((r * 360) / (2 * Math.PI)) - 90
       }
-      return prev
+
+      return {
+        ...prev,
+        x: x,
+        y: y,
+        deg: deg,
+      }
     })
 
     if (mouseMoveCount % 32 === 0) {
-      // send user info
       sendUserInfo()
     }
-
-    // add mouse up event
-    localDiv.addEventListener('mouseup', mup, false)
-    document.body.addEventListener('mouseleave', mup, false)
-    localDiv.addEventListener('touchend', mup, false)
-    document.body.addEventListener('touchleave', mup, false)
   }
 
-  // mouse up
-  function mup(e) {
-    // send user info
+  function onMouseDown() {
+    isMoving = true
     sendUserInfo()
+  }
 
-    // delete move event
-    document.body.removeEventListener('mousemove', mmove, false)
-    localDiv.removeEventListener('mouseup', mup, false)
-    document.body.removeEventListener('touchmove', mmove, false)
-    localDiv.removeEventListener('touchend', mup, false)
+  function onMouseUp() {
+    if (isMoving) {
+      isMoving = false
+      sendUserInfo()
+    }
+  }
+
+  function onMouseLeave() {
+    if (isMoving) {
+      isMoving = false
+      sendUserInfo()
+    }
   }
 
   return (
     <UserIcon info={localUserInfo()}>
       <div
         ref={localDiv}
-        onMouseDown={mdown}
+        onMouseDown={onMouseDown}
+        onMouseMove={onMouseMove}
+        onMouseUp={onMouseUp}
+        onMouseLeave={onMouseLeave}
         class="w-full h-full cursor-grab"
       />
     </UserIcon>
@@ -105,12 +84,11 @@ const LocalUserIcon: Component = () => {
 }
 
 function sendUserInfo() {
-  // send user info
   remoteUserInfos().forEach((rInfo) => {
     const dataConnection = PEER.connect(rInfo.peerId)
 
     dataConnection.on('open', () => {
-      const data: UserCoord = {
+      const data: UserCoordinate = {
         x: localUserInfo().x,
         y: localUserInfo().y,
         deg: localUserInfo().deg,
