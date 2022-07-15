@@ -8,6 +8,7 @@
     "eslint:recommended",
     "plugin:@typescript-eslint/recommended",
     "plugin:@typescript-eslint/eslint-recommended",
+    "plugin:solid/recommended",
     "prettier"
   ],
   "parser": "@typescript-eslint/parser",
@@ -15,7 +16,7 @@
     "ecmaVersion": "latest",
     "sourceType": "module"
   },
-  "plugins": ["@typescript-eslint"],
+  "plugins": ["@typescript-eslint", "solid"],
   "rules": {
     "linebreak-style": ["error", "unix"],
     "quotes": "off",

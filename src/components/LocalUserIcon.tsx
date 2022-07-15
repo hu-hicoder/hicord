@@ -99,7 +99,7 @@ const LocalUserIcon: Component = () => {
         ref={localDiv}
         onMouseDown={mdown}
         class="w-full h-full cursor-grab"
-      ></div>
+      />
     </UserIcon>
   )
 }

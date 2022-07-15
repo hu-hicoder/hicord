@@ -11,7 +11,7 @@ const UserIcon: ParentComponent<{ info: UserInfo }> = (props) => {
     iconDiv.style.left = `${props.info.x}px`
     iconDiv.style.top = `${props.info.y}px`
     iconDiv.style.transform = `rotate(${props.info.deg}deg)`
-  }, [props.info.x, props.info.y, props.info.deg])
+  })
 
   return (
     <div

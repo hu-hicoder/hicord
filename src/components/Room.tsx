@@ -1,4 +1,4 @@
-import Peer, { DataConnection, SfuRoom } from 'skyway-js'
+import Peer, { SfuRoom } from 'skyway-js'
 import type { Component } from 'solid-js'
 import { createEffect, createSignal, For } from 'solid-js'
 import LocalUserIcon from './LocalUserIcon'
@@ -18,7 +18,7 @@ export const PEER = new Peer({ key: KEY as string })
 const ROOM_X = 2048
 const ROOM_Y = 2048
 
-export const Room: Component<{ roomId: string }> = ({ roomId }) => {
+export const Room: Component<{ roomId: string }> = (props) => {
   // Local
   const [localStream, setLocalStream] = createSignal<MediaStream>()
   // Room
@@ -49,7 +49,7 @@ export const Room: Component<{ roomId: string }> = ({ roomId }) => {
         y: ROOM_Y / 2,
         deg: 0,
       })
-      const tmpRoom = PEER.joinRoom<SfuRoom>(roomId, {
+      const tmpRoom = PEER.joinRoom<SfuRoom>(props.roomId, {
         mode: 'sfu',
         stream: localStream(),
       })
