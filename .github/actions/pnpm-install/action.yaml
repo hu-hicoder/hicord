@@ -4,13 +4,19 @@ description: pnpm install Composite Action
 runs:
   using: composite
   steps:
-    - uses: actions/checkout@v3
-    - uses: pnpm/action-setup@v2.2.2
-      with:
-        version: 7.0.0
     - uses: actions/setup-node@v3
       with:
         node-version: 16
-        cache: pnpm
+    - uses: pnpm/action-setup@v2
+      with:
+        version: 7
+    - run: echo "::set-output name=dir::$(pnpm store path)"
+      id: pnpm-cache-dir
+      shell: bash
+    - uses: actions/cache@v3
+      with:
+        path: ${{ steps.pnpm-cache-dir.outputs.dir }}
+        key: ${{ runner.os }}-pnpm-${{ hashFiles('**/pnpm-lock.yaml') }}
+        restore-keys: ${{ runner.os }}-pnpm-
     - run: pnpm install
       shell: bash

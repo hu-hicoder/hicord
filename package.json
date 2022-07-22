@@ -4,7 +4,7 @@
   "description": "",
   "scripts": {
     "dev": "vite",
-    "build": "vite build",
+    "build": "pnpm run type-check && vite build",
     "serve": "vite preview",
     "type-check": "tsc -p tsconfig.json",
     "lint": "eslint . --cache --ext .ts,.tsx",
