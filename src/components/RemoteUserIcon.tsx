@@ -5,7 +5,7 @@ import UserIcon from './UserIcon'
 import { UserInfo } from '../utils/user'
 
 const RemoteUserIcon: Component<{ info: UserInfo }> = (props) => {
-  const videoRef: HTMLVideoElement = null
+  let videoRef: HTMLVideoElement
 
   createEffect(() => {
     // Audio processing
