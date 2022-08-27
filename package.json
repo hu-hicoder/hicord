@@ -1,6 +1,6 @@
 {
-  "name": "vite-template-solid",
-  "version": "0.0.0",
+  "name": "hicord",
+  "version": "0.1.0",
   "description": "",
   "scripts": {
     "dev": "vite",
@@ -14,22 +14,22 @@
   },
   "license": "MIT",
   "devDependencies": {
-    "@typescript-eslint/eslint-plugin": "^5.30.5",
-    "@typescript-eslint/parser": "^5.30.5",
-    "autoprefixer": "^10.4.7",
-    "eslint": "^8.19.0",
+    "@typescript-eslint/eslint-plugin": "^5.35.1",
+    "@typescript-eslint/parser": "^5.35.1",
+    "autoprefixer": "^10.4.8",
+    "eslint": "^8.23.0",
     "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-solid": "^0.7.1",
-    "postcss": "^8.4.14",
+    "postcss": "^8.4.16",
     "prettier": "2.7.1",
-    "tailwindcss": "^3.0.24",
-    "typescript": "^4.6.4",
-    "vite": "^2.9.9",
+    "tailwindcss": "^3.1.8",
+    "typescript": "^4.8.2",
+    "vite": "^3.0.9",
     "vite-plugin-checker": "^0.4.9",
-    "vite-plugin-solid": "^2.2.6"
+    "vite-plugin-solid": "^2.3.0"
   },
   "dependencies": {
-    "skyway-js": "^4.4.4",
-    "solid-js": "^1.4.2"
+    "skyway-js": "^4.4.5",
+    "solid-js": "^1.5.1"
   }
 }
