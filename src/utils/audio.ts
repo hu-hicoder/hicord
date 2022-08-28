@@ -1,23 +1,28 @@
-import { UserInfo } from './user'
+import { UserInfo, RemoteUserAudioNodes } from './user'
 
-function directionX(deg: number) {
+// Panner
+const MAX_DISTANCE = 100
+const REF_DISTANCE = 1
+const ROLL_OFF = 10
+const INNER_CONE = 60
+const OUTER_CONE = 90
+const OUTER_GAIN = 0.3
+
+export function directionX(deg: number) {
   return Math.cos((deg * Math.PI) / 180)
 }
 
-function directionY(deg: number) {
+export function directionY(deg: number) {
   return Math.sin((deg * Math.PI) / 180)
 }
 
+const AudioContext = window.AudioContext
 const audioCtx = new AudioContext()
 
 export function audioProcessing(
   localUserInfo: UserInfo,
   remoteUserInfo: UserInfo
-) {
-  const source = audioCtx.createMediaStreamSource(remoteUserInfo.stream)
-
-  // Filter
-
+): RemoteUserAudioNodes {
   // Listener
   const listener = audioCtx.listener
   listener.positionX.value = localUserInfo.x
@@ -29,13 +34,18 @@ export function audioProcessing(
   // listener.upX.value = 0
   // listener.upY.value = 0
   // listener.upZ.value = 0
+
+  return initRemoteAudio(remoteUserInfo)
+}
+
+export function initRemoteAudio(
+  remoteUserInfo: UserInfo
+): RemoteUserAudioNodes {
+  const sourceNode = audioCtx.createMediaStreamSource(remoteUserInfo.stream)
+
+  // Filter
+
   // Panner
-  const maxDistance = 10000
-  const refDistance = 1
-  const rollOff = 10
-  const innerCone = 60
-  const outerCone = 90
-  const outerGain = 0.3
   const pannerNode = new PannerNode(audioCtx, {
     panningModel: 'HRTF',
     distanceModel: 'linear',
@@ -45,15 +55,20 @@ export function audioProcessing(
     orientationX: directionX(remoteUserInfo.x),
     orientationY: directionY(remoteUserInfo.y),
     // orientationZ: 0,
-    maxDistance: maxDistance,
-    refDistance: refDistance,
-    rolloffFactor: rollOff,
-    coneInnerAngle: innerCone,
-    coneOuterAngle: outerCone,
-    coneOuterGain: outerGain,
+    maxDistance: MAX_DISTANCE,
+    refDistance: REF_DISTANCE,
+    rolloffFactor: ROLL_OFF,
+    coneInnerAngle: INNER_CONE,
+    coneOuterAngle: OUTER_CONE,
+    coneOuterGain: OUTER_GAIN,
   })
 
   // Connect
-  source.connect(pannerNode)
+  sourceNode.connect(pannerNode)
   pannerNode.connect(audioCtx.destination)
+
+  if (audioCtx.state === 'suspended') {
+    audioCtx.resume()
+  }
+  return { sourceNode, pannerNode }
 }

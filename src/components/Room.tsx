@@ -9,8 +9,10 @@ import {
   setRemoteUserInfos,
   UserCoordinate,
   UserInfo,
+  RemoteUserInfo,
 } from '../utils/user'
 import RemoteUserIcon from './RemoteUserIcon'
+import { directionX, directionY, initRemoteAudio } from '../utils/audio'
 
 const KEY = import.meta.env.VITE_SKY_WAY_API_KEY
 export const PEER = new Peer({ key: KEY as string })
@@ -60,16 +62,19 @@ export const Room: Component<{ roomId: string }> = (props) => {
         console.log(`=== ${peerId} が入室しました ===\n`)
       })
       tmpRoom.on('stream', async (stream) => {
-        const remoteUserInfo = {
+        const userInfo: UserInfo = {
           stream: stream,
           peerId: stream.peerId,
           x: ROOM_X / 2,
           y: ROOM_Y / 2,
           deg: 0,
         }
-        // if (localUserInfo) {
-        //   audioProcessing(localUserInfo, remoteUserInfo)
-        // }
+        const audioNodes = initRemoteAudio(userInfo)
+        console.log('create remote user info')
+        const remoteUserInfo: RemoteUserInfo = {
+          ...userInfo,
+          ...audioNodes,
+        }
         setRemoteUserInfos((prev) => [...prev, remoteUserInfo])
       })
       tmpRoom.on('peerLeave', (peerId) => {
@@ -87,21 +92,28 @@ export const Room: Component<{ roomId: string }> = (props) => {
       // DataConnection
       PEER.on('connection', (dataConnection) => {
         dataConnection.on('data', (data) => {
-          console.log(data)
           const userCoord = data as UserCoordinate
           setRemoteUserInfos((prev) => {
-            return prev.map((userInfo) => {
-              if (userInfo.peerId === dataConnection.remoteId) {
-                return {
-                  ...userInfo,
-                  x: userCoord.x,
-                  y: userCoord.y,
-                  deg: userCoord.deg,
-                } as UserInfo
+            return prev.map((remoteUserInfo) => {
+              if (remoteUserInfo.peerId === dataConnection.remoteId) {
+                // Coord
+                remoteUserInfo.x = userCoord.x
+                remoteUserInfo.y = userCoord.y
+                remoteUserInfo.deg = userCoord.deg
+                // Panner Node
+                remoteUserInfo.pannerNode.positionX.value = userCoord.x
+                remoteUserInfo.pannerNode.positionY.value = userCoord.y
+                remoteUserInfo.pannerNode.orientationX.value = directionX(
+                  userCoord.x
+                )
+                remoteUserInfo.pannerNode.orientationY.value = directionY(
+                  userCoord.y
+                )
               }
-              return userInfo
+              return remoteUserInfo
             })
           })
+          console.log(remoteUserInfos()[0])
         })
       })
     }
@@ -129,9 +141,14 @@ export const Room: Component<{ roomId: string }> = (props) => {
         style={{ height: `${ROOM_X}px`, width: `${ROOM_Y}px` }}
       >
         {/* Remote User Icons */}
-        <For each={remoteUserInfos()}>
+        {/* eslint-disable-next-line solid/prefer-for */}
+        {remoteUserInfos().map((info) => (
+          <RemoteUserIcon info={info} />
+        ))}
+        {/* TODO Rerender BUG */}
+        {/* <For each={remoteUserInfos()}>
           {(info) => <RemoteUserIcon info={info} />}
-        </For>
+        </For> */}
         {/* Local User Icon */}
         {localUserInfo() ? <LocalUserIcon /> : null}
         {/* buttons */}

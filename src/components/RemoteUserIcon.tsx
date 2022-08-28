@@ -1,31 +1,24 @@
 import type { Component } from 'solid-js'
-import { createEffect } from 'solid-js'
-import { audioProcessing } from '../utils/audio'
+import { createEffect, onMount } from 'solid-js'
 import UserIcon from './UserIcon'
-import { UserInfo } from '../utils/user'
+import { RemoteUserInfo, UserInfo } from '../utils/user'
 
-const RemoteUserIcon: Component<{ info: UserInfo }> = (props) => {
-  let videoRef: HTMLVideoElement
-
-  createEffect(() => {
-    // Audio processing
-    audioProcessing(
-      {
-        stream: props.info.stream,
-        peerId: props.info.peerId,
-        x: 2048 / 2,
-        y: 2048 / 2,
-        deg: 0,
-      },
-      props.info
-    )
+const RemoteUserIcon: Component<{ info: RemoteUserInfo }> = (props) => {
+  // let videoRef: HTMLVideoElement
+  let audio
+  onMount(() => {
+    console.log('pannerNode onMount')
+    audio = new Audio().srcObject = props.info.stream
+    audio.play()
     // Set stream to video element
-    videoRef.srcObject = props.info.stream
-    videoRef.play().catch((e) => console.log(e))
+    // videoRef.srcObject = props.info.stream
+    // videoRef.play().catch((e) => console.log(e))
   })
+
   return (
-    <UserIcon info={props.info}>
-      <video ref={videoRef} playsinline controls />
+    <UserIcon info={props.info as UserInfo}>
+      <div>fjfdfa</div>
+      {/* <video ref={videoRef} playsinline controls /> */}
     </UserIcon>
   )
 }
