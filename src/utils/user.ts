@@ -10,6 +10,9 @@ export type UserInfo = UserCoordinate & {
   peerId: string
 }
 
+/**
+ * ユーザーの座標
+ */
 export type UserCoordinate = {
   // right-handed coordinate system
   x: number

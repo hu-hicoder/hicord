@@ -34,79 +34,81 @@ export const Room: Component<{ roomId: string }> = (props) => {
         console.log(e)
       })
   }, [])
+
   const onStart = () => {
-    if (PEER) {
-      if (!PEER.open) {
-        return
-      }
-      if (localStream() === undefined) {
-        return
-      }
-      setLocalUserInfo({
-        stream: localStream(),
-        peerId: PEER.id,
+    if (PEER && !PEER.open) {
+      return
+    }
+    if (localStream() === undefined) {
+      return
+    }
+
+    setIsStarted((prev) => !prev)
+
+    setLocalUserInfo({
+      stream: localStream(),
+      peerId: PEER.id,
+      x: ROOM_X / 2,
+      y: ROOM_Y / 2,
+      deg: 0,
+    })
+    const tmpRoom = PEER.joinRoom<SfuRoom>(props.roomId, {
+      mode: 'sfu',
+      stream: localStream(),
+    })
+    tmpRoom.once('open', () => {
+      console.log('=== あなたが参加しました ===\n')
+    })
+    tmpRoom.on('peerJoin', (peerId) => {
+      console.log(`=== ${peerId} が入室しました ===\n`)
+    })
+    tmpRoom.on('stream', async (stream) => {
+      const remoteUserInfo = {
+        stream: stream,
+        peerId: stream.peerId,
         x: ROOM_X / 2,
         y: ROOM_Y / 2,
         deg: 0,
+      }
+      // if (localUserInfo) {
+      //   audioProcessing(localUserInfo, remoteUserInfo)
+      // }
+      setRemoteUserInfos((prev) => [...prev, remoteUserInfo])
+    })
+    tmpRoom.on('peerLeave', (peerId) => {
+      setRemoteUserInfos((prev) => {
+        return prev.filter((userInfo) => {
+          if (userInfo.peerId === peerId) {
+            userInfo.stream.getTracks().forEach((track) => track.stop())
+          }
+          return userInfo.peerId !== peerId
+        })
       })
-      const tmpRoom = PEER.joinRoom<SfuRoom>(props.roomId, {
-        mode: 'sfu',
-        stream: localStream(),
-      })
-      tmpRoom.once('open', () => {
-        console.log('=== あなたが参加しました ===\n')
-      })
-      tmpRoom.on('peerJoin', (peerId) => {
-        console.log(`=== ${peerId} が入室しました ===\n`)
-      })
-      tmpRoom.on('stream', async (stream) => {
-        const remoteUserInfo = {
-          stream: stream,
-          peerId: stream.peerId,
-          x: ROOM_X / 2,
-          y: ROOM_Y / 2,
-          deg: 0,
-        }
-        // if (localUserInfo) {
-        //   audioProcessing(localUserInfo, remoteUserInfo)
-        // }
-        setRemoteUserInfos((prev) => [...prev, remoteUserInfo])
-      })
-      tmpRoom.on('peerLeave', (peerId) => {
+      console.log(`=== ${peerId} が退出しました ===\n`)
+    })
+    setRoom(tmpRoom)
+    // DataConnection
+    PEER.on('connection', (dataConnection) => {
+      dataConnection.on('data', (data) => {
+        console.log(data)
+        const userCoord = data as UserCoordinate
         setRemoteUserInfos((prev) => {
-          return prev.filter((userInfo) => {
-            if (userInfo.peerId === peerId) {
-              userInfo.stream.getTracks().forEach((track) => track.stop())
+          return prev.map((userInfo) => {
+            if (userInfo.peerId === dataConnection.remoteId) {
+              return {
+                ...userInfo,
+                x: userCoord.x,
+                y: userCoord.y,
+                deg: userCoord.deg,
+              } as UserInfo
             }
-            return userInfo.peerId !== peerId
-          })
-        })
-        console.log(`=== ${peerId} が退出しました ===\n`)
-      })
-      setRoom(tmpRoom)
-      // DataConnection
-      PEER.on('connection', (dataConnection) => {
-        dataConnection.on('data', (data) => {
-          console.log(data)
-          const userCoord = data as UserCoordinate
-          setRemoteUserInfos((prev) => {
-            return prev.map((userInfo) => {
-              if (userInfo.peerId === dataConnection.remoteId) {
-                return {
-                  ...userInfo,
-                  x: userCoord.x,
-                  y: userCoord.y,
-                  deg: userCoord.deg,
-                } as UserInfo
-              }
-              return userInfo
-            })
+            return userInfo
           })
         })
       })
-    }
-    setIsStarted((prev) => !prev)
+    })
   }
+
   const onEnd = () => {
     if (room()) {
       room().close()
