@@ -7,6 +7,7 @@ import {
   UserCoordinate,
 } from '../utils/user'
 import { PEER } from './Room'
+import { setListener } from '../utils/audio'
 
 const LocalUserIcon: Component = () => {
   let localDiv: HTMLDivElement
@@ -44,6 +45,8 @@ const LocalUserIcon: Component = () => {
         deg: deg,
       }
     })
+    // set listener
+    setListener(localUserInfo())
 
     if (mouseMoveCount % 32 === 0) {
       sendUserInfo()

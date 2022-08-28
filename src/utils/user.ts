@@ -19,6 +19,7 @@ export type UserInfo = UserCoordinate & {
 
 export type RemoteUserAudioNodes = {
   sourceNode: MediaStreamAudioSourceNode
+  gainNode: GainNode
   pannerNode: PannerNode
 }
 

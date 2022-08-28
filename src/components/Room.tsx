@@ -12,7 +12,7 @@ import {
   RemoteUserInfo,
 } from '../utils/user'
 import RemoteUserIcon from './RemoteUserIcon'
-import { directionX, directionY, initRemoteAudio } from '../utils/audio'
+import { initRemoteAudio, setListener, setPanner } from '../utils/audio'
 
 const KEY = import.meta.env.VITE_SKY_WAY_API_KEY
 export const PEER = new Peer({ key: KEY as string })
@@ -51,6 +51,7 @@ export const Room: Component<{ roomId: string }> = (props) => {
         y: ROOM_Y / 2,
         deg: 0,
       })
+      setListener(localUserInfo())
       const tmpRoom = PEER.joinRoom<SfuRoom>(props.roomId, {
         mode: 'sfu',
         stream: localStream(),
@@ -101,14 +102,7 @@ export const Room: Component<{ roomId: string }> = (props) => {
                 remoteUserInfo.y = userCoord.y
                 remoteUserInfo.deg = userCoord.deg
                 // Panner Node
-                remoteUserInfo.pannerNode.positionX.value = userCoord.x
-                remoteUserInfo.pannerNode.positionY.value = userCoord.y
-                remoteUserInfo.pannerNode.orientationX.value = directionX(
-                  userCoord.x
-                )
-                remoteUserInfo.pannerNode.orientationY.value = directionY(
-                  userCoord.y
-                )
+                setPanner(remoteUserInfo)
               }
               return remoteUserInfo
             })
