@@ -10,26 +10,23 @@ import { PEER } from './Room'
 
 const LocalUserIcon: Component = () => {
   let localDiv: HTMLDivElement
-
   let isMoving = false
+  let preTimeMs = Date.now()
+  let actualSendDurationMs = 0
 
-  // mouse move
-  let mouseMoveCount = 0
-  function onMouseMove(event: MouseEvent) {
+  const onMouseMove = (event: MouseEvent) => {
     if (!isMoving) return
 
-    mouseMoveCount += 1
     // prevent
     event.preventDefault()
     // set info
-    setLocalUserInfo((prev) => {
+    setLocalUserInfo((preUserInfo) => {
       const x = event.pageX - USER_ICON_WIDTH / 2
       const y = event.pageY - USER_ICON_HEIGHT / 2
-
-      const dx = x - prev.x
-      const dy = y - prev.y
-      let deg = prev.deg
-      if (25 < Math.abs(dx ** 2 + dy ** 2)) {
+      const dx = x - preUserInfo.x
+      const dy = y - preUserInfo.y
+      let deg = preUserInfo.deg
+      if (25 < dx ** 2 + dy ** 2) {
         let r = Math.atan2(dy, dx)
         if (r < 0) {
           r = r + 2 * Math.PI
@@ -38,31 +35,38 @@ const LocalUserIcon: Component = () => {
       }
 
       return {
-        ...prev,
+        ...preUserInfo,
         x: x,
         y: y,
         deg: deg,
       }
     })
 
-    if (mouseMoveCount % 32 === 0) {
+    const sendDurationMs = 500
+    const nowTimeMs = Date.now()
+    actualSendDurationMs += nowTimeMs - preTimeMs
+    preTimeMs = nowTimeMs
+    if (actualSendDurationMs >= sendDurationMs) {
+      actualSendDurationMs -= sendDurationMs
       sendUserInfo()
     }
   }
 
-  function onMouseDown() {
+  const onMouseDown = () => {
     isMoving = true
+    preTimeMs = Date.now()
+    actualSendDurationMs = 0
     sendUserInfo()
   }
 
-  function onMouseUp() {
+  const onMouseUp = () => {
     if (isMoving) {
       isMoving = false
       sendUserInfo()
     }
   }
 
-  function onMouseLeave() {
+  const onMouseLeave = () => {
     if (isMoving) {
       isMoving = false
       sendUserInfo()
