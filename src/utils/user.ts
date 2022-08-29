@@ -5,6 +5,9 @@ export const [remoteUserInfos, setRemoteUserInfos] = createSignal<
   RemoteUserInfo[]
 >([])
 
+/**
+ * ユーザーの座標
+ */
 export type UserCoordinate = {
   // right-handed coordinate system
   x: number

@@ -1,5 +1,5 @@
 import type { Component } from 'solid-js'
-import { createEffect, onMount } from 'solid-js'
+import { createEffect } from 'solid-js'
 import UserIcon from './UserIcon'
 import { RemoteUserInfo, UserInfo } from '../utils/user'
 
