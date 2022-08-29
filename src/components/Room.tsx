@@ -6,11 +6,12 @@ import {
   localUserInfo,
   setLocalUserInfo,
   remoteUserInfos,
+  RemoteUserInfo,
   setRemoteUserInfos,
   UserCoordinate,
-  UserInfo,
 } from '../utils/user'
 import RemoteUserIcon from './RemoteUserIcon'
+import { initRemoteAudio, setListener, setPanner } from '../utils/audio'
 
 const KEY = import.meta.env.VITE_SKY_WAY_API_KEY
 export const PEER = new Peer({ key: KEY as string })
@@ -52,6 +53,8 @@ export const Room: Component<{ roomId: string }> = (props) => {
       y: ROOM_Y / 2,
       deg: 0,
     })
+    setListener(localUserInfo())
+
     const tmpRoom = PEER.joinRoom<SfuRoom>(props.roomId, {
       mode: 'sfu',
       stream: localStream(),
@@ -63,16 +66,19 @@ export const Room: Component<{ roomId: string }> = (props) => {
       console.log(`=== ${peerId} が入室しました ===\n`)
     })
     tmpRoom.on('stream', async (stream) => {
-      const remoteUserInfo = {
+      const userInfo = {
         stream: stream,
         peerId: stream.peerId,
         x: ROOM_X / 2,
         y: ROOM_Y / 2,
         deg: 0,
       }
-      // if (localUserInfo) {
-      //   audioProcessing(localUserInfo, remoteUserInfo)
-      // }
+      const audioNodes = initRemoteAudio(userInfo)
+      console.log('create remote user info')
+      const remoteUserInfo: RemoteUserInfo = {
+        ...userInfo,
+        ...audioNodes,
+      }
       setRemoteUserInfos((prev) => [...prev, remoteUserInfo])
     })
     tmpRoom.on('peerLeave', (peerId) => {
@@ -93,16 +99,16 @@ export const Room: Component<{ roomId: string }> = (props) => {
         console.log(data)
         const userCoord = data as UserCoordinate
         setRemoteUserInfos((prev) => {
-          return prev.map((userInfo) => {
-            if (userInfo.peerId === dataConnection.remoteId) {
-              return {
-                ...userInfo,
-                x: userCoord.x,
-                y: userCoord.y,
-                deg: userCoord.deg,
-              } as UserInfo
+          return prev.map((remoteUserInfo) => {
+            if (remoteUserInfo.peerId === dataConnection.remoteId) {
+              // Coord
+              remoteUserInfo.x = userCoord.x
+              remoteUserInfo.y = userCoord.y
+              remoteUserInfo.deg = userCoord.deg
+              // Panner Node
+              setPanner(remoteUserInfo)
             }
-            return userInfo
+            return remoteUserInfo
           })
         })
       })

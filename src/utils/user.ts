@@ -1,14 +1,9 @@
 import { createSignal } from 'solid-js'
 
 export const [localUserInfo, setLocalUserInfo] = createSignal<UserInfo>()
-export const [remoteUserInfos, setRemoteUserInfos] = createSignal<UserInfo[]>(
-  []
-)
-
-export type UserInfo = UserCoordinate & {
-  stream: MediaStream
-  peerId: string
-}
+export const [remoteUserInfos, setRemoteUserInfos] = createSignal<
+  RemoteUserInfo[]
+>([])
 
 /**
  * ユーザーの座標
@@ -19,3 +14,16 @@ export type UserCoordinate = {
   y: number
   deg: number
 }
+
+export type UserInfo = UserCoordinate & {
+  stream: MediaStream
+  peerId: string
+}
+
+export type RemoteUserAudioNodes = {
+  sourceNode: MediaStreamAudioSourceNode
+  gainNode: GainNode
+  pannerNode: PannerNode
+}
+
+export type RemoteUserInfo = UserInfo & RemoteUserAudioNodes

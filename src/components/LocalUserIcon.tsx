@@ -7,6 +7,7 @@ import {
   UserCoordinate,
 } from '../utils/user'
 import { PEER } from './Room'
+import { setListener } from '../utils/audio'
 
 const LocalUserIcon: Component = () => {
   let localDiv: HTMLDivElement
@@ -41,6 +42,8 @@ const LocalUserIcon: Component = () => {
         deg: deg,
       }
     })
+    // set listener
+    setListener(localUserInfo())
 
     const sendDurationMs = 500
     const nowTimeMs = Date.now()
