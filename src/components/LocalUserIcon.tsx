@@ -1,13 +1,8 @@
 import type { Component } from 'solid-js'
 import UserIcon, { USER_ICON_WIDTH, USER_ICON_HEIGHT } from './UserIcon'
-import {
-  localUserInfo,
-  setLocalUserInfo,
-  remoteUserInfos,
-  UserCoordinate,
-} from '../utils/user'
-import { PEER } from './Room'
+import { localUserInfo, setLocalUserInfo } from '../utils/user'
 import { setListener } from '../utils/audio'
+import { sendUserCoordinateToAll } from '../utils/sendUserCoordinate'
 
 const LocalUserIcon: Component = () => {
   let localDiv: HTMLDivElement
@@ -51,7 +46,7 @@ const LocalUserIcon: Component = () => {
     preTimeMs = nowTimeMs
     if (actualSendDurationMs >= sendDurationMs) {
       actualSendDurationMs -= sendDurationMs
-      sendUserInfo()
+      sendUserCoordinateToAll()
     }
   }
 
@@ -59,20 +54,20 @@ const LocalUserIcon: Component = () => {
     isMoving = true
     preTimeMs = Date.now()
     actualSendDurationMs = 0
-    sendUserInfo()
+    sendUserCoordinateToAll()
   }
 
   const onMouseUp = () => {
     if (isMoving) {
       isMoving = false
-      sendUserInfo()
+      sendUserCoordinateToAll()
     }
   }
 
   const onMouseLeave = () => {
     if (isMoving) {
       isMoving = false
-      sendUserInfo()
+      sendUserCoordinateToAll()
     }
   }
 
@@ -88,21 +83,6 @@ const LocalUserIcon: Component = () => {
       />
     </UserIcon>
   )
-}
-
-function sendUserInfo() {
-  remoteUserInfos().forEach((rInfo) => {
-    const dataConnection = PEER.connect(rInfo.peerId)
-
-    dataConnection.on('open', () => {
-      const data: UserCoordinate = {
-        x: localUserInfo().x,
-        y: localUserInfo().y,
-        deg: localUserInfo().deg,
-      }
-      dataConnection.send(data)
-    })
-  })
 }
 
 export default LocalUserIcon
