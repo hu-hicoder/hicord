@@ -1,6 +1,6 @@
 import Peer, { SfuRoom } from 'skyway-js'
 import type { Component } from 'solid-js'
-import { createEffect, createSignal, For } from 'solid-js'
+import { createEffect, createSignal } from 'solid-js'
 import LocalUserIcon from './LocalUserIcon'
 import {
   localUserInfo,
@@ -8,13 +8,19 @@ import {
   remoteUserInfos,
   RemoteUserInfo,
   setRemoteUserInfos,
-  UserCoordinate,
+  isUserCoordinate,
+  isUserName,
 } from '../utils/user'
 import RemoteUserIcon from './RemoteUserIcon'
 import ChatToolbar from './ChatToolbar'
 import MainToolbar from './MainToolbar'
 import UserToolbar from './UserToolbar'
 import { initRemoteAudio, setListener, setPanner } from '../utils/audio'
+import {
+  sendLocalUserName,
+  sendLocalUserNameToAll,
+} from '../utils/sendLocalUserName'
+import { sendUserCoordinateToAll } from '../utils/sendUserCoordinate'
 
 const KEY = import.meta.env.VITE_SKY_WAY_API_KEY
 export const PEER = new Peer({ key: KEY as string })
@@ -23,11 +29,13 @@ const ROOM_X = 4096
 const ROOM_Y = 4096
 
 export const Room: Component<{ roomId: string }> = (props) => {
+  let localUserNameElement: HTMLInputElement
   // Local
   const [localStream, setLocalStream] = createSignal<MediaStream>()
   // Room
   const [room, setRoom] = createSignal<SfuRoom>()
   const [isStarted, setIsStarted] = createSignal(false)
+
   createEffect(() => {
     navigator.mediaDevices
       .getUserMedia({ video: false, audio: true })
@@ -55,6 +63,7 @@ export const Room: Component<{ roomId: string }> = (props) => {
       x: ROOM_X / 2,
       y: ROOM_Y / 2,
       deg: 0,
+      userName: localUserNameElement.value,
     })
     setListener(localUserInfo())
 
@@ -67,6 +76,7 @@ export const Room: Component<{ roomId: string }> = (props) => {
     })
     tmpRoom.on('peerJoin', (peerId) => {
       console.log(`=== ${peerId} が入室しました ===\n`)
+      sendLocalUserName(peerId)
     })
     tmpRoom.on('stream', async (stream) => {
       const userInfo = {
@@ -75,6 +85,7 @@ export const Room: Component<{ roomId: string }> = (props) => {
         x: ROOM_X / 2,
         y: ROOM_Y / 2,
         deg: 0,
+        userName: '?', // TODO:
       }
       const audioNodes = initRemoteAudio(userInfo)
       console.log('create remote user info')
@@ -83,6 +94,8 @@ export const Room: Component<{ roomId: string }> = (props) => {
         ...audioNodes,
       }
       setRemoteUserInfos((prev) => [...prev, remoteUserInfo])
+      sendLocalUserNameToAll()
+      sendUserCoordinateToAll()
     })
     tmpRoom.on('peerLeave', (peerId) => {
       setRemoteUserInfos((prev) => {
@@ -100,20 +113,30 @@ export const Room: Component<{ roomId: string }> = (props) => {
     PEER.on('connection', (dataConnection) => {
       dataConnection.on('data', (data) => {
         console.log(data)
-        const userCoord = data as UserCoordinate
-        setRemoteUserInfos((prev) => {
-          return prev.map((remoteUserInfo) => {
-            if (remoteUserInfo.peerId === dataConnection.remoteId) {
-              // Coord
-              remoteUserInfo.x = userCoord.x
-              remoteUserInfo.y = userCoord.y
-              remoteUserInfo.deg = userCoord.deg
-              // Panner Node
-              setPanner(remoteUserInfo)
-            }
-            return remoteUserInfo
-          })
-        })
+        if (isUserCoordinate(data)) {
+          setRemoteUserInfos((preInfo) =>
+            preInfo.map((remoteUserInfo) => {
+              if (remoteUserInfo.peerId === dataConnection.remoteId) {
+                // Coord
+                remoteUserInfo.x = data.x
+                remoteUserInfo.y = data.y
+                remoteUserInfo.deg = data.deg
+                // Panner Node
+                setPanner(remoteUserInfo)
+              }
+              return remoteUserInfo
+            })
+          )
+        } else if (isUserName(data)) {
+          setRemoteUserInfos((preInfo) =>
+            preInfo.map((remoteUserInfo) => {
+              if (remoteUserInfo.peerId === dataConnection.remoteId) {
+                remoteUserInfo.userName = data.userName
+              }
+              return remoteUserInfo
+            })
+          )
+        }
       })
     })
   }
@@ -133,6 +156,20 @@ export const Room: Component<{ roomId: string }> = (props) => {
     console.log('=== あなたが退出しました ===\n')
   }
 
+  const onClickRename = () => {
+    console.log(`${localUserNameElement.value}に変える`) // TODO:
+    if (localUserInfo().userName === localUserNameElement.value) {
+      // TODO: 同じ場合disabledに
+      console.info('今と同じ名前です')
+      return
+    }
+    setLocalUserInfo((preInfo) => ({
+      ...preInfo,
+      userName: localUserNameElement.value,
+    }))
+    sendLocalUserNameToAll()
+  }
+
   return (
     <div>
       <div
@@ -140,9 +177,16 @@ export const Room: Component<{ roomId: string }> = (props) => {
         style={{ height: `${ROOM_X}px`, width: `${ROOM_Y}px` }}
       >
         {/* Remote User Icons */}
-        <For each={remoteUserInfos()}>
+        {
+          // TODO: more better
+          // eslint-disable-next-line solid/prefer-for
+          remoteUserInfos().map((info) => (
+            <RemoteUserIcon info={info} />
+          ))
+        }
+        {/* <For each={remoteUserInfos()}> かぜかうまくいかない
           {(info) => <RemoteUserIcon info={info} />}
-        </For>
+        </For> */}
         {/* Local User Icon */}
         {localUserInfo() ? <LocalUserIcon /> : null}
         {/* buttons */}
@@ -161,6 +205,20 @@ export const Room: Component<{ roomId: string }> = (props) => {
           >
             停止
           </button>
+          <input
+            type="text"
+            ref={localUserNameElement}
+            class="rounded py-2 px-4 m-2 border-2 border-cyan-400"
+            {...{ value: 'No Name' }}
+          />
+          {isStarted() ? (
+            <button
+              class="bg-cyan-400 hover:bg-cyan-500 disabled:bg-cyan-700 disabled:opacity-60 rounded p-2 m-2"
+              onClick={() => onClickRename()}
+            >
+              rename
+            </button>
+          ) : undefined}
         </div>
 
         {/* Toolbar */}
