@@ -11,13 +11,16 @@ import {
   UserCoordinate,
 } from '../utils/user'
 import RemoteUserIcon from './RemoteUserIcon'
+import ChatToolbar from './ChatToolbar'
+import MainToolbar from './MainToolbar'
+import UserToolbar from './UserToolbar'
 import { initRemoteAudio, setListener, setPanner } from '../utils/audio'
 
 const KEY = import.meta.env.VITE_SKY_WAY_API_KEY
 export const PEER = new Peer({ key: KEY as string })
 
-const ROOM_X = 2048
-const ROOM_Y = 2048
+const ROOM_X = 4096
+const ROOM_Y = 4096
 
 export const Room: Component<{ roomId: string }> = (props) => {
   // Local
@@ -133,7 +136,7 @@ export const Room: Component<{ roomId: string }> = (props) => {
   return (
     <div>
       <div
-        class="relative bg-orange-100"
+        class="relative bg-main"
         style={{ height: `${ROOM_X}px`, width: `${ROOM_Y}px` }}
       >
         {/* Remote User Icons */}
@@ -159,6 +162,11 @@ export const Room: Component<{ roomId: string }> = (props) => {
             停止
           </button>
         </div>
+
+        {/* Toolbar */}
+        <UserToolbar />
+        <MainToolbar />
+        <ChatToolbar />
       </div>
     </div>
   )
