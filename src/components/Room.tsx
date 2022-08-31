@@ -192,14 +192,14 @@ export const Room: Component<{ roomId: string }> = (props) => {
         {/* buttons */}
         <div class="sticky left-0 top-0 inline-flex">
           <button
-            class="bg-cyan-400 hover:bg-cyan-500 disabled:bg-cyan-700 disabled:opacity-60 rounded py-2 px-4 m-2"
+            class="btn btn-primary m-2"
             onClick={() => onStart()}
             disabled={isStarted()}
           >
             開始
           </button>
           <button
-            class="bg-cyan-400 hover:bg-cyan-500 disabled:bg-cyan-700 disabled:opacity-60 rounded py-2 px-4 m-2"
+            class="btn btn-primary m-2"
             onClick={() => onEnd()}
             disabled={!isStarted()}
           >
@@ -208,14 +208,11 @@ export const Room: Component<{ roomId: string }> = (props) => {
           <input
             type="text"
             ref={localUserNameElement}
-            class="rounded py-2 px-4 m-2 border-2 border-cyan-400"
-            {...{ value: 'No Name' }}
+            class="input input-bordered m-2"
+            value="No Name"
           />
           {isStarted() ? (
-            <button
-              class="bg-cyan-400 hover:bg-cyan-500 disabled:bg-cyan-700 disabled:opacity-60 rounded p-2 m-2"
-              onClick={() => onClickRename()}
-            >
+            <button class="btn btn-primary m-2" onClick={() => onClickRename()}>
               rename
             </button>
           ) : undefined}
