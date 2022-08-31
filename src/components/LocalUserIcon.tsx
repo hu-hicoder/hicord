@@ -17,8 +17,8 @@ const LocalUserIcon: Component = () => {
     event.preventDefault()
     // set info
     setLocalUserInfo((preUserInfo) => {
-      const x = event.pageX - USER_ICON_WIDTH / 2
-      const y = event.pageY - USER_ICON_HEIGHT / 2
+      const x = event.pageX
+      const y = event.pageY
       const dx = x - preUserInfo.x
       const dy = y - preUserInfo.y
       let deg = preUserInfo.deg
