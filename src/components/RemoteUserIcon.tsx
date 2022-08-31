@@ -7,7 +7,6 @@ const RemoteUserIcon: Component<{ info: RemoteUserInfo }> = (props) => {
   let gainRef: HTMLInputElement
   let videoRef: HTMLVideoElement
   createEffect(() => {
-    console.log('pannerNode onMount')
     // Set stream to video element
     videoRef.srcObject = props.info.stream
     videoRef.play().catch((e) => console.log(e))
@@ -32,7 +31,7 @@ const RemoteUserIcon: Component<{ info: RemoteUserInfo }> = (props) => {
         step="0.01"
         onInput={changeGain}
       />
-      <video ref={videoRef} controls />
+      <video class="hidden" ref={videoRef} controls />
     </UserIcon>
   )
 }

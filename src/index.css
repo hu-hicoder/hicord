@@ -13,7 +13,7 @@
   }
 
   .tb-icon {
-    @apply text-neutral-content p-2 hover:bg-base-content opacity-95 rounded-lg;
+    @apply text-neutral-content p-2 hover:bg-base-content opacity-95 rounded-lg cursor-pointer;
   }
 
   .tb-icon-on {

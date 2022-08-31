@@ -33,7 +33,6 @@ export function setListener(localUserInfo: UserInfo) {
   listener.positionX.setValueAtTime(localUserInfo.x, audioCtx.currentTime)
   listener.positionZ.setValueAtTime(localUserInfo.y, audioCtx.currentTime)
   // listener.positionZ.value
-  console.log('forward: ', directionX(localUserInfo), directionZ(localUserInfo))
   listener.forwardX.setValueAtTime(
     directionX(localUserInfo),
     audioCtx.currentTime
@@ -96,11 +95,9 @@ export function initRemoteAudio(
   })
 
   // Connect
-  sourceNode.connect(pannerNode)
-  pannerNode.connect(audioCtx.destination)
+  sourceNode.connect(gainNode).connect(pannerNode).connect(audioCtx.destination)
 
   if (audioCtx.state === 'suspended') {
-    console.log('suspend => resume')
     audioCtx.resume()
   }
   return { sourceNode, gainNode, pannerNode }
