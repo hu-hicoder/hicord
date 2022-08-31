@@ -18,17 +18,11 @@ import MainToolbar from './MainToolbar'
 import UserToolbar from './UserToolbar'
 import { initRemoteAudio, setListener, setPanner } from '../utils/audio'
 import {
-  sendLocalUserName,
+  sendLocalUserNameTo,
   sendLocalUserNameToAll,
 } from '../utils/sendLocalUserName'
-import {
-  sendLocalUserAvatar,
-  sendLocalUserAvatarToAll,
-} from '../utils/sendLocalUserAvatar'
-import {
-  sendUserCoordinate,
-  sendUserCoordinateToAll,
-} from '../utils/sendUserCoordinate'
+import { sendLocalUserAvatarTo } from '../utils/sendLocalUserAvatar'
+import { sendLocalUserCoordinateToAll } from '../utils/sendLocalUserCoordinate'
 
 const KEY = import.meta.env.VITE_SKY_WAY_API_KEY
 export const PEER = new Peer({ key: KEY as string })
@@ -84,9 +78,8 @@ export const Room: Component<{ roomId: string }> = (props) => {
     })
     tmpRoom.on('peerJoin', (peerId) => {
       console.log(`=== ${peerId} が入室しました ===\n`)
-      sendLocalUserName(peerId)
-      sendUserCoordinate(peerId)
-      sendLocalUserAvatar(peerId)
+      sendLocalUserNameTo(peerId)
+      sendLocalUserAvatarTo(peerId)
     })
     tmpRoom.on('stream', async (stream) => {
       const userInfo = {
@@ -105,8 +98,7 @@ export const Room: Component<{ roomId: string }> = (props) => {
       }
       setRemoteUserInfos((prev) => [...prev, remoteUserInfo])
       sendLocalUserNameToAll()
-      sendUserCoordinateToAll()
-      sendLocalUserAvatarToAll()
+      sendLocalUserCoordinateToAll()
     })
     tmpRoom.on('peerLeave', (peerId) => {
       setRemoteUserInfos((prev) => {
@@ -241,7 +233,6 @@ export const Room: Component<{ roomId: string }> = (props) => {
             </button>
           ) : undefined}
         </div>
-
         {/* Toolbar */}
         <UserToolbar />
         <MainToolbar />

@@ -8,7 +8,7 @@ export const sendLocalUserAvatarToAll = () => {
   sendToAll(data)
 }
 
-export const sendLocalUserAvatar = (
+export const sendLocalUserAvatarTo = (
   remoteUserPeerId: RemoteUserInfo['peerId']
 ) => {
   const data: UserAvatar = {
