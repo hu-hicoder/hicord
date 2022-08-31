@@ -10,6 +10,7 @@ import {
   setRemoteUserInfos,
   isUserCoordinate,
   isUserName,
+  isUserAvatar,
 } from '../utils/user'
 import RemoteUserIcon from './RemoteUserIcon'
 import ChatToolbar from './ChatToolbar'
@@ -20,7 +21,14 @@ import {
   sendLocalUserName,
   sendLocalUserNameToAll,
 } from '../utils/sendLocalUserName'
-import { sendUserCoordinateToAll } from '../utils/sendUserCoordinate'
+import {
+  sendLocalUserAvatar,
+  sendLocalUserAvatarToAll,
+} from '../utils/sendLocalUserAvatar'
+import {
+  sendUserCoordinate,
+  sendUserCoordinateToAll,
+} from '../utils/sendUserCoordinate'
 
 const KEY = import.meta.env.VITE_SKY_WAY_API_KEY
 export const PEER = new Peer({ key: KEY as string })
@@ -77,6 +85,8 @@ export const Room: Component<{ roomId: string }> = (props) => {
     tmpRoom.on('peerJoin', (peerId) => {
       console.log(`=== ${peerId} が入室しました ===\n`)
       sendLocalUserName(peerId)
+      sendUserCoordinate(peerId)
+      sendLocalUserAvatar(peerId)
     })
     tmpRoom.on('stream', async (stream) => {
       const userInfo = {
@@ -85,7 +95,7 @@ export const Room: Component<{ roomId: string }> = (props) => {
         x: ROOM_X / 2,
         y: ROOM_Y / 2,
         deg: 0,
-        userName: '?', // TODO:
+        userName: 'No Name', // TODO:
       }
       const audioNodes = initRemoteAudio(userInfo)
       console.log('create remote user info')
@@ -96,6 +106,7 @@ export const Room: Component<{ roomId: string }> = (props) => {
       setRemoteUserInfos((prev) => [...prev, remoteUserInfo])
       sendLocalUserNameToAll()
       sendUserCoordinateToAll()
+      sendLocalUserAvatarToAll()
     })
     tmpRoom.on('peerLeave', (peerId) => {
       setRemoteUserInfos((prev) => {
@@ -132,6 +143,19 @@ export const Room: Component<{ roomId: string }> = (props) => {
             preInfo.map((remoteUserInfo) => {
               if (remoteUserInfo.peerId === dataConnection.remoteId) {
                 remoteUserInfo.userName = data.userName
+              }
+              return remoteUserInfo
+            })
+          )
+        } else if (isUserAvatar(data)) {
+          // TODO Refactor
+          setRemoteUserInfos((preInfo) =>
+            preInfo.map((remoteUserInfo) => {
+              if (remoteUserInfo.peerId === dataConnection.remoteId) {
+                const arrayBuffer = data.image as any as ArrayBuffer
+                remoteUserInfo.image = new Blob([arrayBuffer], {
+                  type: 'image/jpeg',
+                }) as File
               }
               return remoteUserInfo
             })

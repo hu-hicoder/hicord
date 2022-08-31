@@ -72,16 +72,16 @@ const LocalUserIcon: Component = () => {
   }
 
   return (
-    <UserIcon info={localUserInfo()}>
-      <div
-        ref={localDiv}
-        onMouseDown={onMouseDown}
-        onMouseMove={onMouseMove}
-        onMouseUp={onMouseUp}
-        onMouseLeave={onMouseLeave}
-        class="w-full h-full cursor-grab"
-      />
-    </UserIcon>
+    <div
+      ref={localDiv}
+      onMouseDown={onMouseDown}
+      onMouseMove={onMouseMove}
+      onMouseUp={onMouseUp}
+      onMouseLeave={onMouseLeave}
+      class="cursor-grab"
+    >
+      <UserIcon info={localUserInfo()} />
+    </div>
   )
 }
 

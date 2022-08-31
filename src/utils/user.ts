@@ -6,7 +6,8 @@ export const [remoteUserInfos, setRemoteUserInfos] = createSignal<
 >([])
 
 export type UserInfo = UserCoordinate &
-  UserName & {
+  UserName &
+  UserAvatar & {
     stream: MediaStream
     peerId: string
   }
@@ -33,6 +34,10 @@ export type UserName = {
   userName: string
 }
 
+export type UserAvatar = {
+  image?: File
+}
+
 export const isUserCoordinate = (data: unknown): data is UserCoordinate =>
   typeof data === 'object' &&
   data !== null &&
@@ -44,3 +49,10 @@ export const isUserName = (data: unknown): data is UserName =>
   typeof data === 'object' &&
   data !== null &&
   typeof (data as UserName).userName === 'string'
+
+// TODO Refactor
+// const isFile = (input) => 'File' in window && input instanceof File
+export const isUserAvatar = (data: unknown): data is UserAvatar =>
+  typeof data === 'object' &&
+  data !== null &&
+  (data as UserAvatar).image !== null
