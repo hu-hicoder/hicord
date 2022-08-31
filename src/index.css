@@ -4,35 +4,43 @@
 @tailwind utilities;
 
 @layer components {
-    .tb-bg {
-        @apply bg-neutral-800 opacity-75;
-    }
+  .tb-bg {
+    @apply bg-neutral opacity-75;
+  }
 
-    .tb-card {
-        @apply flex tb-bg p-2 rounded-lg content-center gap-2;
-    }
+  .tb-card {
+    @apply flex tb-bg p-2 rounded-lg content-center gap-2;
+  }
 
-    .tb-icon {
-        @apply text-neutral-200 p-2 hover:bg-neutral-600 opacity-95 rounded-lg;
-    }
+  .tb-icon {
+    @apply text-neutral-content p-2 hover:bg-base-content opacity-95 rounded-lg;
+  }
 
-    .tb-icon-on {
-        @apply text-green-200 hover:bg-green-600 bg-green-800 opacity-80;
-    }
+  .tb-icon-on {
+    @apply text-green-200 hover:bg-green-600 bg-green-800 opacity-80;
+  }
 
-    .tb-icon-off {
-        @apply text-red-200 hover:bg-red-700 bg-red-800 opacity-80;
-    }
+  .tb-icon-off {
+    @apply text-red-200 hover:bg-red-700 bg-red-800 opacity-80;
+  }
 
-    .bg-main {
-        background-image: linear-gradient(0deg, transparent calc(100% - 1px), rgb(240, 240, 240) calc(100% - 1px)),
-                          linear-gradient(90deg, transparent calc(100% - 1px), rgb(240, 240, 240) calc(100% - 1px));
-        background-size: 32px 32px;
-        background-repeat: repeat;
-        background-position: center center;
-      }
+  .bg-main {
+    background-image: linear-gradient(
+        0deg,
+        transparent calc(100% - 1px),
+        rgb(240, 240, 240) calc(100% - 1px)
+      ),
+      linear-gradient(
+        90deg,
+        transparent calc(100% - 1px),
+        rgb(240, 240, 240) calc(100% - 1px)
+      );
+    background-size: 32px 32px;
+    background-repeat: repeat;
+    background-position: center center;
+  }
 }
 
 .material-symbols-outlined {
-    font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 48;
+  font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 48;
 }
