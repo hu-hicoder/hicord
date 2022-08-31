@@ -4,24 +4,30 @@
 @tailwind utilities;
 
 @layer components {
+  /* Toolbar */
   .tb-bg {
-    @apply bg-neutral opacity-75;
+    background: rgba(10, 10, 10, 0.75);
   }
 
   .tb-card {
-    @apply flex tb-bg p-2 rounded-lg content-center gap-2;
+    @apply flex tb-bg p-2 rounded-lg content-center gap-x-2 text-neutral-content;
   }
 
-  .tb-icon {
-    @apply text-neutral-content p-2 hover:bg-base-content opacity-95 rounded-lg cursor-pointer;
+  .tb-item {
+    @apply flex flex-row items-center content-center p-2 hover:bg-base-content rounded-lg cursor-pointer;
   }
 
-  .tb-icon-on {
-    @apply text-green-200 hover:bg-green-600 bg-green-800 opacity-80;
+  .tb-item-on {
+    @apply text-green-200 hover:bg-green-600 bg-green-800;
   }
 
-  .tb-icon-off {
-    @apply text-red-200 hover:bg-red-700 bg-red-800 opacity-80;
+  .tb-item-off {
+    @apply text-red-200 hover:bg-red-700 bg-red-800;
+  }
+
+  /* Dropdown */
+  .dd-item {
+    @apply flex flex-row items-center content-center p-4 hover:bg-base-content rounded-lg cursor-pointer;
   }
 
   .bg-main {

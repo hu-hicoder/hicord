@@ -1,7 +1,7 @@
 import type { Component } from 'solid-js'
 import { createEffect } from 'solid-js'
 import UserIcon from './UserIcon'
-import { RemoteUserInfo, UserInfo } from '../utils/user'
+import { RemoteUserInfo } from '../utils/user'
 
 const RemoteUserIcon: Component<{ info: RemoteUserInfo }> = (props) => {
   let gainRef: HTMLInputElement
@@ -19,7 +19,8 @@ const RemoteUserIcon: Component<{ info: RemoteUserInfo }> = (props) => {
   }
 
   return (
-    <UserIcon info={props.info as UserInfo}>
+    <div>
+      <UserIcon info={props.info} />
       <input
         ref={gainRef}
         type="range"
@@ -32,7 +33,7 @@ const RemoteUserIcon: Component<{ info: RemoteUserInfo }> = (props) => {
         onInput={changeGain}
       />
       <video class="hidden" ref={videoRef} controls />
-    </UserIcon>
+    </div>
   )
 }
 
