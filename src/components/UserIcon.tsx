@@ -10,8 +10,8 @@ const UserIcon: Component<{ info: UserInfo }> = (props) => {
   let imgElement: HTMLImageElement
 
   createEffect(() => {
-    iconPositionDiv.style.left = `${props.info.x}px`
-    iconPositionDiv.style.top = `${props.info.y}px`
+    iconPositionDiv.style.left = `${props.info.x - USER_ICON_WIDTH / 2}px`
+    iconPositionDiv.style.top = `${props.info.y - USER_ICON_HEIGHT / 2}px`
   })
 
   createEffect(() => {

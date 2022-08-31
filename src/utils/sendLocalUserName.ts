@@ -6,7 +6,7 @@ export const sendLocalUserNameToAll = () => {
   sendToAll(data)
 }
 
-export const sendLocalUserName = (
+export const sendLocalUserNameTo = (
   remoteUserPeerId: RemoteUserInfo['peerId']
 ) => {
   const data: UserName = { userName: localUserInfo().userName }
