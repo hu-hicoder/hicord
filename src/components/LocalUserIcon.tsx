@@ -2,7 +2,7 @@ import type { Component } from 'solid-js'
 import UserIcon, { USER_ICON_WIDTH, USER_ICON_HEIGHT } from './UserIcon'
 import { localUserInfo, setLocalUserInfo } from '../utils/user'
 import { setListener } from '../utils/audio'
-import { sendUserCoordinateToAll } from '../utils/sendUserCoordinate'
+import { sendLocalUserCoordinateToAll } from '../utils/sendLocalUserCoordinate'
 
 const LocalUserIcon: Component = () => {
   let localDiv: HTMLDivElement
@@ -46,7 +46,7 @@ const LocalUserIcon: Component = () => {
     preTimeMs = nowTimeMs
     if (actualSendDurationMs >= sendDurationMs) {
       actualSendDurationMs -= sendDurationMs
-      sendUserCoordinateToAll()
+      sendLocalUserCoordinateToAll()
     }
   }
 
@@ -54,20 +54,20 @@ const LocalUserIcon: Component = () => {
     isMoving = true
     preTimeMs = Date.now()
     actualSendDurationMs = 0
-    sendUserCoordinateToAll()
+    sendLocalUserCoordinateToAll()
   }
 
   const onMouseUp = () => {
     if (isMoving) {
       isMoving = false
-      sendUserCoordinateToAll()
+      sendLocalUserCoordinateToAll()
     }
   }
 
   const onMouseLeave = () => {
     if (isMoving) {
       isMoving = false
-      sendUserCoordinateToAll()
+      sendLocalUserCoordinateToAll()
     }
   }
 
