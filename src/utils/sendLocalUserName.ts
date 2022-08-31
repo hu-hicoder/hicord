@@ -1,28 +1,14 @@
-import { PEER } from '../components/Room'
-import {
-  localUserInfo,
-  RemoteUserInfo,
-  remoteUserInfos,
-  UserName,
-} from './user'
+import { localUserInfo, UserName, RemoteUserInfo } from './user'
+import { sendTo, sendToAll } from './send'
 
 export const sendLocalUserNameToAll = () => {
-  remoteUserInfos().forEach((info) => {
-    const dataConnection = PEER.connect(info.peerId)
-
-    dataConnection.on('open', () => {
-      const data: UserName = { userName: localUserInfo().userName }
-      dataConnection.send(data)
-    })
-  })
+  const data: UserName = { userName: localUserInfo().userName }
+  sendToAll(data)
 }
 
 export const sendLocalUserName = (
   remoteUserPeerId: RemoteUserInfo['peerId']
 ) => {
-  const dataConnection = PEER.connect(remoteUserPeerId)
-  dataConnection.on('open', () => {
-    const data: UserName = { userName: localUserInfo().userName }
-    dataConnection.send(data)
-  })
+  const data: UserName = { userName: localUserInfo().userName }
+  sendTo(remoteUserPeerId, data)
 }

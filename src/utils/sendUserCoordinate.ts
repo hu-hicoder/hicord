@@ -1,37 +1,22 @@
-import { PEER } from '../components/Room'
-import {
-  localUserInfo,
-  RemoteUserInfo,
-  remoteUserInfos,
-  UserCoordinate,
-} from './user'
+import { localUserInfo, UserCoordinate, RemoteUserInfo } from './user'
+import { sendTo, sendToAll } from './send'
 
 export const sendUserCoordinateToAll = () => {
-  remoteUserInfos().forEach((info) => {
-    const dataConnection = PEER.connect(info.peerId)
-
-    dataConnection.on('open', () => {
-      const data: UserCoordinate = {
-        x: localUserInfo().x,
-        y: localUserInfo().y,
-        deg: localUserInfo().deg,
-      }
-      dataConnection.send(data)
-    })
-  })
+  const data: UserCoordinate = {
+    x: localUserInfo().x,
+    y: localUserInfo().y,
+    deg: localUserInfo().deg,
+  }
+  sendToAll(data)
 }
 
 export const sendUserCoordinate = (
   remoteUserPeerId: RemoteUserInfo['peerId']
 ) => {
-  const dataConnection = PEER.connect(remoteUserPeerId)
-
-  dataConnection.on('open', () => {
-    const data: UserCoordinate = {
-      x: localUserInfo().x,
-      y: localUserInfo().y,
-      deg: localUserInfo().deg,
-    }
-    dataConnection.send(data)
-  })
+  const data: UserCoordinate = {
+    x: localUserInfo().x,
+    y: localUserInfo().y,
+    deg: localUserInfo().deg,
+  }
+  sendTo(remoteUserPeerId, data)
 }
