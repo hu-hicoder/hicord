@@ -7,7 +7,8 @@ export const [remoteUserInfos, setRemoteUserInfos] = createSignal<
 
 export type UserInfo = UserCoordinate &
   UserName &
-  UserAvatar & {
+  UserAvatar &
+  UserReaction & {
     stream: MediaStream
     peerId: string
   }
@@ -38,6 +39,10 @@ export type UserAvatar = {
   image?: File
 }
 
+export type UserReaction = {
+  userReaction?: string
+}
+
 export const isUserCoordinate = (data: unknown): data is UserCoordinate =>
   typeof data === 'object' &&
   data !== null &&
@@ -56,3 +61,8 @@ export const isUserAvatar = (data: unknown): data is UserAvatar =>
   typeof data === 'object' &&
   data !== null &&
   (data as UserAvatar).image !== null
+
+export const isUserReaction = (data: unknown): data is Required<UserReaction> =>
+  typeof data === 'object' &&
+  data !== null &&
+  typeof (data as UserReaction).userReaction === 'string'

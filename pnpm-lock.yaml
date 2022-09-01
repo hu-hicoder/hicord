@@ -9,6 +9,7 @@ specifiers:
   eslint-config-prettier: ^8.5.0
   eslint-plugin-solid: ^0.7.1
   material-symbols: ^0.2.9
+  picmo: ^5.6.1
   postcss: ^8.4.16
   prettier: 2.7.1
   skyway-js: ^4.4.5
@@ -21,6 +22,7 @@ specifiers:
 
 dependencies:
   material-symbols: 0.2.9
+  picmo: 5.6.1
   skyway-js: 4.4.5
   solid-js: 1.5.1
 
@@ -1047,6 +1049,10 @@ packages:
   /electron-to-chromium/1.4.233:
     resolution: {integrity: sha512-ejwIKXTg1wqbmkcRJh9Ur3hFGHFDZDw1POzdsVrB2WZjgRuRMHIQQKNpe64N/qh3ZtH2otEoRoS+s6arAAuAAw==}
     dev: true
+
+  /emojibase/6.1.0:
+    resolution: {integrity: sha512-1GkKJPXP6tVkYJHOBSJHoGOr/6uaDxZ9xJ6H7m6PfdGXTmQgbALHLWaVRY4Gi/qf5x/gT/NUXLPuSHYLqtLtrQ==}
+    dev: false
 
   /engine.io-client/3.5.2:
     resolution: {integrity: sha512-QEqIp+gJ/kMHeUun7f5Vv3bteRHppHH/FMBQX/esFj/fuYfjyUKWGMo3VCvIP/V8bE9KcjHmRZrhIz2Z9oNsDA==}
@@ -2181,6 +2187,12 @@ packages:
     resolution: {integrity: sha512-gDKb8aZMDeD/tZWs9P6+q0J9Mwkdl6xMV8TjnGP3qJVJ06bdMgkbBlLU8IdfOsIsFz2BW1rNVT3XuNEl8zPAvw==}
     engines: {node: '>=8'}
     dev: true
+
+  /picmo/5.6.1:
+    resolution: {integrity: sha512-cJSDl3d/UgZ5vS24uWT6wvS8AgUo9nZRLG1d4a6uy+1ow3uyJBnFmYprZj24VoHFBFBlT1vXp47bfmg8MT5qTw==}
+    dependencies:
+      emojibase: 6.1.0
+    dev: false
 
   /picocolors/1.0.0:
     resolution: {integrity: sha512-1fygroTLlHu66zi26VoTDv8yRgm0Fccecssto+MhsZ0D/DGW2sm8E8AjW7NU5VVTRt5GxbeZ5qBuJr+HyLYkjQ==}

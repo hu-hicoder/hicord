@@ -37,6 +37,14 @@ const UserIcon: Component<{ info: UserInfo }> = (props) => {
       </div>
 
       <div class="text-center">{props.info.userName}</div>
+      <div
+        class="text-center text-6xl relative"
+        style={{
+          top: `${-USER_ICON_HEIGHT - 100}px`,
+        }}
+      >
+        {props.info.userReaction}
+      </div>
     </div>
   )
 }

@@ -8,21 +8,19 @@ import {
   remoteUserInfos,
   RemoteUserInfo,
   setRemoteUserInfos,
-  isUserCoordinate,
-  isUserName,
-  isUserAvatar,
 } from '../utils/user'
 import RemoteUserIcon from './RemoteUserIcon'
 import ChatToolbar from './ChatToolbar'
 import MainToolbar from './MainToolbar'
 import UserToolbar from './UserToolbar'
-import { initRemoteAudio, setListener, setPanner } from '../utils/audio'
+import { initRemoteAudio, setListener } from '../utils/audio'
 import {
   sendLocalUserNameTo,
   sendLocalUserNameToAll,
 } from '../utils/sendLocalUserName'
 import { sendLocalUserAvatarTo } from '../utils/sendLocalUserAvatar'
 import { sendLocalUserCoordinateToAll } from '../utils/sendLocalUserCoordinate'
+import { setPeerOnConnection } from '../utils/setPeerOnConnection'
 
 const KEY = import.meta.env.VITE_SKY_WAY_API_KEY
 export const PEER = new Peer({ key: KEY as string })
@@ -113,48 +111,7 @@ export const Room: Component<{ roomId: string }> = (props) => {
     })
     setRoom(tmpRoom)
     // DataConnection
-    PEER.on('connection', (dataConnection) => {
-      dataConnection.on('data', (data) => {
-        console.log(data)
-        if (isUserCoordinate(data)) {
-          setRemoteUserInfos((preInfo) =>
-            preInfo.map((remoteUserInfo) => {
-              if (remoteUserInfo.peerId === dataConnection.remoteId) {
-                // Coord
-                remoteUserInfo.x = data.x
-                remoteUserInfo.y = data.y
-                remoteUserInfo.deg = data.deg
-                // Panner Node
-                setPanner(remoteUserInfo)
-              }
-              return remoteUserInfo
-            })
-          )
-        } else if (isUserName(data)) {
-          setRemoteUserInfos((preInfo) =>
-            preInfo.map((remoteUserInfo) => {
-              if (remoteUserInfo.peerId === dataConnection.remoteId) {
-                remoteUserInfo.userName = data.userName
-              }
-              return remoteUserInfo
-            })
-          )
-        } else if (isUserAvatar(data)) {
-          // TODO Refactor
-          setRemoteUserInfos((preInfo) =>
-            preInfo.map((remoteUserInfo) => {
-              if (remoteUserInfo.peerId === dataConnection.remoteId) {
-                const arrayBuffer = data.image as any as ArrayBuffer
-                remoteUserInfo.image = new Blob([arrayBuffer], {
-                  type: 'image/jpeg',
-                }) as File
-              }
-              return remoteUserInfo
-            })
-          )
-        }
-      })
-    })
+    setPeerOnConnection()
   }
 
   const onEnd = () => {

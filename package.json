@@ -31,6 +31,7 @@
   },
   "dependencies": {
     "material-symbols": "^0.2.9",
+    "picmo": "^5.6.1",
     "skyway-js": "^4.4.5",
     "solid-js": "^1.5.1"
   }
