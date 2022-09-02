@@ -2,6 +2,7 @@ import { createSignal } from 'solid-js'
 import { localUserInfo, setLocalUserInfo } from '../utils/user'
 import { sendLocalUserNameToAll } from '../utils/sendLocalUserName'
 import { sendLocalUserAvatarToAll } from '../utils/sendLocalUserAvatar'
+
 const EditProfile = () => {
   let nameElement: HTMLInputElement
   let avatarElement: HTMLInputElement
@@ -31,7 +32,6 @@ const EditProfile = () => {
         <span class="material-symbols-outlined mr-3">person</span>
         プロフェールの編集
       </label>
-
       <input type="checkbox" id="edit-profile-modal" class="modal-toggle" />
       <label for="edit-profile-modal" class="modal cursor-pointer">
         <label class="modal-box relative text-black" for="">

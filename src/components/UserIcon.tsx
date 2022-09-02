@@ -8,6 +8,7 @@ const UserIcon: Component<{ info: UserInfo }> = (props) => {
   let iconPositionDiv: HTMLDivElement
   let iconDiv: HTMLDivElement
   let imgElement: HTMLImageElement
+  let userReactionElement: HTMLDivElement
 
   createEffect(() => {
     iconPositionDiv.style.left = `${props.info.x - USER_ICON_WIDTH / 2}px`
@@ -28,6 +29,18 @@ const UserIcon: Component<{ info: UserInfo }> = (props) => {
     imgElement.src = srcUrl
   })
 
+  createEffect(() => {
+    console.log(props.info.userReactionURIEncoded)
+    if (props.info.userReactionURIEncoded === undefined) {
+      userReactionElement.style.display = 'none'
+    } else {
+      userReactionElement.style.removeProperty('display')
+      userReactionElement.textContent = decodeURI(
+        props.info.userReactionURIEncoded
+      )
+    }
+  })
+
   return (
     <div ref={iconPositionDiv} class="absolute w-32 h-32 flex flex-col">
       <div ref={iconDiv} class="avatar">
@@ -37,6 +50,13 @@ const UserIcon: Component<{ info: UserInfo }> = (props) => {
       </div>
 
       <div class="text-center">{props.info.userName}</div>
+      <div
+        ref={userReactionElement}
+        class="text-center text-6xl relative"
+        style={{
+          top: `${-USER_ICON_HEIGHT - 100}px`,
+        }}
+      />
     </div>
   )
 }

@@ -20,10 +20,10 @@
   "rules": {
     "linebreak-style": ["error", "unix"],
     "quotes": "off",
-    "@typescript-eslint/quotes": ["error", "single"],
+    "@typescript-eslint/quotes": ["warn", "single"],
     "semi": "off",
     "@typescript-eslint/semi": [
-      "error",
+      "warn",
       "never",
       { "beforeStatementContinuationChars": "never" }
     ]

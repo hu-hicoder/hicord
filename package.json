@@ -30,7 +30,9 @@
     "vite-plugin-solid": "^2.3.0"
   },
   "dependencies": {
+    "@picmo/popup-picker": "^5.6.1",
     "material-symbols": "^0.2.9",
+    "picmo": "^5.6.1",
     "skyway-js": "^4.4.5",
     "solid-js": "^1.5.1"
   }
