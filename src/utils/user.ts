@@ -40,7 +40,7 @@ export type UserAvatar = {
 }
 
 export type UserReaction = {
-  userReaction?: string
+  userReactionURIEncoded?: string
 }
 
 export const isUserCoordinate = (data: unknown): data is UserCoordinate =>
@@ -65,4 +65,4 @@ export const isUserAvatar = (data: unknown): data is UserAvatar =>
 export const isUserReaction = (data: unknown): data is Required<UserReaction> =>
   typeof data === 'object' &&
   data !== null &&
-  typeof (data as UserReaction).userReaction === 'string'
+  typeof (data as UserReaction).userReactionURIEncoded === 'string'

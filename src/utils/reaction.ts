@@ -11,12 +11,12 @@ const REACTION_DISPLAY_TIME_MS = 5000
 
 let newLocalUserReactionAddedTimeMs: number
 export const addLocalUserReaction = (
-  reaction: UserReaction['userReaction']
+  reaction: UserReaction['userReactionURIEncoded']
 ) => {
   sendLocalUserReactionToAll(reaction)
   setLocalUserInfo((preInfo) => ({
     ...preInfo,
-    userReaction: reaction,
+    userReactionURIEncoded: reaction,
   }))
   const thisReactionAddedTime = Date.now()
   newLocalUserReactionAddedTimeMs = thisReactionAddedTime
@@ -25,7 +25,7 @@ export const addLocalUserReaction = (
     if (newLocalUserReactionAddedTimeMs === thisReactionAddedTime) {
       setLocalUserInfo((preInfo) => ({
         ...preInfo,
-        userReaction: undefined,
+        userReactionURIEncoded: undefined,
       }))
     }
   })()
@@ -35,13 +35,13 @@ const newRemoteUserReactionAddedTimeMsDictionary: {
   [peerId: RemoteUserInfo['peerId']]: number
 } = {}
 export const addRemoteUserReaction = (
-  reaction: UserReaction['userReaction'],
+  reaction: UserReaction['userReactionURIEncoded'],
   peerId: RemoteUserInfo['peerId']
 ) => {
   setRemoteUserInfos((preInfos) =>
     preInfos.map((preInfo) => {
       if (preInfo.peerId === peerId) {
-        return { ...preInfo, userReaction: reaction }
+        return { ...preInfo, userReactionURIEncoded: reaction }
       }
       return preInfo
     })
@@ -58,7 +58,7 @@ export const addRemoteUserReaction = (
       setRemoteUserInfos((preInfos) => {
         return preInfos.map((preInfo) => {
           if (preInfo.peerId === peerId) {
-            return { ...preInfo, userReaction: undefined }
+            return { ...preInfo, userReactionURIEncoded: undefined }
           }
           return preInfo
         })

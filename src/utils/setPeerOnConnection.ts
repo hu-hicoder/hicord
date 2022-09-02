@@ -28,7 +28,7 @@ export const setPeerOnConnection = () => {
           })
         )
       } else if (isUserReaction(data)) {
-        addRemoteUserReaction(data.userReaction, dataConnection.remoteId)
+        addRemoteUserReaction(data.userReactionURIEncoded, dataConnection.remoteId)
       } else if (isUserName(data)) {
         setRemoteUserInfos((preInfo) =>
           preInfo.map((remoteUserInfo) => {
