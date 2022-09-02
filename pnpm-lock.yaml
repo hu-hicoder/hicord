@@ -2,6 +2,7 @@ lockfileVersion: 5.4
 
 specifiers:
   '@picmo/popup-picker': ^5.6.1
+  '@types/luxon': ^3.0.1
   '@typescript-eslint/eslint-plugin': ^5.35.1
   '@typescript-eslint/parser': ^5.35.1
   autoprefixer: ^10.4.8
@@ -9,6 +10,7 @@ specifiers:
   eslint: ^8.23.0
   eslint-config-prettier: ^8.5.0
   eslint-plugin-solid: ^0.7.1
+  luxon: ^3.0.3
   material-symbols: ^0.2.9
   picmo: ^5.6.1
   postcss: ^8.4.16
@@ -23,12 +25,14 @@ specifiers:
 
 dependencies:
   '@picmo/popup-picker': 5.6.1_picmo@5.6.1
+  luxon: 3.0.3
   material-symbols: 0.2.9
   picmo: 5.6.1
   skyway-js: 4.4.5
   solid-js: 1.5.1
 
 devDependencies:
+  '@types/luxon': 3.0.1
   '@typescript-eslint/eslint-plugin': 5.35.1_pfwtupu3r4wxmgbx6hj7gwmyuu
   '@typescript-eslint/parser': 5.35.1_yqf6kl63nyoq5megxukfnom5rm
   autoprefixer: 10.4.8_postcss@8.4.16
@@ -495,6 +499,10 @@ packages:
 
   /@types/json-schema/7.0.11:
     resolution: {integrity: sha512-wOuvG1SN4Us4rez+tylwwwCV1psiNVOkJeM3AUWUNWg/jDQY2+HE/444y5gc+jBmRqASOm2Oeh5c1axHobwRKQ==}
+    dev: true
+
+  /@types/luxon/3.0.1:
+    resolution: {integrity: sha512-/LAvk1cMOJt0ghzMFrZEvByUhsiEfeeT2IF53Le+Ki3A538yEL9pRZ7a6MuCxdrYK+YNqNIDmrKU/r2nnw04zQ==}
     dev: true
 
   /@types/node/12.20.55:
@@ -2033,6 +2041,11 @@ packages:
     dependencies:
       yallist: 4.0.0
     dev: true
+
+  /luxon/3.0.3:
+    resolution: {integrity: sha512-+EfHWnF+UT7GgTnq5zXg3ldnTKL2zdv7QJgsU5bjjpbH17E3qi/puMhQyJVYuCq+FRkogvB5WB6iVvUr+E4a7w==}
+    engines: {node: '>=12'}
+    dev: false
 
   /material-symbols/0.2.9:
     resolution: {integrity: sha512-pq0IF4Un3sCjqDCbhWZkIBk0lEjmTg2wor2u0pfN2/MzRBXpmqEkM+aVAGsvIf/5SBlYEiLSQ5x1loC412QjCQ==}

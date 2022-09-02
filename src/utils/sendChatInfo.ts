@@ -1,24 +1,14 @@
-import { RemoteUserInfo, localUserInfo } from './user'
-import { ChatInfo, ChatRaw } from './chat'
+import { RemoteUserInfo } from './user'
+import { ChatInfo, localChatInfoFrom } from './chat'
 import { sendTo, sendToAll } from './send'
 
-function localChatInfoFrom(chatRaw: ChatRaw): ChatInfo {
-  return {
-    userName: localUserInfo().userName,
-    chatId: chatRaw.chatId,
-    peerId: localUserInfo().peerId,
-    value: chatRaw.value,
-    date: new Date(),
-  }
-}
-
-export const sendChatInfoToAll = (chatRaw: ChatRaw) => {
-  sendToAll(localChatInfoFrom(chatRaw))
+export const sendChatInfoToAll = (data: ChatInfo) => {
+  sendToAll(localChatInfoFrom(data))
 }
 
 export const sendChatInfoTo = (
   remoteUserPeerId: RemoteUserInfo['peerId'],
-  chatRaw: ChatRaw
+  data: ChatInfo
 ) => {
-  sendTo(remoteUserPeerId, localChatInfoFrom(chatRaw))
+  sendTo(remoteUserPeerId, data)
 }

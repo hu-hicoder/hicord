@@ -4,24 +4,15 @@ export const [localUserInfo, setLocalUserInfo] = createSignal<UserInfo>()
 export const [remoteUserInfos, setRemoteUserInfos] = createSignal<
   RemoteUserInfo[]
 >([])
+import { Coordinate } from './coordinate'
 
-export type UserInfo = UserCoordinate &
+export type UserInfo = Coordinate &
   UserName &
   UserAvatar &
   UserReaction & {
     stream: MediaStream
     peerId: string
   }
-
-/**
- * ユーザーの座標
- * right-handed coordinate system
- */
-export type UserCoordinate = {
-  x: number
-  y: number
-  deg: number
-}
 
 export type RemoteUserAudioNodes = {
   sourceNode: MediaStreamAudioSourceNode
@@ -43,16 +34,18 @@ export type UserReaction = {
   userReactionURIEncoded?: string
 }
 
-export const isUserCoordinate = (data: unknown): data is UserCoordinate =>
+export const isUserCoordinate = (data: unknown): data is Coordinate =>
   typeof data === 'object' &&
   data !== null &&
-  typeof (data as UserCoordinate).x === 'number' &&
-  typeof (data as UserCoordinate).y === 'number' &&
-  typeof (data as UserCoordinate).deg === 'number'
+  Object.keys(data).length === 3 &&
+  typeof (data as Coordinate).x === 'number' &&
+  typeof (data as Coordinate).y === 'number' &&
+  typeof (data as Coordinate).deg === 'number'
 
 export const isUserName = (data: unknown): data is UserName =>
   typeof data === 'object' &&
   data !== null &&
+  Object.keys(data).length === 1 &&
   typeof (data as UserName).userName === 'string'
 
 // TODO Refactor
@@ -60,9 +53,11 @@ export const isUserName = (data: unknown): data is UserName =>
 export const isUserAvatar = (data: unknown): data is UserAvatar =>
   typeof data === 'object' &&
   data !== null &&
+  Object.keys(data).length === 1 &&
   (data as UserAvatar).image !== null
 
 export const isUserReaction = (data: unknown): data is Required<UserReaction> =>
   typeof data === 'object' &&
   data !== null &&
+  Object.keys(data).length === 1 &&
   typeof (data as UserReaction).userReactionURIEncoded === 'string'

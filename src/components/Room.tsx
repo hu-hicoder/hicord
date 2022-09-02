@@ -14,6 +14,7 @@ import ChatToolbar from './ChatToolbar'
 import MainToolbar from './MainToolbar'
 import UserToolbar from './UserToolbar'
 import ChatInput from './ChatInput'
+import ChatBox from './ChatBox'
 import { initRemoteAudio, setListener } from '../utils/audio'
 import {
   sendLocalUserNameTo,
@@ -160,6 +161,17 @@ export const Room: Component<{ roomId: string }> = (props) => {
         class="relative bg-main"
         style={{ height: `${ROOM_X}px`, width: `${ROOM_Y}px` }}
       >
+        {/* Boxes */}
+        <ChatBox
+          chatId={0}
+          boxInfo={{
+            x: 2048,
+            y: 2048,
+            deg: 0,
+            width: 300,
+            height: 300,
+          }}
+        />
         {/* Remote User Icons */}
         {
           // TODO: more better

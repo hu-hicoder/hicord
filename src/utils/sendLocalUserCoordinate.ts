@@ -1,8 +1,9 @@
-import { localUserInfo, UserCoordinate, RemoteUserInfo } from './user'
+import { localUserInfo, RemoteUserInfo } from './user'
+import { Coordinate } from './coordinate'
 import { sendTo, sendToAll } from './send'
 
 export const sendLocalUserCoordinateToAll = () => {
-  const data: UserCoordinate = {
+  const data: Coordinate = {
     x: localUserInfo().x,
     y: localUserInfo().y,
     deg: localUserInfo().deg,
@@ -13,7 +14,7 @@ export const sendLocalUserCoordinateToAll = () => {
 export const sendLocalUserCoordinateTo = (
   remoteUserPeerId: RemoteUserInfo['peerId']
 ) => {
-  const data: UserCoordinate = {
+  const data: Coordinate = {
     x: localUserInfo().x,
     y: localUserInfo().y,
     deg: localUserInfo().deg,

@@ -15,6 +15,7 @@ export const setPeerOnConnection = () => {
     dataConnection.on('data', (data) => {
       console.log(data)
       if (isUserCoordinate(data)) {
+        console.log('user coord')
         setRemoteUserInfos((preInfo) =>
           preInfo.map((remoteUserInfo) => {
             if (remoteUserInfo.peerId === dataConnection.remoteId) {
@@ -29,11 +30,13 @@ export const setPeerOnConnection = () => {
           })
         )
       } else if (isUserReaction(data)) {
+        console.log('user reaction')
         addRemoteUserReaction(
           data.userReactionURIEncoded,
           dataConnection.remoteId
         )
       } else if (isUserName(data)) {
+        console.log('user name')
         setRemoteUserInfos((preInfo) =>
           preInfo.map((remoteUserInfo) => {
             if (remoteUserInfo.peerId === dataConnection.remoteId) {
@@ -42,7 +45,12 @@ export const setPeerOnConnection = () => {
             return remoteUserInfo
           })
         )
+      } else if (isChatInfo(data)) {
+        console.log('get chat info')
+        data.date = new Date(data.date)
+        setChatInfos((prev) => [...prev, data])
       } else if (isUserAvatar(data)) {
+        console.log('user avatar', data)
         // TODO Refactor
         setRemoteUserInfos((preInfo) =>
           preInfo.map((remoteUserInfo) => {
@@ -55,8 +63,6 @@ export const setPeerOnConnection = () => {
             return remoteUserInfo
           })
         )
-      } else if (isChatInfo(data)) {
-        setChatInfos((prev) => [...prev, data])
       }
     })
   })
