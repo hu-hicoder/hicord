@@ -1,7 +1,7 @@
 import type { Component } from 'solid-js'
 import UserIcon from './UserIcon'
 import { localUserInfo, setLocalUserInfo } from '../utils/user'
-import { setListener } from '../utils/audio'
+import { setListener as setAudioListener } from '../utils/audio'
 import { sendLocalUserCoordinateToAll } from '../utils/sendLocalUserCoordinate'
 
 const LocalUserIcon: Component = () => {
@@ -10,7 +10,21 @@ const LocalUserIcon: Component = () => {
   let preTimeMs = Date.now()
   let actualSendDurationMs = 0
 
-  const onMouseMove = (event: MouseEvent) => {
+  const onMouseDown = () => {
+    isMoving = true
+    preTimeMs = Date.now()
+    actualSendDurationMs = 0
+    sendLocalUserCoordinateToAll()
+  }
+
+  window.addEventListener('mouseup', () => {
+    if (isMoving) {
+      isMoving = false
+      sendLocalUserCoordinateToAll()
+    }
+  })
+
+  window.addEventListener('mousemove', (event) => {
     if (!isMoving) return
 
     // prevent
@@ -22,7 +36,7 @@ const LocalUserIcon: Component = () => {
       const dx = x - preUserInfo.x
       const dy = y - preUserInfo.y
       let deg = preUserInfo.deg
-      if (25 < dx ** 2 + dy ** 2) {
+      if (20 < dx ** 2 + dy ** 2) {
         let r = Math.atan2(dy, dx)
         if (r < 0) {
           r = r + 2 * Math.PI
@@ -37,8 +51,8 @@ const LocalUserIcon: Component = () => {
         deg: deg,
       }
     })
-    // set listener
-    setListener(localUserInfo())
+    // set audio listener
+    setAudioListener(localUserInfo())
 
     const sendDurationMs = 500
     const nowTimeMs = Date.now()
@@ -48,36 +62,12 @@ const LocalUserIcon: Component = () => {
       actualSendDurationMs -= sendDurationMs
       sendLocalUserCoordinateToAll()
     }
-  }
-
-  const onMouseDown = () => {
-    isMoving = true
-    preTimeMs = Date.now()
-    actualSendDurationMs = 0
-    sendLocalUserCoordinateToAll()
-  }
-
-  const onMouseUp = () => {
-    if (isMoving) {
-      isMoving = false
-      sendLocalUserCoordinateToAll()
-    }
-  }
-
-  const onMouseLeave = () => {
-    if (isMoving) {
-      isMoving = false
-      sendLocalUserCoordinateToAll()
-    }
-  }
+  })
 
   return (
     <div
       ref={localDiv}
       onMouseDown={onMouseDown}
-      onMouseMove={onMouseMove}
-      onMouseUp={onMouseUp}
-      onMouseLeave={onMouseLeave}
       class="cursor-grab"
     >
       <UserIcon info={localUserInfo()} />
