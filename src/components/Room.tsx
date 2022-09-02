@@ -1,5 +1,5 @@
 import Peer, { SfuRoom } from 'skyway-js'
-import type { Component } from 'solid-js'
+import { Component, createMemo } from 'solid-js'
 import { createEffect, createSignal } from 'solid-js'
 import LocalUserIcon from './LocalUserIcon'
 import {
@@ -155,6 +155,10 @@ export const Room: Component<{ roomId: string }> = (props) => {
     sendLocalUserNameToAll()
   }
 
+  const RemoteUserIcons = createMemo(() =>
+    remoteUserInfos().map((info) => <RemoteUserIcon info={info} />)
+  )
+
   return (
     <div>
       <div
@@ -173,13 +177,7 @@ export const Room: Component<{ roomId: string }> = (props) => {
           }}
         />
         {/* Remote User Icons */}
-        {
-          // TODO: more better
-          // eslint-disable-next-line solid/prefer-for
-          remoteUserInfos().map((info) => (
-            <RemoteUserIcon info={info} />
-          ))
-        }
+        <RemoteUserIcons />
         {/* <For each={remoteUserInfos()}> かぜかうまくいかない
           {(info) => <RemoteUserIcon info={info} />}
         </For> */}
