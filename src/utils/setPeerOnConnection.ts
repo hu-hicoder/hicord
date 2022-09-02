@@ -1,5 +1,6 @@
 import { PEER } from '../components/Room'
 import { setPanner } from './audio'
+import { isChatInfo, setChatInfos } from './chat'
 import { addRemoteUserReaction } from './reaction'
 import {
   isUserAvatar,
@@ -28,7 +29,10 @@ export const setPeerOnConnection = () => {
           })
         )
       } else if (isUserReaction(data)) {
-        addRemoteUserReaction(data.userReactionURIEncoded, dataConnection.remoteId)
+        addRemoteUserReaction(
+          data.userReactionURIEncoded,
+          dataConnection.remoteId
+        )
       } else if (isUserName(data)) {
         setRemoteUserInfos((preInfo) =>
           preInfo.map((remoteUserInfo) => {
@@ -51,6 +55,8 @@ export const setPeerOnConnection = () => {
             return remoteUserInfo
           })
         )
+      } else if (isChatInfo(data)) {
+        setChatInfos((prev) => [...prev, data])
       }
     })
   })
