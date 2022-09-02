@@ -13,13 +13,21 @@ import RemoteUserIcon from './RemoteUserIcon'
 import ChatToolbar from './ChatToolbar'
 import MainToolbar from './MainToolbar'
 import UserToolbar from './UserToolbar'
+import ChatInput from './ChatInput'
+import ChatBox from './ChatBox'
 import { initRemoteAudio, setListener } from '../utils/audio'
 import {
   sendLocalUserNameTo,
   sendLocalUserNameToAll,
 } from '../utils/sendLocalUserName'
-import { sendLocalUserAvatarTo } from '../utils/sendLocalUserAvatar'
-import { sendLocalUserCoordinateToAll } from '../utils/sendLocalUserCoordinate'
+import {
+  sendLocalUserAvatarTo,
+  sendLocalUserAvatarToAll,
+} from '../utils/sendLocalUserAvatar'
+import {
+  sendLocalUserCoordinateTo,
+  sendLocalUserCoordinateToAll,
+} from '../utils/sendLocalUserCoordinate'
 import { setPeerOnConnection } from '../utils/setPeerOnConnection'
 
 const KEY = import.meta.env.VITE_SKY_WAY_API_KEY
@@ -76,7 +84,9 @@ export const Room: Component<{ roomId: string }> = (props) => {
     })
     tmpRoom.on('peerJoin', (peerId) => {
       console.log(`=== ${peerId} が入室しました ===\n`)
+      // Send data
       sendLocalUserNameTo(peerId)
+      sendLocalUserCoordinateTo(peerId)
       sendLocalUserAvatarTo(peerId)
     })
     tmpRoom.on('stream', async (stream) => {
@@ -95,8 +105,10 @@ export const Room: Component<{ roomId: string }> = (props) => {
         ...audioNodes,
       }
       setRemoteUserInfos((prev) => [...prev, remoteUserInfo])
+      // Send data
       sendLocalUserNameToAll()
       sendLocalUserCoordinateToAll()
+      sendLocalUserAvatarToAll()
     })
     tmpRoom.on('peerLeave', (peerId) => {
       setRemoteUserInfos((prev) => {
@@ -149,6 +161,17 @@ export const Room: Component<{ roomId: string }> = (props) => {
         class="relative bg-main"
         style={{ height: `${ROOM_X}px`, width: `${ROOM_Y}px` }}
       >
+        {/* Boxes */}
+        <ChatBox
+          chatId={0}
+          boxInfo={{
+            x: 2048,
+            y: 2048,
+            deg: 0,
+            width: 300,
+            height: 300,
+          }}
+        />
         {/* Remote User Icons */}
         {
           // TODO: more better
@@ -189,6 +212,7 @@ export const Room: Component<{ roomId: string }> = (props) => {
               rename
             </button>
           ) : undefined}
+          <ChatInput chatId={0} />
         </div>
         {/* Toolbar */}
         <UserToolbar />

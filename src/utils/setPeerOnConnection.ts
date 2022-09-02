@@ -1,5 +1,6 @@
 import { PEER } from '../components/Room'
 import { setPanner } from './audio'
+import { isChatInfo, setChatInfos } from './chat'
 import { addRemoteUserReaction } from './reaction'
 import {
   isUserAvatar,
@@ -14,6 +15,7 @@ export const setPeerOnConnection = () => {
     dataConnection.on('data', (data) => {
       console.log(data)
       if (isUserCoordinate(data)) {
+        console.log('user coord')
         setRemoteUserInfos((preInfo) =>
           preInfo.map((remoteUserInfo) => {
             if (remoteUserInfo.peerId === dataConnection.remoteId) {
@@ -28,8 +30,13 @@ export const setPeerOnConnection = () => {
           })
         )
       } else if (isUserReaction(data)) {
-        addRemoteUserReaction(data.userReactionURIEncoded, dataConnection.remoteId)
+        console.log('user reaction')
+        addRemoteUserReaction(
+          data.userReactionURIEncoded,
+          dataConnection.remoteId
+        )
       } else if (isUserName(data)) {
+        console.log('user name')
         setRemoteUserInfos((preInfo) =>
           preInfo.map((remoteUserInfo) => {
             if (remoteUserInfo.peerId === dataConnection.remoteId) {
@@ -38,7 +45,12 @@ export const setPeerOnConnection = () => {
             return remoteUserInfo
           })
         )
+      } else if (isChatInfo(data)) {
+        console.log('get chat info')
+        data.date = new Date(data.date)
+        setChatInfos((prev) => [...prev, data])
       } else if (isUserAvatar(data)) {
+        console.log('user avatar', data)
         // TODO Refactor
         setRemoteUserInfos((preInfo) =>
           preInfo.map((remoteUserInfo) => {
