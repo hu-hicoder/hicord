@@ -1,5 +1,6 @@
 import Peer, { SfuRoom } from 'skyway-js'
 import type { Component } from 'solid-js'
+import { For } from 'solid-js'
 import { createEffect, createSignal } from 'solid-js'
 import LocalUserIcon from './LocalUserIcon'
 import {
@@ -29,6 +30,7 @@ import {
   sendLocalUserCoordinateToAll,
 } from '../utils/sendLocalUserCoordinate'
 import { setPeerOnConnection } from '../utils/setPeerOnConnection'
+import { getChatBoxInfos } from '../utils/chat'
 
 const KEY = import.meta.env.VITE_SKY_WAY_API_KEY
 export const PEER = new Peer({ key: KEY as string })
@@ -162,16 +164,9 @@ export const Room: Component<{ roomId: string }> = (props) => {
         style={{ height: `${ROOM_X}px`, width: `${ROOM_Y}px` }}
       >
         {/* Boxes */}
-        <ChatBox
-          chatId={0}
-          boxInfo={{
-            x: 2048,
-            y: 2048,
-            deg: 0,
-            width: 300,
-            height: 300,
-          }}
-        />
+        <For each={getChatBoxInfos()}>
+          {(info) => <ChatBox chatBoxInfo={info} />}
+        </For>
         {/* Remote User Icons */}
         {
           // TODO: more better
@@ -212,7 +207,7 @@ export const Room: Component<{ roomId: string }> = (props) => {
               rename
             </button>
           ) : undefined}
-          <ChatInput chatId={0} />
+          <ChatInput chatGroup={0} />
         </div>
         {/* Toolbar */}
         <UserToolbar />

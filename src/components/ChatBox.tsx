@@ -3,26 +3,40 @@ import { createMemo, createEffect } from 'solid-js'
 import type { Component } from 'solid-js'
 import { For } from 'solid-js'
 // import ChatInput from './ChatInput'
-import { getChatInfos } from '../utils/chat'
-import { BoxInfo } from '../utils/box'
+import { getChatInfos, ChatBoxInfo } from '../utils/chat'
 import { DateTime } from 'luxon'
-const ChatBox: Component<{ chatId: number; boxInfo: BoxInfo }> = (props) => {
+import createResizeObserver from '../utils/resize'
+import ChatInput from './ChatInput'
+
+const ChatBox: Component<{ chatBoxInfo: ChatBoxInfo }> = (props) => {
   let divRef: HTMLDivElement
 
   createEffect(() => {
-    divRef.style.left = `${props.boxInfo.x}px`
-    divRef.style.top = `${props.boxInfo.y}px`
-    divRef.style.width = `${props.boxInfo.width}px`
-    divRef.style.height = `${props.boxInfo.height}px`
+    divRef.style.left = `${props.chatBoxInfo.x}px`
+    divRef.style.top = `${props.chatBoxInfo.y}px`
+    divRef.style.width = `${props.chatBoxInfo.width}px`
+    divRef.style.height = `${props.chatBoxInfo.height}px`
   })
 
   const getIdChats = createMemo(() =>
-    getChatInfos().filter((c) => c.chatId === props.chatId)
+    getChatInfos().filter((c) => c.chatGroup === props.chatBoxInfo.chatGroup)
   )
 
+  createEffect(() => {
+    const handleResize = (entries: ResizeObserverEntry[]) => {
+      const width = entries[0].target.clientWidth
+      const height = entries[0].target.clientHeight
+    }
+
+    createResizeObserver([divRef], handleResize)
+  })
+
   return (
-    <div ref={divRef} class="absolute bg-orange-100 rounded-lg p-4">
-      <div class="space-y-1">
+    <div
+      ref={divRef}
+      class="room-box chat-box rounded-lg p-4 flex flex-col gap-2"
+    >
+      <div class="grow space-y-1 overflow-y-scroll box-scrollbar">
         <For each={getIdChats()}>
           {(chatInfo) => (
             <div class="flex flex-row">
@@ -33,6 +47,10 @@ const ChatBox: Component<{ chatId: number; boxInfo: BoxInfo }> = (props) => {
             </div>
           )}
         </For>
+      </div>
+
+      <div>
+        <ChatInput chatGroup={props.chatBoxInfo.chatGroup} />
       </div>
     </div>
   )

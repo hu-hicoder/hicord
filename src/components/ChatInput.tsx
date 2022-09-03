@@ -2,12 +2,12 @@ import type { Component } from 'solid-js'
 import { sendChatInfoToAll } from '../utils/sendChatInfo'
 import { setChatInfos, localChatInfoFrom } from '../utils/chat'
 
-const ChatInput: Component<{ chatId: number }> = (props) => {
+const ChatInput: Component<{ chatGroup: number }> = (props) => {
   let chatRef: HTMLInputElement
 
   function sendChat() {
     const chatInfo = localChatInfoFrom({
-      chatId: props.chatId,
+      chatGroup: props.chatGroup,
       value: chatRef.value,
     })
     sendChatInfoToAll(chatInfo)
@@ -16,16 +16,17 @@ const ChatInput: Component<{ chatId: number }> = (props) => {
   }
 
   return (
-    <div>
+    <div class="flex flex-row items-center gap-2">
       <input
         ref={chatRef}
         type="text"
-        class="input input-bordered"
+        class="grow rounded-md p-1 bg-gray-100"
         placeholder="Chat"
       />
-      <button class="btn btn-primary" onClick={sendChat}>
-        送信
-      </button>
+
+      <span class="material-symbols-outlined cursor-pointer" onClick={sendChat}>
+        send
+      </span>
     </div>
   )
 }
