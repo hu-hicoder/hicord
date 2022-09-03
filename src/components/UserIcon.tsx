@@ -30,7 +30,6 @@ const UserIcon: Component<{ info: UserInfo }> = (props) => {
   })
 
   createEffect(() => {
-    console.log(props.info.userReactionURIEncoded)
     if (props.info.userReactionURIEncoded === undefined) {
       userReactionElement.style.display = 'none'
     } else {
