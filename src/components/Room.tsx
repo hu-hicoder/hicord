@@ -1,5 +1,5 @@
 import Peer, { SfuRoom } from 'skyway-js'
-import type { Component } from 'solid-js'
+import { Component, createMemo } from 'solid-js'
 import { createEffect, createSignal } from 'solid-js'
 import LocalUserIcon from './LocalUserIcon'
 import {
@@ -37,7 +37,6 @@ const ROOM_X = 4096
 const ROOM_Y = 4096
 
 export const Room: Component<{ roomId: string }> = (props) => {
-  let localUserNameElement: HTMLInputElement
   // Local
   const [localStream, setLocalStream] = createSignal<MediaStream>()
   // Room
@@ -71,7 +70,7 @@ export const Room: Component<{ roomId: string }> = (props) => {
       x: ROOM_X / 2,
       y: ROOM_Y / 2,
       deg: 0,
-      userName: localUserNameElement.value,
+      userName: 'No Name', // TODO: 保存してある名前から参照する
     })
     setListener(localUserInfo())
 
@@ -141,19 +140,9 @@ export const Room: Component<{ roomId: string }> = (props) => {
     console.log('=== あなたが退出しました ===\n')
   }
 
-  const onClickRename = () => {
-    console.log(`${localUserNameElement.value}に変える`) // TODO:
-    if (localUserInfo().userName === localUserNameElement.value) {
-      // TODO: 同じ場合disabledに
-      console.info('今と同じ名前です')
-      return
-    }
-    setLocalUserInfo((preInfo) => ({
-      ...preInfo,
-      userName: localUserNameElement.value,
-    }))
-    sendLocalUserNameToAll()
-  }
+  const RemoteUserIcons = createMemo(() =>
+    remoteUserInfos().map((info) => <RemoteUserIcon info={info} />)
+  )
 
   return (
     <div>
@@ -173,13 +162,7 @@ export const Room: Component<{ roomId: string }> = (props) => {
           }}
         />
         {/* Remote User Icons */}
-        {
-          // TODO: more better
-          // eslint-disable-next-line solid/prefer-for
-          remoteUserInfos().map((info) => (
-            <RemoteUserIcon info={info} />
-          ))
-        }
+        <RemoteUserIcons />
         {/* <For each={remoteUserInfos()}> かぜかうまくいかない
           {(info) => <RemoteUserIcon info={info} />}
         </For> */}
@@ -201,17 +184,6 @@ export const Room: Component<{ roomId: string }> = (props) => {
           >
             停止
           </button>
-          <input
-            type="text"
-            ref={localUserNameElement}
-            class="input input-bordered m-2"
-            value="No Name"
-          />
-          {isStarted() ? (
-            <button class="btn btn-primary m-2" onClick={() => onClickRename()}>
-              rename
-            </button>
-          ) : undefined}
           <ChatInput chatId={0} />
         </div>
         {/* Toolbar */}

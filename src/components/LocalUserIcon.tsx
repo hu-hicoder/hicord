@@ -1,28 +1,41 @@
 import type { Component } from 'solid-js'
 import UserIcon from './UserIcon'
-import { localUserInfo, setLocalUserInfo } from '../utils/user'
-import { setListener } from '../utils/audio'
+import { localUserInfo, setLocalUserInfo, UserInfo } from '../utils/user'
+import { setListener as setAudioListener } from '../utils/audio'
 import { sendLocalUserCoordinateToAll } from '../utils/sendLocalUserCoordinate'
 
 const LocalUserIcon: Component = () => {
-  let localDiv: HTMLDivElement
+  let localUserIconDiv: HTMLDivElement
   let isMoving = false
   let preTimeMs = Date.now()
   let actualSendDurationMs = 0
 
-  const onMouseMove = (event: MouseEvent) => {
-    if (!isMoving) return
+  const [onMouseDown, onTouchStart] = (() => {
+    const f = () => {
+      isMoving = true
+      preTimeMs = Date.now()
+      actualSendDurationMs = 0
+      sendLocalUserCoordinateToAll()
+    }
+    return [f, f]
+  })()
 
-    // prevent
-    event.preventDefault()
+  ;['mouseup', 'touchend'].forEach((eventType) => {
+    window.addEventListener(eventType, () => {
+      if (isMoving) {
+        isMoving = false
+        sendLocalUserCoordinateToAll()
+      }
+    })
+  })
+
+  const setOnMovement = (x: UserInfo['x'], y: UserInfo['y']) => {
     // set info
     setLocalUserInfo((preUserInfo) => {
-      const x = event.pageX
-      const y = event.pageY
       const dx = x - preUserInfo.x
       const dy = y - preUserInfo.y
       let deg = preUserInfo.deg
-      if (25 < dx ** 2 + dy ** 2) {
+      if (20 < dx ** 2 + dy ** 2) {
         let r = Math.atan2(dy, dx)
         if (r < 0) {
           r = r + 2 * Math.PI
@@ -37,8 +50,8 @@ const LocalUserIcon: Component = () => {
         deg: deg,
       }
     })
-    // set listener
-    setListener(localUserInfo())
+    // set audio listener
+    setAudioListener(localUserInfo())
 
     const sendDurationMs = 500
     const nowTimeMs = Date.now()
@@ -50,34 +63,30 @@ const LocalUserIcon: Component = () => {
     }
   }
 
-  const onMouseDown = () => {
-    isMoving = true
-    preTimeMs = Date.now()
-    actualSendDurationMs = 0
-    sendLocalUserCoordinateToAll()
+  const mouseMoveListener = (event: MouseEvent) => {
+    if (!isMoving) return
+
+    event.preventDefault()
+    setOnMovement(event.pageX, event.pageY)
   }
 
-  const onMouseUp = () => {
-    if (isMoving) {
-      isMoving = false
-      sendLocalUserCoordinateToAll()
-    }
+  const touchMoveListener = (event: TouchEvent) => {
+    if (!isMoving) return
+    if (event.touches.length !== 1) return
+
+    event.preventDefault()
+    const touch = event.touches.item(0)
+    setOnMovement(touch.pageX, touch.pageY)
   }
 
-  const onMouseLeave = () => {
-    if (isMoving) {
-      isMoving = false
-      sendLocalUserCoordinateToAll()
-    }
-  }
+  window.addEventListener('mousemove', mouseMoveListener, { passive: false })
+  window.addEventListener('touchmove', touchMoveListener, { passive: false })
 
   return (
     <div
-      ref={localDiv}
+      ref={localUserIconDiv}
       onMouseDown={onMouseDown}
-      onMouseMove={onMouseMove}
-      onMouseUp={onMouseUp}
-      onMouseLeave={onMouseLeave}
+      onTouchStart={onTouchStart}
       class="cursor-grab"
     >
       <UserIcon info={localUserInfo()} />
