@@ -37,6 +37,8 @@
 
   .chat-box {
     background: rgba(220, 220, 220, 0.75);
+    min-width: 250px;
+    min-height: 150px;
   }
 
   /* Chat */

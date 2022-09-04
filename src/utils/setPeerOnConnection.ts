@@ -1,6 +1,11 @@
 import { PEER } from '../components/Room'
 import { setPanner } from './audio'
-import { isChatInfo, setChatInfos } from './chat'
+import {
+  isChatInfo,
+  setChatInfos,
+  isChatBoxInfo,
+  setChatBoxInfos,
+} from './chat'
 import { addRemoteUserReaction } from './reaction'
 import {
   isUserAvatar,
@@ -49,6 +54,16 @@ export const setPeerOnConnection = () => {
         console.log('get chat info')
         data.date = new Date(data.date)
         setChatInfos((prev) => [...prev, data])
+      } else if (isChatBoxInfo(data)) {
+        console.log('chat box info')
+        setChatBoxInfos((preInfo) =>
+          preInfo.map((chatBox) => {
+            if (chatBox.id === data.id) {
+              chatBox = data
+            }
+            return chatBox
+          })
+        )
       } else if (isUserAvatar(data)) {
         console.log('user avatar', data)
         // TODO Refactor

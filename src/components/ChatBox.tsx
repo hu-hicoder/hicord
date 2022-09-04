@@ -3,10 +3,11 @@ import { createMemo, createEffect } from 'solid-js'
 import type { Component } from 'solid-js'
 import { For } from 'solid-js'
 // import ChatInput from './ChatInput'
-import { getChatInfos, ChatBoxInfo } from '../utils/chat'
+import { getChatInfos, ChatBoxInfo, setChatBoxInfos } from '../utils/chat'
 import { DateTime } from 'luxon'
 import createResizeObserver from '../utils/resize'
 import ChatInput from './ChatInput'
+import { sendChatBoxInfoToAll } from '../utils/sendChatInfo'
 
 const ChatBox: Component<{ chatBoxInfo: ChatBoxInfo }> = (props) => {
   let divRef: HTMLDivElement
@@ -26,6 +27,22 @@ const ChatBox: Component<{ chatBoxInfo: ChatBoxInfo }> = (props) => {
     const handleResize = (entries: ResizeObserverEntry[]) => {
       const width = entries[0].target.clientWidth
       const height = entries[0].target.clientHeight
+
+      if (
+        width !== props.chatBoxInfo.width ||
+        height !== props.chatBoxInfo.height
+      ) {
+        setChatBoxInfos((prev) =>
+          prev.map((chatBox) => {
+            if (chatBox.id === props.chatBoxInfo.id) {
+              chatBox.width = width
+              chatBox.height = height
+            }
+            return chatBox
+          })
+        )
+        sendChatBoxInfoToAll(props.chatBoxInfo)
+      }
     }
 
     createResizeObserver([divRef], handleResize)

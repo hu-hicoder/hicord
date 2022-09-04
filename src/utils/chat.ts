@@ -55,3 +55,15 @@ export function localChatInfoFrom(chatRaw: ChatRaw): ChatInfo {
     date: new Date(),
   }
 }
+
+export const isChatBoxInfo = (data: unknown): data is ChatBoxInfo =>
+  typeof data === 'object' &&
+  data !== null &&
+  Object.keys(data).length === 7 &&
+  typeof (data as ChatBoxInfo).chatGroup === 'number' &&
+  typeof (data as ChatBoxInfo).x === 'number' &&
+  typeof (data as ChatBoxInfo).y === 'number' &&
+  typeof (data as ChatBoxInfo).deg === 'number' &&
+  typeof (data as ChatBoxInfo).width === 'number' &&
+  typeof (data as ChatBoxInfo).height === 'number' &&
+  typeof (data as ChatBoxInfo).id === 'number'
