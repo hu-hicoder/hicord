@@ -1,19 +1,8 @@
 import { UserName, localUserInfo } from './user'
 import { createSignal } from 'solid-js'
-import { BoxInfo } from './box'
+import { BoxInfo, BoxTypes } from './box'
 
 export const [getChatInfos, setChatInfos] = createSignal<ChatInfo[]>([])
-export const [getChatBoxInfos, setChatBoxInfos] = createSignal<ChatBoxInfo[]>([
-  {
-    id: 1,
-    chatGroup: 0,
-    x: 2048,
-    y: 2048,
-    deg: 0,
-    width: 300,
-    height: 300,
-  },
-])
 
 export type ChatInfo = UserName &
   ChatRaw & {
@@ -29,10 +18,7 @@ export type ChatGroup = {
   chatGroup: number
 }
 
-export type ChatBoxInfo = ChatGroup &
-  BoxInfo & {
-    id: number
-  }
+export type ChatBoxInfo = ChatGroup & BoxInfo
 
 export const isChatInfo = (data: unknown): data is ChatInfo =>
   typeof data === 'object' &&
@@ -59,7 +45,7 @@ export function localChatInfoFrom(chatRaw: ChatRaw): ChatInfo {
 export const isChatBoxInfo = (data: unknown): data is ChatBoxInfo =>
   typeof data === 'object' &&
   data !== null &&
-  Object.keys(data).length === 7 &&
+  (data as ChatBoxInfo).boxType === BoxTypes.CHAT &&
   typeof (data as ChatBoxInfo).chatGroup === 'number' &&
   typeof (data as ChatBoxInfo).x === 'number' &&
   typeof (data as ChatBoxInfo).y === 'number' &&

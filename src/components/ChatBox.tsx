@@ -1,58 +1,20 @@
 /* eslint-disable solid/prefer-for */
-import { createMemo, createEffect } from 'solid-js'
+import { createMemo } from 'solid-js'
 import type { Component } from 'solid-js'
 import { For } from 'solid-js'
 // import ChatInput from './ChatInput'
-import { getChatInfos, ChatBoxInfo, setChatBoxInfos } from '../utils/chat'
+import { getChatInfos, ChatBoxInfo } from '../utils/chat'
 import { DateTime } from 'luxon'
-import createResizeObserver from '../utils/resize'
 import ChatInput from './ChatInput'
-import { sendChatBoxInfoToAll } from '../utils/sendChatInfo'
+import RoomBox from './RoomBox'
 
 const ChatBox: Component<{ chatBoxInfo: ChatBoxInfo }> = (props) => {
-  let divRef: HTMLDivElement
-
-  createEffect(() => {
-    divRef.style.left = `${props.chatBoxInfo.x}px`
-    divRef.style.top = `${props.chatBoxInfo.y}px`
-    divRef.style.width = `${props.chatBoxInfo.width}px`
-    divRef.style.height = `${props.chatBoxInfo.height}px`
-  })
-
   const getIdChats = createMemo(() =>
     getChatInfos().filter((c) => c.chatGroup === props.chatBoxInfo.chatGroup)
   )
 
-  createEffect(() => {
-    const handleResize = (entries: ResizeObserverEntry[]) => {
-      const width = entries[0].target.clientWidth
-      const height = entries[0].target.clientHeight
-
-      if (
-        width !== props.chatBoxInfo.width ||
-        height !== props.chatBoxInfo.height
-      ) {
-        setChatBoxInfos((prev) =>
-          prev.map((chatBox) => {
-            if (chatBox.id === props.chatBoxInfo.id) {
-              chatBox.width = width
-              chatBox.height = height
-            }
-            return chatBox
-          })
-        )
-        sendChatBoxInfoToAll(props.chatBoxInfo)
-      }
-    }
-
-    createResizeObserver([divRef], handleResize)
-  })
-
   return (
-    <div
-      ref={divRef}
-      class="room-box chat-box rounded-lg p-4 flex flex-col gap-2"
-    >
+    <RoomBox boxInfo={props.chatBoxInfo} class="chat-box">
       <div class="grow space-y-1 overflow-y-scroll box-scrollbar">
         <For each={getIdChats()}>
           {(chatInfo) => (
@@ -69,7 +31,7 @@ const ChatBox: Component<{ chatBoxInfo: ChatBoxInfo }> = (props) => {
       <div>
         <ChatInput chatGroup={props.chatBoxInfo.chatGroup} />
       </div>
-    </div>
+    </RoomBox>
   )
 }
 

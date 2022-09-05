@@ -30,7 +30,7 @@ import {
   sendLocalUserCoordinateToAll,
 } from '../utils/sendLocalUserCoordinate'
 import { setPeerOnConnection } from '../utils/setPeerOnConnection'
-import { getChatBoxInfos } from '../utils/chat'
+import { getRoomBoxInfos } from '../utils/box'
 
 const KEY = import.meta.env.VITE_SKY_WAY_API_KEY
 export const PEER = new Peer({ key: KEY as string })
@@ -164,7 +164,7 @@ export const Room: Component<{ roomId: string }> = (props) => {
         style={{ height: `${ROOM_X}px`, width: `${ROOM_Y}px` }}
       >
         {/* Boxes */}
-        <For each={getChatBoxInfos()}>
+        <For each={getRoomBoxInfos()}>
           {(info) => <ChatBox chatBoxInfo={info} />}
         </For>
         {/* Remote User Icons */}

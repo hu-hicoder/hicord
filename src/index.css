@@ -30,12 +30,8 @@
     @apply flex flex-row items-center content-center p-4 hover:bg-base-content rounded-lg cursor-pointer;
   }
 
-  /* Room Box */
-  .room-box {
-    @apply absolute resize overflow-hidden;
-  }
-
   .chat-box {
+    @apply rounded-lg p-4 flex flex-col gap-2;
     background: rgba(220, 220, 220, 0.75);
     min-width: 250px;
     min-height: 150px;
