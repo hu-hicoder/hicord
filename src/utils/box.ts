@@ -36,16 +36,16 @@ export const [getRoomBoxInfos, setRoomBoxInfos] = createSignal<RoomBoxInfo[]>([
 
 export const setRoomBoxInfo = (roomBoxInfo: RoomBoxInfo) => {
   setRoomBoxInfos((prev) => {
-    let hasInfo = false
+    let newInfo = true
     const infos = prev.map((curr) => {
       if (curr.id === roomBoxInfo.id) {
-        hasInfo = true
+        newInfo = false
         return roomBoxInfo
       }
       return curr
     })
 
-    if (hasInfo) {
+    if (newInfo) {
       infos.push(roomBoxInfo)
     }
 

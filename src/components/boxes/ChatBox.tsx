@@ -3,9 +3,9 @@ import { createMemo } from 'solid-js'
 import type { Component } from 'solid-js'
 import { For } from 'solid-js'
 // import ChatInput from './ChatInput'
-import { getChatInfos, ChatBoxInfo } from '../utils/chat'
+import { getChatInfos, ChatBoxInfo } from '../../utils/chat'
 import { DateTime } from 'luxon'
-import ChatInput from './ChatInput'
+import ChatInput from '../ChatInput'
 import RoomBox from './RoomBox'
 
 const ChatBox: Component<{ chatBoxInfo: ChatBoxInfo }> = (props) => {

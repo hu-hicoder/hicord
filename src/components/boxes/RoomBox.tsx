@@ -1,31 +1,21 @@
-import { createEffect, createMemo } from 'solid-js'
-import type { ParentComponent } from 'solid-js'
-import createResizeObserver from '../utils/resize'
-import { RoomBoxInfo, setRoomBoxInfo } from '../utils/box'
-import { createOutsideClick } from '../utils/outside'
-import { localUserInfo } from '../utils/user'
-import { sendRoomBoxInfoToAll } from '../utils/sendRoomBoxInfo'
+import { createEffect, createMemo, JSX } from 'solid-js'
+import createResizeObserver from '../../utils/resize'
+import { getRoomBoxInfos, RoomBoxInfo, setRoomBoxInfo } from '../../utils/box'
+import { localUserInfo } from '../../utils/user'
+import { sendRoomBoxInfoToAll } from '../../utils/sendRoomBoxInfo'
+import clickOutsideDirective from '../../directives/clickOutside'
+const clickOutside = clickOutsideDirective
 
-const RoomBox: ParentComponent<{ boxInfo: RoomBoxInfo; class: string }> = (
-  props
-) => {
+function RoomBox(props: {
+  boxInfo: RoomBoxInfo
+  class: string
+  children: JSX.Element
+}) {
   let divRef: HTMLDivElement
   const isEditing = createMemo(
     () =>
       localUserInfo() && localUserInfo().peerId === props.boxInfo.editorPeerId
   )
-  createEffect(() => {
-    createOutsideClick(divRef, () => {
-      if (isEditing()) {
-        const roomBoxInfo: RoomBoxInfo = {
-          ...props.boxInfo,
-          editorPeerId: null,
-        }
-        setRoomBoxInfo(roomBoxInfo)
-        sendRoomBoxInfoToAll(roomBoxInfo)
-      }
-    })
-  })
 
   createEffect(() => {
     divRef.style.left = `${props.boxInfo.x}px`
@@ -64,6 +54,7 @@ const RoomBox: ParentComponent<{ boxInfo: RoomBoxInfo; class: string }> = (
         props.class
       }`}
       onClick={() => {
+        console.log('inside click')
         if (localUserInfo() && !isEditing() && !props.boxInfo.editorPeerId) {
           const roomBoxInfo: RoomBoxInfo = {
             ...props.boxInfo,
@@ -73,7 +64,22 @@ const RoomBox: ParentComponent<{ boxInfo: RoomBoxInfo; class: string }> = (
           sendRoomBoxInfoToAll(roomBoxInfo)
         }
       }}
+      // eslint-disable-next-line solid/reactivity
+      use:clickOutside={() => {
+        console.log('outside click')
+        if (isEditing()) {
+          const roomBoxInfo: RoomBoxInfo = {
+            ...props.boxInfo,
+            editorPeerId: null,
+          }
+          setRoomBoxInfo(roomBoxInfo)
+          sendRoomBoxInfoToAll(roomBoxInfo)
+        }
+      }}
     >
+      {`${props.boxInfo.width}px ${props.boxInfo.height}px`}
+      {isEditing() ? 'hennshuu' : 'not'}
+      {getRoomBoxInfos()?.length}
       {props.children}
     </div>
   )

@@ -15,7 +15,7 @@ import ChatToolbar from './ChatToolbar'
 import MainToolbar from './MainToolbar'
 import UserToolbar from './UserToolbar'
 import ChatInput from './ChatInput'
-import ChatBox from './ChatBox'
+import ChatBox from './boxes/ChatBox'
 import { initRemoteAudio, setListener } from '../utils/audio'
 import {
   sendLocalUserNameTo,
