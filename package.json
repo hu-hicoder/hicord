@@ -32,6 +32,7 @@
   },
   "dependencies": {
     "@picmo/popup-picker": "^5.6.1",
+    "@solid-primitives/resize-observer": "^2.0.4",
     "luxon": "^3.0.3",
     "material-symbols": "^0.2.9",
     "picmo": "^5.6.1",

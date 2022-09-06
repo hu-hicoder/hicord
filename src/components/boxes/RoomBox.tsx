@@ -1,10 +1,10 @@
-import { createEffect, createMemo, JSX } from 'solid-js'
-import createResizeObserver from '../../utils/resize'
+import { createEffect, createMemo, JSX, onMount } from 'solid-js'
 import { getRoomBoxInfos, RoomBoxInfo, setRoomBoxInfo } from '../../utils/box'
 import { localUserInfo } from '../../utils/user'
 import { sendRoomBoxInfoToAll } from '../../utils/sendRoomBoxInfo'
 import clickOutsideDirective from '../../directives/clickOutside'
 const clickOutside = clickOutsideDirective
+import { createResizeObserver } from '@solid-primitives/resize-observer'
 
 function RoomBox(props: {
   boxInfo: RoomBoxInfo
@@ -17,35 +17,33 @@ function RoomBox(props: {
       localUserInfo() && localUserInfo().peerId === props.boxInfo.editorPeerId
   )
 
+  onMount(() => {
+    createResizeObserver(divRef, () => {
+      const width = divRef.clientWidth
+      const height = divRef.clientHeight
+      console.log('div', width, height)
+      if (
+        isEditing() &&
+        (width / 5 !== props.boxInfo.width / 5 ||
+          height / 5 !== props.boxInfo.height / 5)
+      ) {
+        const roomBoxInfo: RoomBoxInfo = {
+          ...props.boxInfo,
+          width,
+          height,
+        }
+        setRoomBoxInfo(roomBoxInfo)
+        sendRoomBoxInfoToAll(roomBoxInfo)
+      }
+    })
+  })
+
   createEffect(() => {
     divRef.style.left = `${props.boxInfo.x}px`
     divRef.style.top = `${props.boxInfo.y}px`
     divRef.style.width = `${props.boxInfo.width}px`
     divRef.style.height = `${props.boxInfo.height}px`
   })
-
-  // createEffect(() => {
-  //   const handleResize = (entries: ResizeObserverEntry[]) => {
-  //     const width = entries[0].target.clientWidth
-  //     const height = entries[0].target.clientHeight
-  //     console.log(width, height)
-
-  //     if (
-  //       isEditing() &&
-  //       (width !== props.boxInfo.width || height !== props.boxInfo.height)
-  //     ) {
-  //       const roomBoxInfo: RoomBoxInfo = {
-  //         ...props.boxInfo,
-  //         width,
-  //         height,
-  //       }
-  //       setRoomBoxInfo(roomBoxInfo)
-  //       sendRoomBoxInfoToAll(roomBoxInfo)
-  //     }
-  //   }
-
-  //   createResizeObserver([divRef], handleResize)
-  // }, [divRef])
 
   return (
     <div
