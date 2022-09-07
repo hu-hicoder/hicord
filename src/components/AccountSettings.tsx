@@ -1,7 +1,7 @@
 import { createSignal } from 'solid-js'
 import { localUserInfo, setLocalUserInfo } from '../utils/user'
-import { sendLocalUserNameToAll } from '../utils/sendLocalUserName'
-import { sendLocalUserAvatarToAll } from '../utils/sendLocalUserAvatar'
+import { sendLocalUserNameToAll } from '../utils/send/sendLocalUserName'
+import { sendLocalUserAvatarToAll } from '../utils/send/sendLocalUserAvatar'
 
 const EditProfile = () => {
   let nameElement: HTMLInputElement

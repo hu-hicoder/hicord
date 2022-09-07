@@ -1,4 +1,4 @@
-import { sendLocalUserReactionToAll } from './sendLocalUserReaction'
+import { sendLocalUserReactionToAll } from './send/sendLocalUserReaction'
 import {
   RemoteUserInfo,
   remoteUserInfos,

@@ -19,19 +19,19 @@ import { initRemoteAudio, setListener } from '../utils/audio'
 import {
   sendLocalUserNameTo,
   sendLocalUserNameToAll,
-} from '../utils/sendLocalUserName'
+} from '../utils/send/sendLocalUserName'
 import {
   sendLocalUserAvatarTo,
   sendLocalUserAvatarToAll,
-} from '../utils/sendLocalUserAvatar'
+} from '../utils/send/sendLocalUserAvatar'
 import {
   sendLocalUserCoordinateTo,
   sendLocalUserCoordinateToAll,
-} from '../utils/sendLocalUserCoordinate'
+} from '../utils/send/sendLocalUserCoordinate'
 import { setPeerOnConnection } from '../utils/setPeerOnConnection'
 import { getRoomBoxInfos } from '../utils/box'
-import { sendRoomBoxInfosTo } from '../utils/sendRoomBoxInfo'
-import { sendChatInfosTo } from '../utils/sendChatInfo'
+import { sendRoomBoxInfosTo } from '../utils/send/sendRoomBoxInfo'
+import { sendChatInfosTo } from '../utils/send/sendChatInfo'
 
 const KEY = import.meta.env.VITE_SKY_WAY_API_KEY
 export const PEER = new Peer({ key: KEY as string })

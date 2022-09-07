@@ -1,5 +1,5 @@
-import { localUserInfo, RemoteUserInfo } from './user'
-import { Coordinate } from './coordinate'
+import { localUserInfo, RemoteUserInfo } from '../user'
+import { Coordinate } from '../coordinate'
 import { sendTo, sendToAll } from './send'
 
 export const sendLocalUserCoordinateToAll = () => {

@@ -1,7 +1,7 @@
 import { createEffect, createMemo, JSX, onMount } from 'solid-js'
 import { RoomBoxInfo, setRoomBoxInfo, BoxInfo } from '../../utils/box'
 import { localUserInfo, remoteUserInfos } from '../../utils/user'
-import { sendRoomBoxInfoToAll } from '../../utils/sendRoomBoxInfo'
+import { sendRoomBoxInfoToAll } from '../../utils/send/sendRoomBoxInfo'
 import clickOutsideDirective from '../../directives/clickOutside'
 const clickOutside = clickOutsideDirective
 import { createResizeObserver } from '@solid-primitives/resize-observer'

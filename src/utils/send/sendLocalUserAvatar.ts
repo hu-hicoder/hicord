@@ -1,4 +1,4 @@
-import { localUserInfo, UserAvatar, RemoteUserInfo } from './user'
+import { localUserInfo, UserAvatar, RemoteUserInfo } from '../user'
 import { sendTo, sendToAll } from './send'
 
 export const sendLocalUserAvatarToAll = () => {

@@ -1,5 +1,5 @@
-import { PEER } from '../components/Room'
-import { RemoteUserInfo, remoteUserInfos } from './user'
+import { PEER } from '../../components/Room'
+import { RemoteUserInfo, remoteUserInfos } from '../user'
 
 export const sendTo = (
   remoteUserPeerId: RemoteUserInfo['peerId'],
