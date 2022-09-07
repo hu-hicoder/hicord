@@ -30,6 +30,12 @@
     @apply flex flex-row items-center content-center p-4 hover:bg-base-content rounded-lg cursor-pointer;
   }
 
+  /* Box */
+
+  .edit-card {
+    @apply rounded py-1 px-2 flex flex-row gap-1 content-center items-center;
+    background: rgba(220, 220, 220, 0.75);
+  }
   .chat-box {
     @apply rounded-lg p-4 flex flex-col gap-2;
     background: rgba(220, 220, 220, 0.75);

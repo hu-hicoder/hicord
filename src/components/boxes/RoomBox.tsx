@@ -1,10 +1,24 @@
 import { createEffect, createMemo, JSX, onMount } from 'solid-js'
 import { RoomBoxInfo, setRoomBoxInfo, BoxInfo } from '../../utils/box'
-import { localUserInfo } from '../../utils/user'
+import { localUserInfo, remoteUserInfos } from '../../utils/user'
 import { sendRoomBoxInfoToAll } from '../../utils/sendRoomBoxInfo'
 import clickOutsideDirective from '../../directives/clickOutside'
 const clickOutside = clickOutsideDirective
 import { createResizeObserver } from '@solid-primitives/resize-observer'
+
+const whoIsEditing = (editorPeerId: string): string => {
+  if (editorPeerId === localUserInfo().peerId) {
+    return '編集中…'
+  } else {
+    const initialValue = `${editorPeerId}が編集中…`
+    return remoteUserInfos().reduce((previousValue, currUser) => {
+      if (currUser.peerId === editorPeerId) {
+        return `${currUser.userName}が編集中…`
+      }
+      return previousValue
+    }, initialValue)
+  }
+}
 
 function RoomBox(props: {
   boxInfo: RoomBoxInfo
@@ -125,7 +139,15 @@ function RoomBox(props: {
           <span class="material-symbols-outlined">open_with</span>
         </div>
       ) : null}
-
+      {/* Editor */}
+      {props.boxInfo.editorPeerId ? (
+        <div class="absolute left-5" style={{ bottom: '-2.5rem' }}>
+          <div class="absolute top-0 animate-ping h-4 w-4 bg-blue-600 rounded-full" />
+          <div class="edit-card">
+            {whoIsEditing(props.boxInfo.editorPeerId)}
+          </div>
+        </div>
+      ) : null}
       {/* Content */}
       <div
         ref={divRef}
@@ -154,8 +176,6 @@ function RoomBox(props: {
           }
         }}
       >
-        {`${props.boxInfo.width}px ${props.boxInfo.height}px`}
-        {isEditing() ? 'hennshuu' : 'not'}
         {props.children}
       </div>
     </div>
