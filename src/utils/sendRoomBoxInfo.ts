@@ -1,5 +1,5 @@
 import { RemoteUserInfo } from './user'
-import { RoomBoxInfo, BoxTypes } from './box'
+import { RoomBoxInfo, BoxTypes, getRoomBoxInfos } from './box'
 import { sendChatBoxInfoTo, sendChatBoxInfoToAll } from './sendChatInfo'
 import { ChatBoxInfo } from './chat'
 
@@ -20,4 +20,10 @@ export const sendRoomBoxInfoTo = (
       sendChatBoxInfoTo(remoteUserPeerId, data as ChatBoxInfo)
       break
   }
+}
+
+export const sendRoomBoxInfosTo = (
+  remoteUserPeerId: RemoteUserInfo['peerId']
+) => {
+  getRoomBoxInfos().forEach((info) => sendRoomBoxInfoTo(remoteUserPeerId, info))
 }

@@ -1,5 +1,5 @@
 import { RemoteUserInfo } from './user'
-import { ChatInfo, localChatInfoFrom, ChatBoxInfo } from './chat'
+import { ChatInfo, localChatInfoFrom, ChatBoxInfo, getChatInfos } from './chat'
 import { sendTo, sendToAll } from './send'
 
 export const sendChatInfoToAll = (data: ChatInfo) => {
@@ -11,6 +11,10 @@ export const sendChatInfoTo = (
   data: ChatInfo
 ) => {
   sendTo(remoteUserPeerId, data)
+}
+
+export const sendChatInfosTo = (remoteUserPeerId: RemoteUserInfo['peerId']) => {
+  getChatInfos().forEach((info) => sendChatInfoTo(remoteUserPeerId, info))
 }
 
 export const sendChatBoxInfoToAll = (data: ChatBoxInfo) => {

@@ -1,3 +1,4 @@
+/* eslint-disable solid/prefer-for */
 import Peer, { SfuRoom } from 'skyway-js'
 import { Component, createMemo, For } from 'solid-js'
 import { createEffect, createSignal } from 'solid-js'
@@ -30,6 +31,8 @@ import {
 } from '../utils/sendLocalUserCoordinate'
 import { setPeerOnConnection } from '../utils/setPeerOnConnection'
 import { getRoomBoxInfos } from '../utils/box'
+import { sendRoomBoxInfosTo } from '../utils/sendRoomBoxInfo'
+import { sendChatInfosTo } from '../utils/sendChatInfo'
 
 const KEY = import.meta.env.VITE_SKY_WAY_API_KEY
 export const PEER = new Peer({ key: KEY as string })
@@ -88,6 +91,15 @@ export const Room: Component<{ roomId: string }> = (props) => {
       sendLocalUserNameTo(peerId)
       sendLocalUserCoordinateTo(peerId)
       sendLocalUserAvatarTo(peerId)
+      // Send Room data
+      if (
+        !remoteUserInfos().some(
+          (element) => element.peerId.localeCompare(localUserInfo().peerId) > 0
+        )
+      ) {
+        sendRoomBoxInfosTo(peerId)
+        sendChatInfosTo(peerId)
+      }
     })
     tmpRoom.on('stream', async (stream) => {
       const userInfo = {
@@ -141,10 +153,6 @@ export const Room: Component<{ roomId: string }> = (props) => {
     console.log('=== あなたが退出しました ===\n')
   }
 
-  const RemoteUserIcons = createMemo(() =>
-    remoteUserInfos().map((info) => <RemoteUserIcon info={info} />)
-  )
-
   return (
     <div>
       <div
@@ -156,7 +164,9 @@ export const Room: Component<{ roomId: string }> = (props) => {
           {(info) => <ChatBox chatBoxInfo={info} />}
         </For>
         {/* Remote User Icons */}
-        <RemoteUserIcons />
+        {remoteUserInfos().map((info) => (
+          <RemoteUserIcon info={info} />
+        ))}
         {/* <For each={remoteUserInfos()}> かぜかうまくいかない
           {(info) => <RemoteUserIcon info={info} />}
         </For> */}

@@ -19,20 +19,9 @@ export type BoxInfo = Coordinate & {
 
 export type RoomBoxInfo = ChatBoxInfo
 
-export const [getRoomBoxInfos, setRoomBoxInfos] = createSignal<RoomBoxInfo[]>([
-  {
-    boxType: BoxTypes.CHAT,
-    id: 1,
-    x: 2048,
-    y: 2048,
-    deg: 0,
-    width: 300,
-    height: 300,
-    editorPeerId: null,
-    // Chat Box
-    chatGroup: 0,
-  },
-])
+export const [getRoomBoxInfos, setRoomBoxInfos] = createSignal<RoomBoxInfo[]>(
+  []
+)
 
 export const setRoomBoxInfo = (roomBoxInfo: RoomBoxInfo) => {
   setRoomBoxInfos((prev) => {
