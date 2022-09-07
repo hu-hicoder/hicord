@@ -32,6 +32,7 @@ import { setPeerOnConnection } from '../utils/setPeerOnConnection'
 import { getRoomBoxInfos } from '../utils/box'
 import { sendRoomBoxInfosTo } from '../utils/send/sendRoomBoxInfo'
 import { sendChatInfosTo } from '../utils/send/sendChatInfo'
+import { goToMyLocation } from '../utils/goToMyLocation'
 
 const KEY = import.meta.env.VITE_SKY_WAY_API_KEY
 export const PEER = new Peer({ key: KEY as string })
@@ -83,6 +84,7 @@ export const Room: Component<{ roomId: string }> = (props) => {
     })
     tmpRoom.once('open', () => {
       console.log('=== あなたが参加しました ===\n')
+      goToMyLocation()
     })
     tmpRoom.on('peerJoin', (peerId) => {
       console.log(`=== ${peerId} が入室しました ===\n`)

@@ -1,7 +1,6 @@
 /* eslint-disable solid/prefer-for */
-import { createMemo } from 'solid-js'
+import { createMemo, For } from 'solid-js'
 import type { Component } from 'solid-js'
-import { For } from 'solid-js'
 // import ChatInput from './ChatInput'
 import { getChatInfos, ChatBoxInfo } from '../../utils/chat'
 import { DateTime } from 'luxon'

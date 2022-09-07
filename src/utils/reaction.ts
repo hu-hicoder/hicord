@@ -1,4 +1,5 @@
 import { sendLocalUserReactionToAll } from './send/sendLocalUserReaction'
+import { sleep } from './sleep'
 import {
   RemoteUserInfo,
   remoteUserInfos,
@@ -72,6 +73,3 @@ export const addRemoteUserReaction = (
     }
   })()
 }
-
-const sleep = async (durationMs: number) =>
-  new Promise((resolve) => setTimeout(resolve, durationMs))
