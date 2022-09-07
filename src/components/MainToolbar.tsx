@@ -1,8 +1,8 @@
 import { addLocalUserReaction } from '../utils/reaction'
-import { localUserInfo } from '../utils/user'
 import { onMount } from 'solid-js'
 import { createPopup, PopupPickerController } from '@picmo/popup-picker'
 import { EmojiSelection } from 'picmo'
+import { goToMyLocation } from '../utils/goToMyLocation'
 
 const MainToolbar = () => {
   let reactionButtonElement: HTMLInputElement
@@ -31,13 +31,6 @@ const MainToolbar = () => {
 
   const onClickReactionButton = () => {
     picker.open()
-  }
-
-  const goToMyLocation = () => {
-    window.scroll(
-      localUserInfo().x - window.innerWidth / 2,
-      localUserInfo().y - window.innerHeight / 2
-    )
   }
 
   return (

@@ -1,4 +1,4 @@
-import { RemoteUserInfo, UserReaction } from './user'
+import { RemoteUserInfo, UserReaction } from '../user'
 import { sendTo, sendToAll } from './send'
 
 export const sendLocalUserReactionToAll = (

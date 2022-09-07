@@ -2,7 +2,7 @@ import type { Component } from 'solid-js'
 import UserIcon from './UserIcon'
 import { localUserInfo, setLocalUserInfo, UserInfo } from '../utils/user'
 import { setListener as setAudioListener } from '../utils/audio'
-import { sendLocalUserCoordinateToAll } from '../utils/sendLocalUserCoordinate'
+import { sendLocalUserCoordinateToAll } from '../utils/send/sendLocalUserCoordinate'
 
 const LocalUserIcon: Component = () => {
   let localUserIconDiv: HTMLDivElement

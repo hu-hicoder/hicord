@@ -1,5 +1,5 @@
 import { setRoomBoxInfo, BoxTypes, getRoomBoxInfos } from '../utils/box'
-import { sendRoomBoxInfoToAll } from '../utils/sendRoomBoxInfo'
+import { sendRoomBoxInfoToAll } from '../utils/send/sendRoomBoxInfo'
 
 const ChatToolbar = () => {
   const addChatBox = () => {
