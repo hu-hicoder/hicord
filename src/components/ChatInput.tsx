@@ -16,7 +16,7 @@ const ChatInput: Component<{ chatGroup: number }> = (props) => {
   }
 
   return (
-    <div class="flex flex-row items-center gap-2">
+    <div class="flex flex-row items-center gap-1.5">
       <input
         ref={chatRef}
         type="text"
@@ -24,7 +24,10 @@ const ChatInput: Component<{ chatGroup: number }> = (props) => {
         placeholder="Chat"
       />
 
-      <span class="material-symbols-outlined cursor-pointer" onClick={sendChat}>
+      <span
+        class="material-symbols-outlined cursor-pointer text-blue-700"
+        onClick={sendChat}
+      >
         send
       </span>
     </div>

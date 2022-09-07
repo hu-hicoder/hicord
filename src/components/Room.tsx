@@ -1,6 +1,6 @@
 /* eslint-disable solid/prefer-for */
 import Peer, { SfuRoom } from 'skyway-js'
-import { Component, createMemo, For } from 'solid-js'
+import { Component, For } from 'solid-js'
 import { createEffect, createSignal } from 'solid-js'
 import LocalUserIcon from './LocalUserIcon'
 import {
@@ -14,7 +14,6 @@ import RemoteUserIcon from './RemoteUserIcon'
 import ChatToolbar from './ChatToolbar'
 import MainToolbar from './MainToolbar'
 import UserToolbar from './UserToolbar'
-import ChatInput from './ChatInput'
 import ChatBox from './boxes/ChatBox'
 import { initRemoteAudio, setListener } from '../utils/audio'
 import {
@@ -188,7 +187,6 @@ export const Room: Component<{ roomId: string }> = (props) => {
           >
             停止
           </button>
-          <ChatInput chatGroup={0} />
         </div>
         {/* Toolbar */}
         <UserToolbar />
