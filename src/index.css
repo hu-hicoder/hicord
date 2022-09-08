@@ -42,6 +42,10 @@
     min-width: 250px;
     min-height: 150px;
   }
+  .screen-box {
+    @apply rounded-sm;
+    background: rgba(220, 220, 220, 0.75);
+  }
 
   /* Chat */
   /* .chat-input {

@@ -3,6 +3,7 @@ import { onMount } from 'solid-js'
 import { createPopup, PopupPickerController } from '@picmo/popup-picker'
 import { EmojiSelection } from 'picmo'
 import { goToMyLocation } from '../utils/goToMyLocation'
+import { screenCapture } from '../utils/screenCapture'
 
 const MainToolbar = () => {
   let reactionButtonElement: HTMLInputElement
@@ -46,7 +47,9 @@ const MainToolbar = () => {
         add_reaction
       </span>
       <span class="material-symbols-outlined tb-item tb-icon-on">mic</span>
-      <span class="material-symbols-outlined tb-item">screen_share</span>
+      <span class="material-symbols-outlined tb-item" onClick={screenCapture}>
+        screen_share
+      </span>
       <span
         class="material-symbols-outlined tb-item"
         onClick={() => goToMyLocation()}

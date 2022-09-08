@@ -1,15 +1,16 @@
 import { setRoomBoxInfo, BoxTypes, getRoomBoxInfos } from '../utils/box'
+import { ChatBoxInfo } from '../utils/chat'
 import { sendRoomBoxInfoToAll } from '../utils/send/sendRoomBoxInfo'
 
 const ChatToolbar = () => {
   const addChatBox = () => {
-    const roomBox = {
+    const roomBox: ChatBoxInfo = {
       boxType: BoxTypes.CHAT,
       id: getRoomBoxInfos().length + 1,
       x: 2048,
       y: 2048,
       deg: 0,
-      width: 300,
+      width: 400,
       height: 300,
       editorPeerId: null,
       // Chat Box

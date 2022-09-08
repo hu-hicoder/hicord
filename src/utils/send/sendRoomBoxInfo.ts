@@ -2,11 +2,16 @@ import { RemoteUserInfo } from '../user'
 import { RoomBoxInfo, BoxTypes, getRoomBoxInfos } from '../box'
 import { sendChatBoxInfoTo, sendChatBoxInfoToAll } from './sendChatInfo'
 import { ChatBoxInfo } from '../chat'
+import { sendScreenBoxInfoTo, sendScreenBoxInfoToAll } from './sendScreen'
+import { ScreenBoxInfo } from '../screen'
 
 export const sendRoomBoxInfoToAll = (data: RoomBoxInfo) => {
   switch (data.boxType) {
     case BoxTypes.CHAT:
       sendChatBoxInfoToAll(data as ChatBoxInfo)
+      break
+    case BoxTypes.SCREEN:
+      sendScreenBoxInfoToAll(data as ScreenBoxInfo)
       break
   }
 }
@@ -18,6 +23,9 @@ export const sendRoomBoxInfoTo = (
   switch (data.boxType) {
     case BoxTypes.CHAT:
       sendChatBoxInfoTo(remoteUserPeerId, data as ChatBoxInfo)
+      break
+    case BoxTypes.SCREEN:
+      sendScreenBoxInfoTo(remoteUserPeerId, data as ScreenBoxInfo)
       break
   }
 }

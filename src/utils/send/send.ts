@@ -9,7 +9,7 @@ export const sendTo = (
 
   dataConnection.on('open', () => {
     dataConnection.send(data)
-    console.log(data)
+    console.log(`send to ${remoteUserPeerId}`, data)
   })
 }
 

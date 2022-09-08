@@ -7,13 +7,13 @@ import { DateTime } from 'luxon'
 import ChatInput from '../ChatInput'
 import RoomBox from './RoomBox'
 
-const ChatBox: Component<{ chatBoxInfo: ChatBoxInfo }> = (props) => {
+const ChatBox: Component<{ info: ChatBoxInfo }> = (props) => {
   const getIdChats = createMemo(() =>
-    getChatInfos().filter((c) => c.chatGroup === props.chatBoxInfo.chatGroup)
+    getChatInfos().filter((c) => c.chatGroup === props.info.chatGroup)
   )
 
   return (
-    <RoomBox boxInfo={props.chatBoxInfo} class="chat-box">
+    <RoomBox boxInfo={props.info} class="chat-box">
       <div class="grow space-y-1 overflow-y-scroll box-scrollbar">
         <For each={getIdChats()}>
           {(chatInfo) => (
@@ -28,7 +28,7 @@ const ChatBox: Component<{ chatBoxInfo: ChatBoxInfo }> = (props) => {
       </div>
 
       <div>
-        <ChatInput chatGroup={props.chatBoxInfo.chatGroup} />
+        <ChatInput chatGroup={props.info.chatGroup} />
       </div>
     </RoomBox>
   )

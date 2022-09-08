@@ -29,10 +29,14 @@ import {
   sendLocalUserCoordinateToAll,
 } from '../utils/send/sendLocalUserCoordinate'
 import { setPeerOnConnection } from '../utils/setPeerOnConnection'
-import { getRoomBoxInfos } from '../utils/box'
+import { BoxTypes, getRoomBoxInfos } from '../utils/box'
 import { sendRoomBoxInfosTo } from '../utils/send/sendRoomBoxInfo'
 import { sendChatInfosTo } from '../utils/send/sendChatInfo'
 import { goToMyLocation } from '../utils/goToMyLocation'
+import { setCall } from '../utils/setCall'
+import { ChatBoxInfo } from '../utils/chat'
+import ScreenBox from './boxes/ScreenBox'
+import { ScreenBoxInfo } from '../utils/screen'
 
 const KEY = import.meta.env.VITE_SKY_WAY_API_KEY
 export const PEER = new Peer({ key: KEY as string })
@@ -135,6 +139,8 @@ export const Room: Component<{ roomId: string }> = (props) => {
       console.log(`=== ${peerId} が退出しました ===\n`)
     })
     setRoom(tmpRoom)
+    // Media Connection
+    setCall()
     // DataConnection
     setPeerOnConnection()
   }
@@ -162,7 +168,14 @@ export const Room: Component<{ roomId: string }> = (props) => {
       >
         {/* Boxes */}
         <For each={getRoomBoxInfos()}>
-          {(info) => <ChatBox chatBoxInfo={info} />}
+          {(info) => {
+            switch (info.boxType) {
+              case BoxTypes.CHAT:
+                return <ChatBox info={info as ChatBoxInfo} />
+              case BoxTypes.SCREEN:
+                return <ScreenBox info={info as ScreenBoxInfo} />
+            }
+          }}
         </For>
         {/* Remote User Icons */}
         {remoteUserInfos().map((info) => (

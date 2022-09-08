@@ -10,6 +10,7 @@ import {
   setRemoteUserInfos,
 } from './user'
 import { setRoomBoxInfo } from './box'
+import { isScreenBoxInfo } from './screen'
 
 export const setPeerOnConnection = () => {
   PEER.on('connection', (dataConnection) => {
@@ -52,6 +53,9 @@ export const setPeerOnConnection = () => {
         setChatInfos((prev) => [...prev, data])
       } else if (isChatBoxInfo(data)) {
         console.log('chat box info')
+        setRoomBoxInfo(data)
+      } else if (isScreenBoxInfo(data)) {
+        console.log('screen box info')
         setRoomBoxInfo(data)
       } else if (isUserAvatar(data)) {
         console.log('user avatar', data)
