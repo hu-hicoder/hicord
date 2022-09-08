@@ -1,8 +1,8 @@
 import type { Component } from 'solid-js'
 import { createEffect } from 'solid-js'
 import { UserInfo } from '../utils/user'
-export const USER_ICON_WIDTH = 128
-export const USER_ICON_HEIGHT = 128
+export const USER_ICON_WIDTH = 64
+export const USER_ICON_HEIGHT = 64
 
 const UserIcon: Component<{ info: UserInfo }> = (props) => {
   let iconPositionDiv: HTMLDivElement
@@ -41,30 +41,22 @@ const UserIcon: Component<{ info: UserInfo }> = (props) => {
   })
 
   return (
-    <div ref={iconPositionDiv} class="absolute w-32 h-32 flex flex-col">
+    <div ref={iconPositionDiv} class="absolute w-16 h-16 flex flex-col">
       <div ref={iconDiv} class="avatar">
-        <div class="w-32 mask mask-squircle">
+        <div class="w-16 mask mask-squircle">
           <img ref={imgElement} />
         </div>
       </div>
 
-      <div
-        class="text-center w-32 absolute"
-        style={{
-          bottom: `${-USER_ICON_HEIGHT / 4}px`,
-        }}
-      >
+      <div class="text-center text-sm absolute w-96 -bottom-8 -right-40">
         {props.info.userName}
       </div>
       <div
         ref={userReactionElement}
-        class="text-center text-6xl w-32 absolute"
-        style={{
-          top: `${-USER_ICON_HEIGHT / 2}px`,
-        }}
+        class="text-center text-4xl w-16 absolute -top-12"
       />
       {props.info.muted ? (
-        <div class="swap-off material-symbols-outlined absolute bottom-0">
+        <div class="swap-off material-symbols-outlined absolute text-xl -bottom-2 -left-2 w-6 h-6 leading-6 rounded-full text-center text-error bg-base-200 bg-opacity-50">
           mic_off
         </div>
       ) : undefined}
