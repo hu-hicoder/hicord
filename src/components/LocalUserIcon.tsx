@@ -3,6 +3,7 @@ import UserIcon from './UserIcon'
 import { localUserInfo, setLocalUserInfo, UserInfo } from '../utils/user'
 import { setListener as setAudioListener } from '../utils/audio'
 import { sendLocalUserCoordinateToAll } from '../utils/send/sendLocalUserCoordinate'
+import { updateDeg } from '../utils/coordinate'
 
 const LocalUserIcon: Component = () => {
   let localUserIconDiv: HTMLDivElement
@@ -34,14 +35,7 @@ const LocalUserIcon: Component = () => {
     setLocalUserInfo((preUserInfo) => {
       const dx = x - preUserInfo.x
       const dy = y - preUserInfo.y
-      let deg = preUserInfo.deg
-      if (20 < dx ** 2 + dy ** 2) {
-        let r = Math.atan2(dy, dx)
-        if (r < 0) {
-          r = r + 2 * Math.PI
-        }
-        deg = Math.floor((r * 360) / (2 * Math.PI)) - 90
-      }
+      const deg = updateDeg(dx, dy, preUserInfo.deg)
 
       return {
         ...preUserInfo,
