@@ -60,30 +60,25 @@ const MainToolbar = () => {
       >
         my_location
       </span>
-      {/* daisyUIのswapでやろうとしたがうまくいかない */}
-      {/* <label class="swap hover:bg-base-content rounded-lg"> */}
-      {/* <input
-        type="checkbox"
-        onClick={() => onClickMicrophoneButton()}
-        checked={localUserInfo()?.muted ?? true}
-      /> */}
-      {/* </label> */}
       {localUserInfo()?.muted ?? true ? (
         <div
-          class="swap-off material-symbols-outlined tb-item tb-icon-on"
+          class="material-symbols-outlined tb-item tb-item-off"
           onClick={() => onClickMicrophoneButton()}
         >
           mic_off
         </div>
       ) : (
         <div
-          class="swap-on material-symbols-outlined tb-item tb-icon-on"
+          class="material-symbols-outlined tb-item tb-item-on"
           onClick={() => onClickMicrophoneButton()}
         >
           mic
         </div>
       )}
-      <span class="material-symbols-outlined tb-item" onClick={screenCapture}>
+      <span
+        class="material-symbols-outlined tb-item hidden md:block"
+        onClick={screenCapture}
+      >
         screen_share
       </span>
       <LocationMove />
