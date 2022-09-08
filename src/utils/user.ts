@@ -61,3 +61,17 @@ export const isUserReaction = (data: unknown): data is Required<UserReaction> =>
   data !== null &&
   Object.keys(data).length === 1 &&
   typeof (data as UserReaction).userReactionURIEncoded === 'string'
+
+export const getUserNameFromPeerId = (peerId: string): string => {
+  if (peerId === localUserInfo().peerId) {
+    return 'あなた'
+  } else {
+    const initialValue = peerId
+    return remoteUserInfos().reduce((previousValue, currUser) => {
+      if (currUser.peerId === peerId) {
+        return currUser.userName
+      }
+      return previousValue
+    }, initialValue)
+  }
+}

@@ -1,10 +1,13 @@
 import { Coordinate } from './coordinate'
 import { createSignal } from 'solid-js'
 import { ChatBoxInfo } from './chat'
+import { addOrUpdateInfoFromPrev } from './info'
+import { ScreenBoxInfo } from './screen'
 
 // Box Type
 export const BoxTypes = {
   CHAT: 'chat',
+  SCREEN: 'screen',
 } as const
 export type BoxType = typeof BoxTypes[keyof typeof BoxTypes]
 export const AllBoxType = Object.values(BoxTypes)
@@ -17,27 +20,14 @@ export type BoxInfo = Coordinate & {
   editorPeerId?: string
 }
 
-export type RoomBoxInfo = ChatBoxInfo
+export type RoomBoxInfo = ChatBoxInfo | ScreenBoxInfo
 
 export const [getRoomBoxInfos, setRoomBoxInfos] = createSignal<RoomBoxInfo[]>(
   []
 )
 
 export const setRoomBoxInfo = (roomBoxInfo: RoomBoxInfo) => {
-  setRoomBoxInfos((prev) => {
-    let newInfo = true
-    const infos = prev.map((curr) => {
-      if (curr.id === roomBoxInfo.id) {
-        newInfo = false
-        return roomBoxInfo
-      }
-      return curr
-    })
-
-    if (newInfo) {
-      infos.push(roomBoxInfo)
-    }
-
-    return infos
-  })
+  setRoomBoxInfos(
+    addOrUpdateInfoFromPrev(roomBoxInfo, (curr, info) => curr.id === info.id)
+  )
 }

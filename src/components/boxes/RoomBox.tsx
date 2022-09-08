@@ -1,23 +1,13 @@
 import { createEffect, createMemo, JSX, onMount } from 'solid-js'
 import { RoomBoxInfo, setRoomBoxInfo, BoxInfo } from '../../utils/box'
-import { localUserInfo, remoteUserInfos } from '../../utils/user'
+import { getUserNameFromPeerId, localUserInfo } from '../../utils/user'
 import { sendRoomBoxInfoToAll } from '../../utils/send/sendRoomBoxInfo'
 import clickOutsideDirective from '../../directives/clickOutside'
 const clickOutside = clickOutsideDirective
 import { createResizeObserver } from '@solid-primitives/resize-observer'
 
 const whoIsEditing = (editorPeerId: string): string => {
-  if (editorPeerId === localUserInfo().peerId) {
-    return '編集中…'
-  } else {
-    const initialValue = `${editorPeerId}が編集中…`
-    return remoteUserInfos().reduce((previousValue, currUser) => {
-      if (currUser.peerId === editorPeerId) {
-        return `${currUser.userName}が編集中…`
-      }
-      return previousValue
-    }, initialValue)
-  }
+  return `${getUserNameFromPeerId(editorPeerId)}が編集中…`
 }
 
 function RoomBox(props: {
@@ -36,7 +26,6 @@ function RoomBox(props: {
     createResizeObserver(divRef, () => {
       const width = divRef.clientWidth
       const height = divRef.clientHeight
-      console.log('div', width, height)
       if (
         isEditing() &&
         (width / 5 !== props.boxInfo.width / 5 ||
