@@ -32,7 +32,10 @@ import { BoxTypes, getRoomBoxInfos } from '../utils/box'
 import { sendRoomBoxInfosTo } from '../utils/send/sendRoomBoxInfo'
 import { sendChatInfosTo } from '../utils/send/sendChatInfo'
 import { goToMyLocation } from '../utils/goToMyLocation'
-import { sendLocalUserMutedTo, sendLocalUserMutedToAll } from '../utils/send/sendLocalUserMuted'
+import {
+  sendLocalUserMutedTo,
+  sendLocalUserMutedToAll,
+} from '../utils/send/sendLocalUserMuted'
 import { setCall } from '../utils/setCall'
 import { ChatBoxInfo } from '../utils/chat'
 import ScreenBox from './boxes/ScreenBox'
@@ -54,7 +57,7 @@ export const Room: Component<{ roomId: string }> = (props) => {
 
   createEffect(() => {
     navigator.mediaDevices
-      .getUserMedia({ video: false, audio: true })
+      .getUserMedia({ audio: true })
       .then((stream) => {
         setLocalStream(stream)
       })
