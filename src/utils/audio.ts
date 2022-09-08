@@ -16,8 +16,17 @@ function directionZ(userInfo: UserInfo) {
   return Math.sin((userInfo.deg * Math.PI) / 180)
 }
 
-const AudioContext = window.AudioContext
-const audioCtx = new AudioContext()
+// Aucio Context
+export let audioCtx: AudioContext
+declare global {
+  interface Window {
+    webkitAudioContext: typeof AudioContext
+  }
+}
+window.onload = function () {
+  const AudioContext = window.AudioContext || window.webkitAudioContext
+  audioCtx = new AudioContext()
+}
 
 export function audioProcessing(
   localUserInfo: UserInfo,
@@ -97,8 +106,5 @@ export function initRemoteAudio(
   // Connect
   sourceNode.connect(gainNode).connect(pannerNode).connect(audioCtx.destination)
 
-  if (audioCtx.state === 'suspended') {
-    audioCtx.resume()
-  }
   return { sourceNode, gainNode, pannerNode }
 }

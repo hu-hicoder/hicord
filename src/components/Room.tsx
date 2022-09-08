@@ -1,7 +1,7 @@
 /* eslint-disable solid/prefer-for */
 import Peer, { SfuRoom } from 'skyway-js'
 import { Component, For, createEffect, createSignal } from 'solid-js'
-import LocalUserIcon from './LocalUserIcon'
+import LocalUserIcon from './userIcons/LocalUserIcon'
 import {
   localUserInfo,
   setLocalUserInfo,
@@ -9,12 +9,12 @@ import {
   RemoteUserInfo,
   setRemoteUserInfos,
 } from '../utils/user'
-import RemoteUserIcon from './RemoteUserIcon'
-import ChatToolbar from './ChatToolbar'
-import MainToolbar from './MainToolbar'
-import UserToolbar from './UserToolbar'
+import RemoteUserIcon from './userIcons/RemoteUserIcon'
+import ChatToolbar from './toolbars/ChatToolbar'
+import MainToolbar from './toolbars/MainToolbar'
+import UserToolbar from './toolbars/UserToolbar'
 import ChatBox from './boxes/ChatBox'
-import { initRemoteAudio, setListener } from '../utils/audio'
+import { audioCtx, initRemoteAudio, setListener } from '../utils/audio'
 import {
   sendLocalUserNameTo,
   sendLocalUserNameToAll,
@@ -28,7 +28,7 @@ import {
   sendLocalUserCoordinateToAll,
 } from '../utils/send/sendLocalUserCoordinate'
 import { setPeerOnConnection } from '../utils/setPeerOnConnection'
-import { BoxTypes, getRoomBoxInfos } from '../utils/box'
+import { BoxTypes, getRoomBoxInfos } from '../utils/boxes/box'
 import { sendRoomBoxInfosTo } from '../utils/send/sendRoomBoxInfo'
 import { sendChatInfosTo } from '../utils/send/sendChatInfo'
 import { goToMyLocation } from '../utils/goToMyLocation'
@@ -37,9 +37,9 @@ import {
   sendLocalUserMutedToAll,
 } from '../utils/send/sendLocalUserMuted'
 import { setCall } from '../utils/setCall'
-import { ChatBoxInfo } from '../utils/chat'
+import { ChatBoxInfo } from '../utils/boxes/chat'
 import ScreenBox from './boxes/ScreenBox'
-import { ScreenBoxInfo } from '../utils/screen'
+import { ScreenBoxInfo } from '../utils/boxes/screen'
 
 const KEY = import.meta.env.VITE_SKY_WAY_API_KEY
 export const PEER = new Peer({ key: KEY as string })
@@ -151,6 +151,13 @@ export const Room: Component<{ roomId: string }> = (props) => {
     setCall()
     // DataConnection
     setPeerOnConnection()
+
+    // Start Audio
+    if (audioCtx.state === 'suspended') {
+      audioCtx.resume().then(() => {
+        console.log('音声の再生を開始しました')
+      })
+    }
   }
 
   return (

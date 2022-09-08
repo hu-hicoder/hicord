@@ -1,7 +1,7 @@
 import type { Component } from 'solid-js'
 import { createEffect } from 'solid-js'
 import UserIcon from './UserIcon'
-import { RemoteUserInfo } from '../utils/user'
+import { RemoteUserInfo } from '../../utils/user'
 
 const RemoteUserIcon: Component<{ info: RemoteUserInfo }> = (props) => {
   let gainRef: HTMLInputElement

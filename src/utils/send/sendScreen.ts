@@ -1,5 +1,5 @@
 import { RemoteUserInfo } from '../user'
-import { ScreenBoxInfo } from '../screen'
+import { ScreenBoxInfo } from '../boxes/screen'
 import { sendTo, sendToAll } from './send'
 
 // Screen Box

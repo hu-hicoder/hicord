@@ -1,7 +1,7 @@
 import { localUserInfo } from './user'
-import { setScreenInfo, ScreenInfo, ScreenBoxInfo } from './screen'
+import { setScreenInfo, ScreenInfo, ScreenBoxInfo } from './boxes/screen'
 import { sendRoomBoxInfoToAll } from './send/sendRoomBoxInfo'
-import { BoxTypes, getRoomBoxInfos, setRoomBoxInfo } from './box'
+import { BoxTypes, getRoomBoxInfos, setRoomBoxInfo } from './boxes/box'
 
 export const screenCapture = async () => {
   const mStream: MediaStream = await navigator.mediaDevices.getDisplayMedia({

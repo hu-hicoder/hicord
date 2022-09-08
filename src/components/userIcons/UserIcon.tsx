@@ -1,6 +1,6 @@
 import type { Component } from 'solid-js'
 import { createEffect } from 'solid-js'
-import { UserInfo } from '../utils/user'
+import { UserInfo } from '../../utils/user'
 export const USER_ICON_WIDTH = 64
 export const USER_ICON_HEIGHT = 64
 

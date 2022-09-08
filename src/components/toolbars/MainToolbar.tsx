@@ -1,12 +1,12 @@
-import { addLocalUserReaction } from '../utils/reaction'
+import { addLocalUserReaction } from '../../utils/reaction'
 import { onMount } from 'solid-js'
 import { createPopup, PopupPickerController } from '@picmo/popup-picker'
 import { EmojiSelection } from 'picmo'
-import { goToMyLocation } from '../utils/goToMyLocation'
-import { localUserInfo, setLocalUserInfo } from '../utils/user'
-import { sendLocalUserMutedToAll } from '../utils/send/sendLocalUserMuted'
-import { screenCapture } from '../utils/screenCapture'
-import LocationMove from './LocationMove'
+import { goToMyLocation } from '../../utils/goToMyLocation'
+import { localUserInfo, setLocalUserInfo } from '../../utils/user'
+import { sendLocalUserMutedToAll } from '../../utils/send/sendLocalUserMuted'
+import { screenCapture } from '../../utils/screenCapture'
+import LocationMove from '../LocationMove'
 
 const MainToolbar = () => {
   let reactionButtonElement: HTMLInputElement

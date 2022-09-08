@@ -1,5 +1,5 @@
 import { createEffect, createMemo, JSX, onMount } from 'solid-js'
-import { RoomBoxInfo, setRoomBoxInfo, BoxInfo } from '../../utils/box'
+import { RoomBoxInfo, setRoomBoxInfo, BoxInfo } from '../../utils/boxes/box'
 import { getUserNameFromPeerId, localUserInfo } from '../../utils/user'
 import { sendRoomBoxInfoToAll } from '../../utils/send/sendRoomBoxInfo'
 import clickOutsideDirective from '../../directives/clickOutside'

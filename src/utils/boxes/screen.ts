@@ -1,7 +1,7 @@
 // import { UserName, localUserInfo } from './user'
 import { createSignal } from 'solid-js'
 import { BoxInfo, BoxTypes } from './box'
-import { addOrUpdateInfoFromPrev } from './info'
+import { addOrUpdateInfoFromPrev } from '../info'
 import { MediaConnection } from 'skyway-js'
 export const [getScreenInfos, setScreenInfos] = createSignal<ScreenInfo[]>([])
 

@@ -5,10 +5,10 @@ import {
   ScreenBoxInfo,
   getScreenInfos,
   setMediaStreamEventListener,
-} from '../../utils/screen'
+} from '../../utils/boxes/screen'
 import RoomBox from './RoomBox'
 import { getUserNameFromPeerId } from '../../utils/user'
-import { setRoomBoxInfo } from '../../utils/box'
+import { setRoomBoxInfo } from '../../utils/boxes/box'
 import { sendRoomBoxInfoToAll } from '../../utils/send/sendRoomBoxInfo'
 import { PEER } from '../Room'
 

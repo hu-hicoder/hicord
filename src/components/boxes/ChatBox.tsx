@@ -2,7 +2,7 @@
 import { createMemo, For } from 'solid-js'
 import type { Component } from 'solid-js'
 // import ChatInput from './ChatInput'
-import { getChatInfos, ChatBoxInfo } from '../../utils/chat'
+import { getChatInfos, ChatBoxInfo } from '../../utils/boxes/chat'
 import { DateTime } from 'luxon'
 import ChatInput from '../ChatInput'
 import RoomBox from './RoomBox'

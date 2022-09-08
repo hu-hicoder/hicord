@@ -1,6 +1,6 @@
 import { PEER } from '../components/Room'
 import { setPanner } from './audio'
-import { isChatInfo, setChatInfos, isChatBoxInfo } from './chat'
+import { isChatInfo, setChatInfos, isChatBoxInfo } from './boxes/chat'
 import { addRemoteUserReaction } from './reaction'
 import {
   isUserAvatar,
@@ -10,8 +10,8 @@ import {
   isUserReaction,
   setRemoteUserInfos,
 } from './user'
-import { setRoomBoxInfo } from './box'
-import { isScreenBoxInfo } from './screen'
+import { setRoomBoxInfo } from './boxes/box'
+import { isScreenBoxInfo } from './boxes/screen'
 
 export const setPeerOnConnection = () => {
   PEER.on('connection', (dataConnection) => {
