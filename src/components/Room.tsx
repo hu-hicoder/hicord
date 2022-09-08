@@ -44,12 +44,13 @@ export const PEER = new Peer({ key: KEY as string })
 const ROOM_X = 4096
 const ROOM_Y = 4096
 
+// Room
+export const [isStarted, setIsStarted] = createSignal(false)
+export const [room, setRoom] = createSignal<SfuRoom>()
+
 export const Room: Component<{ roomId: string }> = (props) => {
   // Local
   const [localStream, setLocalStream] = createSignal<MediaStream>()
-  // Room
-  const [room, setRoom] = createSignal<SfuRoom>()
-  const [isStarted, setIsStarted] = createSignal(false)
 
   createEffect(() => {
     navigator.mediaDevices
@@ -70,7 +71,7 @@ export const Room: Component<{ roomId: string }> = (props) => {
       return
     }
 
-    setIsStarted((prev) => !prev)
+    setIsStarted(true)
 
     setLocalUserInfo({
       stream: localStream(),
@@ -145,21 +146,6 @@ export const Room: Component<{ roomId: string }> = (props) => {
     setPeerOnConnection()
   }
 
-  const onEnd = () => {
-    if (room()) {
-      room().close()
-      setRemoteUserInfos((prev) => {
-        return prev.filter((userInfo) => {
-          userInfo.stream.getTracks().forEach((track) => track.stop())
-          return false
-        })
-      })
-    }
-    setLocalUserInfo()
-    setIsStarted((prev) => !prev)
-    console.log('=== あなたが退出しました ===\n')
-  }
-
   return (
     <div>
       <div
@@ -187,22 +173,22 @@ export const Room: Component<{ roomId: string }> = (props) => {
         {/* Local User Icon */}
         {localUserInfo() ? <LocalUserIcon /> : null}
         {/* buttons */}
-        <div class="sticky left-0 top-0 inline-flex">
-          <button
-            class="btn btn-primary m-2"
-            onClick={() => onStart()}
-            disabled={isStarted()}
+        {isStarted() ? null : (
+          <div
+            class="mx-auto sm:w-3/4 md:w-2/4 fixed inset-0 flex items-center"
+            id="signin-success-message"
           >
-            開始
-          </button>
-          <button
-            class="btn btn-primary m-2"
-            onClick={() => onEnd()}
-            disabled={!isStarted()}
-          >
-            停止
-          </button>
-        </div>
+            <div class="py-4 flex items-center justify-center w-full">
+              <button
+                class="py-6 px-10 bg-sky-600 rounded-full text-2xl font-bold text-sky-50"
+                onClick={() => onStart()}
+              >
+                開始
+              </button>
+            </div>
+          </div>
+        )}
+
         {/* Toolbar */}
         <UserToolbar />
         <MainToolbar />

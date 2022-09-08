@@ -19,8 +19,8 @@ const LocationMove = () => {
   const [getWatchID, setWatchID] = createSignal<number>()
   const [getBaseCoord, setBaseCoord] = createSignal<GeolocationCoordinates>()
   const success = (position: GeolocationPosition) => {
-    const dx = getBaseCoord().latitude - position.coords.latitude
-    const dy = getBaseCoord().longitude - position.coords.longitude
+    const dx = (position.coords.latitude - getBaseCoord().latitude) * 200000
+    const dy = (position.coords.longitude - getBaseCoord().longitude) * 200000
     console.log(
       position.coords.latitude,
       position.coords.longitude,
@@ -31,8 +31,8 @@ const LocationMove = () => {
     setLocalUserInfo((preUserInfo) => {
       return {
         ...preUserInfo,
-        x: preUserInfo.x + dx * 1000,
-        y: preUserInfo.y + dy * 1000,
+        x: preUserInfo.x + dx,
+        y: preUserInfo.y + dy,
         deg: updateDeg(dx, dy, preUserInfo.deg),
       }
     })
