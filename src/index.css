@@ -18,7 +18,7 @@
   }
 
   .tb-item-on {
-    @apply text-green-200 hover:bg-green-600 bg-green-800;
+    @apply text-green-200 hover:bg-green-700 bg-green-800;
   }
 
   .tb-item-off {
