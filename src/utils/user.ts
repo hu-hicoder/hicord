@@ -9,7 +9,8 @@ import { Coordinate } from './coordinate'
 export type UserInfo = Coordinate &
   UserName &
   UserAvatar &
-  UserReaction & {
+  UserReaction &
+  UserMuted & {
     stream: MediaStream
     peerId: string
   }
@@ -32,6 +33,10 @@ export type UserAvatar = {
 
 export type UserReaction = {
   userReactionURIEncoded?: string
+}
+
+export type UserMuted = {
+  muted: boolean
 }
 
 export const isUserCoordinate = (data: unknown): data is Coordinate =>
@@ -61,3 +66,9 @@ export const isUserReaction = (data: unknown): data is Required<UserReaction> =>
   data !== null &&
   Object.keys(data).length === 1 &&
   typeof (data as UserReaction).userReactionURIEncoded === 'string'
+
+export const isUserMuted = (data: unknown): data is UserMuted =>
+  typeof data === 'object' &&
+  data !== null &&
+  Object.keys(data).length === 1 &&
+  typeof (data as UserMuted).muted === 'boolean'

@@ -5,6 +5,7 @@ import { addRemoteUserReaction } from './reaction'
 import {
   isUserAvatar,
   isUserCoordinate,
+  isUserMuted,
   isUserName,
   isUserReaction,
   setRemoteUserInfos,
@@ -35,6 +36,16 @@ export const setPeerOnConnection = () => {
         addRemoteUserReaction(
           data.userReactionURIEncoded,
           dataConnection.remoteId
+        )
+      } else if (isUserMuted(data)) {
+        console.log('user muted')
+        setRemoteUserInfos((preInfos) =>
+          preInfos.map((remoteUserInfo) => {
+            if (remoteUserInfo.peerId === dataConnection.remoteId) {
+              remoteUserInfo.muted = data.muted
+            }
+            return remoteUserInfo
+          })
         )
       } else if (isUserName(data)) {
         console.log('user name')

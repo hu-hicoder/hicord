@@ -3,6 +3,8 @@ import { onMount } from 'solid-js'
 import { createPopup, PopupPickerController } from '@picmo/popup-picker'
 import { EmojiSelection } from 'picmo'
 import { goToMyLocation } from '../utils/goToMyLocation'
+import { localUserInfo, setLocalUserInfo } from '../utils/user'
+import { sendLocalUserMutedToAll } from '../utils/send/sendLocalUserMuted'
 
 const MainToolbar = () => {
   let reactionButtonElement: HTMLInputElement
@@ -33,6 +35,11 @@ const MainToolbar = () => {
     picker.open()
   }
 
+  const onClickMicrophoneButton = () => {
+    setLocalUserInfo((preInfo) => ({ ...preInfo, muted: !preInfo.muted }))
+    sendLocalUserMutedToAll()
+  }
+
   return (
     <div
       class="fixed sm:left-6 sm:bottom-6 left-4 bottom-4 tb-card"
@@ -45,7 +52,29 @@ const MainToolbar = () => {
       >
         add_reaction
       </span>
-      <span class="material-symbols-outlined tb-item tb-icon-on">mic</span>
+      {/* daisyUIのswapでやろうとしたがうまくいかない */}
+      {/* <label class="swap hover:bg-base-content rounded-lg"> */}
+      {/* <input
+        type="checkbox"
+        onClick={() => onClickMicrophoneButton()}
+        checked={localUserInfo()?.muted ?? true}
+      /> */}
+      {/* </label> */}
+      {localUserInfo()?.muted ?? true ? (
+        <div
+          class="swap-off material-symbols-outlined tb-item tb-icon-on"
+          onClick={() => onClickMicrophoneButton()}
+        >
+          mic_off
+        </div>
+      ) : (
+        <div
+          class="swap-on material-symbols-outlined tb-item tb-icon-on"
+          onClick={() => onClickMicrophoneButton()}
+        >
+          mic
+        </div>
+      )}
       <span class="material-symbols-outlined tb-item">screen_share</span>
       <span
         class="material-symbols-outlined tb-item"

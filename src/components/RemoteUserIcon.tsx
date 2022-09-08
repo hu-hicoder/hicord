@@ -6,7 +6,18 @@ import { RemoteUserInfo } from '../utils/user'
 const RemoteUserIcon: Component<{ info: RemoteUserInfo }> = (props) => {
   let gainRef: HTMLInputElement
   let videoRef: HTMLVideoElement
+
   createEffect(() => {
+    // TODO: ミュート中は送らないように
+    if (props.info.muted) {
+      props.info.stream.getAudioTracks().forEach((track) => {
+        track.enabled = false
+      })
+    } else {
+      props.info.stream.getAudioTracks().forEach((track) => {
+        track.enabled = true
+      })
+    }
     // Set stream to video element
     videoRef.srcObject = props.info.stream
     videoRef.play().catch((e) => console.log(e))
