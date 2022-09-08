@@ -1,7 +1,6 @@
 /* eslint-disable solid/prefer-for */
 import Peer, { SfuRoom } from 'skyway-js'
-import { Component, For } from 'solid-js'
-import { createEffect, createSignal } from 'solid-js'
+import { Component, For, createEffect, createSignal } from 'solid-js'
 import LocalUserIcon from './LocalUserIcon'
 import {
   localUserInfo,
@@ -33,6 +32,7 @@ import { BoxTypes, getRoomBoxInfos } from '../utils/box'
 import { sendRoomBoxInfosTo } from '../utils/send/sendRoomBoxInfo'
 import { sendChatInfosTo } from '../utils/send/sendChatInfo'
 import { goToMyLocation } from '../utils/goToMyLocation'
+import { sendLocalUserMutedTo, sendLocalUserMutedToAll } from '../utils/send/sendLocalUserMuted'
 import { setCall } from '../utils/setCall'
 import { ChatBoxInfo } from '../utils/chat'
 import ScreenBox from './boxes/ScreenBox'
@@ -80,6 +80,7 @@ export const Room: Component<{ roomId: string }> = (props) => {
       y: ROOM_Y / 2,
       deg: 0,
       userName: 'No Name', // TODO: 保存してある名前から参照する
+      muted: true,
     })
     setListener(localUserInfo())
 
@@ -97,6 +98,7 @@ export const Room: Component<{ roomId: string }> = (props) => {
       sendLocalUserNameTo(peerId)
       sendLocalUserCoordinateTo(peerId)
       sendLocalUserAvatarTo(peerId)
+      sendLocalUserMutedTo(peerId)
       // Send Room data
       if (
         !remoteUserInfos().some(
@@ -115,6 +117,7 @@ export const Room: Component<{ roomId: string }> = (props) => {
         y: ROOM_Y / 2,
         deg: 0,
         userName: 'No Name', // TODO:
+        muted: true,
       }
       const audioNodes = initRemoteAudio(userInfo)
       console.log('create remote user info')
@@ -127,6 +130,7 @@ export const Room: Component<{ roomId: string }> = (props) => {
       sendLocalUserNameToAll()
       sendLocalUserCoordinateToAll()
       sendLocalUserAvatarToAll()
+      sendLocalUserMutedToAll()
     })
     tmpRoom.on('peerLeave', (peerId) => {
       setRemoteUserInfos((prev) => {
