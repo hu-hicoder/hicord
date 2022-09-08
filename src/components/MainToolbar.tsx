@@ -54,6 +54,12 @@ const MainToolbar = () => {
       >
         add_reaction
       </span>
+      <span
+        class="material-symbols-outlined tb-item"
+        onClick={() => goToMyLocation()}
+      >
+        my_location
+      </span>
       {/* daisyUIのswapでやろうとしたがうまくいかない */}
       {/* <label class="swap hover:bg-base-content rounded-lg"> */}
       {/* <input
@@ -77,12 +83,6 @@ const MainToolbar = () => {
           mic
         </div>
       )}
-      <span
-        class="material-symbols-outlined tb-item"
-        onClick={() => goToMyLocation()}
-      >
-        my_location
-      </span>
       <span class="material-symbols-outlined tb-item" onClick={screenCapture}>
         screen_share
       </span>
