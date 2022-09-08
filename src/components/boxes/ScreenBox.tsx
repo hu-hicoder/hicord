@@ -1,4 +1,3 @@
-/* eslint-disable solid/prefer-for */
 import { createMemo, createEffect } from 'solid-js'
 import type { Component } from 'solid-js'
 import {

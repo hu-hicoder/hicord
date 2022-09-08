@@ -1,8 +1,8 @@
 import { createSignal } from 'solid-js'
-import { localUserInfo, setLocalUserInfo } from '../utils/user'
-import { sendLocalUserCoordinateToAll } from '../utils/send/sendLocalUserCoordinate'
-import { setListener as setAudioListener } from '../utils/audio'
-import { updateDeg } from '../utils/coordinate'
+import { localUserInfo, setLocalUserInfo } from '../../utils/user'
+import { sendLocalUserCoordinateToAll } from '../../utils/send/sendLocalUserCoordinate'
+import { setListener as setAudioListener } from '../../utils/audio'
+import { updateDeg } from '../../utils/coordinate'
 
 const options = {
   enableHighAccuracy: true,
