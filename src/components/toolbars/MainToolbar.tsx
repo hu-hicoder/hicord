@@ -6,7 +6,8 @@ import { goToMyLocation } from '../../utils/goToMyLocation'
 import { localUserInfo, setLocalUserInfo } from '../../utils/user'
 import { sendLocalUserMutedToAll } from '../../utils/send/sendLocalUserMuted'
 import { screenCapture } from '../../utils/screenCapture'
-import LocationMove from '../LocationMove'
+import LocationMove from './LocationMove'
+import AddImage from './AddImage'
 
 const MainToolbar = () => {
   let reactionButtonElement: HTMLInputElement
@@ -54,12 +55,6 @@ const MainToolbar = () => {
       >
         add_reaction
       </span>
-      <span
-        class="material-symbols-outlined tb-item"
-        onClick={() => goToMyLocation()}
-      >
-        my_location
-      </span>
       {localUserInfo()?.muted ?? true ? (
         <div
           class="material-symbols-outlined tb-item tb-item-off"
@@ -82,6 +77,13 @@ const MainToolbar = () => {
         screen_share
       </span>
       <LocationMove />
+      <span
+        class="material-symbols-outlined tb-item"
+        onClick={() => goToMyLocation()}
+      >
+        my_location
+      </span>
+      <AddImage />
     </div>
   )
 }

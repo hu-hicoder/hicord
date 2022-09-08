@@ -40,6 +40,8 @@ import { setCall } from '../utils/setCall'
 import { ChatBoxInfo } from '../utils/boxes/chat'
 import ScreenBox from './boxes/ScreenBox'
 import { ScreenBoxInfo } from '../utils/boxes/screen'
+import ImageBox from './boxes/ImageBox'
+import { ImageBoxInfo } from '../utils/boxes/image'
 
 const KEY = import.meta.env.VITE_SKY_WAY_API_KEY
 export const PEER = new Peer({ key: KEY as string })
@@ -172,6 +174,8 @@ export const Room: Component<{ roomId: string }> = (props) => {
             switch (info.boxType) {
               case BoxTypes.CHAT:
                 return <ChatBox info={info as ChatBoxInfo} />
+              case BoxTypes.IMAGE:
+                return <ImageBox info={info as ImageBoxInfo} />
               case BoxTypes.SCREEN:
                 return <ScreenBox info={info as ScreenBoxInfo} />
             }

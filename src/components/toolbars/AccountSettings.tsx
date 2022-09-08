@@ -1,7 +1,7 @@
 import { createSignal } from 'solid-js'
-import { localUserInfo, setLocalUserInfo } from '../utils/user'
-import { sendLocalUserNameToAll } from '../utils/send/sendLocalUserName'
-import { sendLocalUserAvatarToAll } from '../utils/send/sendLocalUserAvatar'
+import { localUserInfo, setLocalUserInfo } from '../../utils/user'
+import { sendLocalUserNameToAll } from '../../utils/send/sendLocalUserName'
+import { sendLocalUserAvatarToAll } from '../../utils/send/sendLocalUserAvatar'
 
 const EditProfile = () => {
   let nameElement: HTMLInputElement
@@ -61,7 +61,7 @@ const EditProfile = () => {
               <label class="label">
                 <span class="label-text">アバター</span>
               </label>
-              <input type="file" ref={avatarElement} />
+              <input type="file" ref={avatarElement} accept="image/*" />
             </div>
           </div>
           <div class="modal-action">

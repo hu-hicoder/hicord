@@ -12,6 +12,7 @@ import {
 } from './user'
 import { setRoomBoxInfo } from './boxes/box'
 import { isScreenBoxInfo } from './boxes/screen'
+import { isImageBoxInfo } from './boxes/image'
 
 export const setPeerOnConnection = () => {
   PEER.on('connection', (dataConnection) => {
@@ -64,6 +65,13 @@ export const setPeerOnConnection = () => {
         setChatInfos((prev) => [...prev, data])
       } else if (isChatBoxInfo(data)) {
         console.log('chat box info')
+        setRoomBoxInfo(data)
+      } else if (isImageBoxInfo(data)) {
+        console.log('image box info')
+        const arrayBuffer = data.image as unknown as ArrayBuffer
+        data.image = new Blob([arrayBuffer], {
+          type: 'image/jpeg',
+        }) as File
         setRoomBoxInfo(data)
       } else if (isScreenBoxInfo(data)) {
         console.log('screen box info')
