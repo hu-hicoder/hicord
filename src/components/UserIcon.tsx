@@ -48,14 +48,26 @@ const UserIcon: Component<{ info: UserInfo }> = (props) => {
         </div>
       </div>
 
-      <div class="text-center">{props.info.userName}</div>
+      <div
+        class="text-center w-32 absolute"
+        style={{
+          bottom: `${-USER_ICON_HEIGHT / 4}px`,
+        }}
+      >
+        {props.info.userName}
+      </div>
       <div
         ref={userReactionElement}
-        class="text-center text-6xl relative"
+        class="text-center text-6xl w-32 absolute"
         style={{
-          top: `${-USER_ICON_HEIGHT - 100}px`,
+          top: `${-USER_ICON_HEIGHT / 2}px`,
         }}
       />
+      {props.info.muted ? (
+        <div class="swap-off material-symbols-outlined absolute bottom-0">
+          mic_off
+        </div>
+      ) : undefined}
     </div>
   )
 }
