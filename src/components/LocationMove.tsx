@@ -19,8 +19,8 @@ const LocationMove = () => {
   const [getWatchID, setWatchID] = createSignal<number>()
   const [getBaseCoord, setBaseCoord] = createSignal<GeolocationCoordinates>()
   const success = (position: GeolocationPosition) => {
-    const dx = (position.coords.latitude - getBaseCoord().latitude) * 200000
-    const dy = (position.coords.longitude - getBaseCoord().longitude) * 200000
+    const dx = (position.coords.latitude - getBaseCoord().latitude) * 2000000
+    const dy = (position.coords.longitude - getBaseCoord().longitude) * 2000000
     console.log(
       position.coords.latitude,
       position.coords.longitude,
