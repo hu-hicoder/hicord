@@ -14,13 +14,17 @@ const error = () => {
   alert('位置情報を利用できません')
 }
 
+const POSITION_RATE = 10000000
+
 const LocationMove = () => {
   const [getHasLocationMove, setHasLocationMove] = createSignal(false)
   const [getWatchID, setWatchID] = createSignal<number>()
   const [getBaseCoord, setBaseCoord] = createSignal<GeolocationCoordinates>()
   const success = (position: GeolocationPosition) => {
-    const dx = (position.coords.latitude - getBaseCoord().latitude) * 2000000
-    const dy = (position.coords.longitude - getBaseCoord().longitude) * 2000000
+    const dx =
+      (position.coords.latitude - getBaseCoord().latitude) * POSITION_RATE
+    const dy =
+      (position.coords.longitude - getBaseCoord().longitude) * POSITION_RATE
     console.log(
       position.coords.latitude,
       position.coords.longitude,
