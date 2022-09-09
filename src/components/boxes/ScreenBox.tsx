@@ -41,6 +41,7 @@ const ScreenBox: Component<{ info: ScreenBoxInfo }> = (props) => {
     if (getScreenInfo()) {
       videoRef.srcObject = getScreenInfo().mStream
       videoRef.play().catch((e) => console.log(e))
+      videoRef.playsInline = true
       videoRef.muted = true
 
       videoRef.addEventListener(

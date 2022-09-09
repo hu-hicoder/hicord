@@ -21,6 +21,7 @@ const RemoteUserIcon: Component<{ info: RemoteUserInfo }> = (props) => {
     // Set stream to video element
     videoRef.srcObject = props.info.stream
     videoRef.play().catch((e) => console.log(e))
+    videoRef.playsInline = true
     videoRef.muted = true
   })
 
@@ -43,7 +44,7 @@ const RemoteUserIcon: Component<{ info: RemoteUserInfo }> = (props) => {
         step="0.01"
         onInput={changeGain}
       />
-      <video class="hidden" ref={videoRef} controls />
+      <video class="hidden" ref={videoRef} />
     </div>
   )
 }
