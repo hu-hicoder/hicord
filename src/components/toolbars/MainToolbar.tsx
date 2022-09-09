@@ -55,6 +55,12 @@ const MainToolbar = () => {
       >
         add_reaction
       </span>
+      <span
+        class="material-symbols-outlined tb-item"
+        onClick={() => goToMyLocation()}
+      >
+        my_location
+      </span>
       {localUserInfo()?.muted ?? true ? (
         <div
           class="material-symbols-outlined tb-item tb-item-off"
@@ -70,6 +76,7 @@ const MainToolbar = () => {
           mic
         </div>
       )}
+      <AddImage />
       <span
         class="material-symbols-outlined tb-item hidden md:block"
         onClick={screenCapture}
@@ -77,13 +84,6 @@ const MainToolbar = () => {
         screen_share
       </span>
       <LocationMove />
-      <span
-        class="material-symbols-outlined tb-item"
-        onClick={() => goToMyLocation()}
-      >
-        my_location
-      </span>
-      <AddImage />
     </div>
   )
 }
