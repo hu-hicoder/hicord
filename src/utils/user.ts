@@ -9,7 +9,7 @@ import { Coordinate } from './coordinate'
 export type UserInfo = Coordinate &
   UserName &
   UserOriginalAvatar &
-  // UserAvatar &
+  UserAvatar &
   UserReaction &
   UserMuted & {
     stream: MediaStream
@@ -36,6 +36,11 @@ export type UserAvatar = {
   mainColor: string
   subColor1: string
   subColor2: string
+}
+export const defaultUserAvatar = {
+  mainColor: '#ffffff',
+  subColor1: '#f4a460',
+  subColor2: '#696969',
 }
 
 export type UserReaction = {

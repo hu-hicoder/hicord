@@ -9,6 +9,7 @@ import {
   isUserName,
   isUserReaction,
   setRemoteUserInfos,
+  isUserAvatar,
 } from './user'
 import { setRoomBoxInfo } from './boxes/box'
 import { isScreenBoxInfo } from './boxes/screen'
@@ -76,6 +77,18 @@ export const setPeerOnConnection = () => {
       } else if (isScreenBoxInfo(data)) {
         console.log('screen box info')
         setRoomBoxInfo(data)
+      } else if (isUserAvatar(data)) {
+        console.log('user avatar')
+        setRemoteUserInfos((preInfo) =>
+          preInfo.map((remoteUserInfo) => {
+            if (remoteUserInfo.peerId === dataConnection.remoteId) {
+              remoteUserInfo.mainColor = data.mainColor
+              remoteUserInfo.subColor1 = data.subColor1
+              remoteUserInfo.subColor2 = data.subColor2
+            }
+            return remoteUserInfo
+          })
+        )
       } else if (isUserOriginalAvatar(data)) {
         console.log('user avatar', data)
         // TODO Refactor

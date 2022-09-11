@@ -8,6 +8,7 @@ import {
   remoteUserInfos,
   RemoteUserInfo,
   setRemoteUserInfos,
+  defaultUserAvatar,
 } from '../utils/user'
 import RemoteUserIcon from './userIcons/RemoteUserIcon'
 import ChatToolbar from './toolbars/ChatToolbar'
@@ -22,6 +23,8 @@ import {
 import {
   sendLocalUserOriginalAvatarTo,
   sendLocalUserOriginalAvatarToAll,
+  sendLocalUserAvatarTo,
+  sendLocalUserAvatarToAll,
 } from '../utils/send/sendLocalUserAvatar'
 import {
   sendLocalUserCoordinateTo,
@@ -79,6 +82,7 @@ export const Room: Component<{ roomId: string }> = (props) => {
     setIsStarted(true)
 
     setLocalUserInfo({
+      ...defaultUserAvatar,
       stream: localStream(),
       peerId: PEER.id,
       x: ROOM_X / 2,
@@ -102,6 +106,7 @@ export const Room: Component<{ roomId: string }> = (props) => {
       // Send data
       sendLocalUserNameTo(peerId)
       sendLocalUserCoordinateTo(peerId)
+      sendLocalUserAvatarTo(peerId)
       sendLocalUserOriginalAvatarTo(peerId)
       sendLocalUserMutedTo(peerId)
       // Send Room data
@@ -116,6 +121,7 @@ export const Room: Component<{ roomId: string }> = (props) => {
     })
     tmpRoom.on('stream', async (stream) => {
       const userInfo = {
+        ...defaultUserAvatar,
         stream: stream,
         peerId: stream.peerId,
         x: ROOM_X / 2,
@@ -134,6 +140,7 @@ export const Room: Component<{ roomId: string }> = (props) => {
       // Send data
       sendLocalUserNameToAll()
       sendLocalUserCoordinateToAll()
+      sendLocalUserAvatarToAll()
       sendLocalUserOriginalAvatarToAll()
       sendLocalUserMutedToAll()
     })
