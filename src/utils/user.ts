@@ -8,6 +8,7 @@ import { Coordinate } from './coordinate'
 
 export type UserInfo = Coordinate &
   UserName &
+  UserOriginalAvatar &
   UserAvatar &
   UserReaction &
   UserMuted & {
@@ -27,8 +28,19 @@ export type UserName = {
   userName: string
 }
 
+export type UserOriginalAvatar = {
+  originalImage?: File
+}
+
 export type UserAvatar = {
-  image?: File
+  mainColor: string
+  subColor1: string
+  subColor2: string
+}
+export const defaultUserAvatar = {
+  mainColor: '#ffffff',
+  subColor1: '#f4a460',
+  subColor2: '#696969',
 }
 
 export type UserReaction = {
@@ -55,11 +67,21 @@ export const isUserName = (data: unknown): data is UserName =>
 
 // TODO Refactor
 // const isFile = (input) => 'File' in window && input instanceof File
-export const isUserAvatar = (data: unknown): data is UserAvatar =>
+export const isUserOriginalAvatar = (
+  data: unknown
+): data is UserOriginalAvatar =>
   typeof data === 'object' &&
   data !== null &&
   Object.keys(data).length === 1 &&
-  (data as UserAvatar).image !== null
+  (data as UserOriginalAvatar).originalImage !== null
+
+export const isUserAvatar = (data: unknown): data is UserAvatar =>
+  typeof data === 'object' &&
+  data !== null &&
+  Object.keys(data).length === 3 &&
+  typeof (data as UserAvatar).mainColor === 'string' &&
+  typeof (data as UserAvatar).subColor1 === 'string' &&
+  typeof (data as UserAvatar).subColor2 === 'string'
 
 export const isUserReaction = (data: unknown): data is Required<UserReaction> =>
   typeof data === 'object' &&

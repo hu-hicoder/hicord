@@ -1,6 +1,7 @@
 import type { Component } from 'solid-js'
 import { createEffect } from 'solid-js'
 import { UserInfo } from '../../utils/user'
+import UserAvatarIcon from './UserAvatarIcon'
 export const USER_ICON_WIDTH = 64
 export const USER_ICON_HEIGHT = 64
 
@@ -20,13 +21,11 @@ const UserIcon: Component<{ info: UserInfo }> = (props) => {
   })
 
   createEffect(() => {
-    const file = props.info.image
-    let srcUrl = './dummy.png'
+    const file = props.info.originalImage
     if (file) {
-      srcUrl = window.URL.createObjectURL(props.info.image)
+      const srcUrl = window.URL.createObjectURL(file)
+      imgElement.src = srcUrl
     }
-
-    imgElement.src = srcUrl
   })
 
   createEffect(() => {
@@ -41,10 +40,14 @@ const UserIcon: Component<{ info: UserInfo }> = (props) => {
   })
 
   return (
-    <div ref={iconPositionDiv} class="absolute w-16 h-16 flex flex-col">
+    <div ref={iconPositionDiv} class="absolute w-16 flex flex-col">
       <div ref={iconDiv} class="avatar">
-        <div class="w-16 mask mask-squircle">
-          <img ref={imgElement} />
+        <div class="w-16 h-16">
+          {props.info.originalImage ? (
+            <img ref={imgElement} />
+          ) : (
+            <UserAvatarIcon avatar={props.info} />
+          )}
         </div>
       </div>
 

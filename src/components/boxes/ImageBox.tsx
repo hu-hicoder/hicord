@@ -7,11 +7,7 @@ import { getUserNameFromPeerId } from '../../utils/user'
 const ImageBox: Component<{ info: ImageBoxInfo }> = (props) => {
   let imageRef: HTMLImageElement
   createEffect(() => {
-    const file = props.info.image
-    let srcUrl = './dummy.png'
-    if (file) {
-      srcUrl = window.URL.createObjectURL(props.info.image)
-    }
+    const srcUrl = window.URL.createObjectURL(props.info.image)
 
     imageRef.src = srcUrl
   })

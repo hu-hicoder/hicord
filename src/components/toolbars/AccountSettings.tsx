@@ -1,10 +1,16 @@
 import { createSignal } from 'solid-js'
 import { localUserInfo, setLocalUserInfo } from '../../utils/user'
 import { sendLocalUserNameToAll } from '../../utils/send/sendLocalUserName'
-import { sendLocalUserAvatarToAll } from '../../utils/send/sendLocalUserAvatar'
+import {
+  sendLocalUserAvatarToAll,
+  sendLocalUserOriginalAvatarToAll,
+} from '../../utils/send/sendLocalUserAvatar'
 
 const EditProfile = () => {
   let nameElement: HTMLInputElement
+  let mainColorRef: HTMLInputElement
+  let subColor1Ref: HTMLInputElement
+  let subColor2Ref: HTMLInputElement
   let avatarElement: HTMLInputElement
 
   function updateProfile() {
@@ -15,14 +21,27 @@ const EditProfile = () => {
       }))
       sendLocalUserNameToAll()
     }
+    if (
+      localUserInfo().mainColor !== mainColorRef.value ||
+      localUserInfo().subColor1 !== subColor1Ref.value ||
+      localUserInfo().subColor2 !== subColor2Ref.value
+    ) {
+      setLocalUserInfo((preInfo) => ({
+        ...preInfo,
+        mainColor: mainColorRef.value,
+        subColor1: subColor1Ref.value,
+        subColor2: subColor2Ref.value,
+      }))
+      sendLocalUserAvatarToAll()
+    }
     if (avatarElement.files.length === 1) {
       const file = avatarElement.files.item(0)
       setLocalUserInfo((preInfo) => ({
         ...preInfo,
-        image: file,
+        originalImage: file,
       }))
-      sendLocalUserAvatarToAll()
-      console.log('send user avatar')
+      sendLocalUserOriginalAvatarToAll()
+      console.log('send user original avatar')
     }
   }
 
@@ -57,11 +76,51 @@ const EditProfile = () => {
               />
             </div>
             {/* User Avatar */}
-            <div class="form-control w-full max-w-xs">
-              <label class="label">
-                <span class="label-text">アバター</span>
-              </label>
-              <input type="file" ref={avatarElement} accept="image/*" />
+            <div>
+              <div class="text-lg font-bold">アバター</div>
+              <div class="form-control w-full max-w-xs">
+                <label class="label">
+                  <span class="label-text">メインカラー</span>
+                </label>
+                <input
+                  type="color"
+                  ref={mainColorRef}
+                  value={
+                    localUserInfo() ? localUserInfo().mainColor : '#ffffff'
+                  }
+                />
+              </div>
+              <div class="form-control w-full max-w-xs">
+                <label class="label">
+                  <span class="label-text">サブカラー１</span>
+                </label>
+                <input
+                  type="color"
+                  ref={subColor1Ref}
+                  value={
+                    localUserInfo() ? localUserInfo().subColor1 : '#ffffff'
+                  }
+                />
+              </div>
+              <div class="form-control w-full max-w-xs">
+                <label class="label">
+                  <span class="label-text">サブカラー２</span>
+                </label>
+                <input
+                  type="color"
+                  ref={subColor2Ref}
+                  value={
+                    localUserInfo() ? localUserInfo().subColor2 : '#ffffff'
+                  }
+                />
+              </div>
+              {/* User Original Avatar */}
+              <div class="form-control w-full max-w-xs">
+                <label class="label">
+                  <span class="label-text">オリジナルアイコン</span>
+                </label>
+                <input type="file" ref={avatarElement} accept="image/*" />
+              </div>
             </div>
           </div>
           <div class="modal-action">

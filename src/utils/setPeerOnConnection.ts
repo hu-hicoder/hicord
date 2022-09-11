@@ -3,12 +3,13 @@ import { setPanner } from './audio'
 import { isChatInfo, setChatInfos, isChatBoxInfo } from './boxes/chat'
 import { addRemoteUserReaction } from './reaction'
 import {
-  isUserAvatar,
+  isUserOriginalAvatar,
   isUserCoordinate,
   isUserMuted,
   isUserName,
   isUserReaction,
   setRemoteUserInfos,
+  isUserAvatar,
 } from './user'
 import { setRoomBoxInfo } from './boxes/box'
 import { isScreenBoxInfo } from './boxes/screen'
@@ -77,13 +78,25 @@ export const setPeerOnConnection = () => {
         console.log('screen box info')
         setRoomBoxInfo(data)
       } else if (isUserAvatar(data)) {
+        console.log('user avatar')
+        setRemoteUserInfos((preInfo) =>
+          preInfo.map((remoteUserInfo) => {
+            if (remoteUserInfo.peerId === dataConnection.remoteId) {
+              remoteUserInfo.mainColor = data.mainColor
+              remoteUserInfo.subColor1 = data.subColor1
+              remoteUserInfo.subColor2 = data.subColor2
+            }
+            return remoteUserInfo
+          })
+        )
+      } else if (isUserOriginalAvatar(data)) {
         console.log('user avatar', data)
         // TODO Refactor
         setRemoteUserInfos((preInfo) =>
           preInfo.map((remoteUserInfo) => {
             if (remoteUserInfo.peerId === dataConnection.remoteId) {
-              const arrayBuffer = data.image as unknown as ArrayBuffer
-              remoteUserInfo.image = new Blob([arrayBuffer], {
+              const arrayBuffer = data.originalImage as unknown as ArrayBuffer
+              remoteUserInfo.originalImage = new Blob([arrayBuffer], {
                 type: 'image/jpeg',
               }) as File
             }
