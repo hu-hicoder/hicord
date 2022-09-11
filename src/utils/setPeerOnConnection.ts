@@ -3,7 +3,7 @@ import { setPanner } from './audio'
 import { isChatInfo, setChatInfos, isChatBoxInfo } from './boxes/chat'
 import { addRemoteUserReaction } from './reaction'
 import {
-  isUserAvatar,
+  isUserOriginalAvatar,
   isUserCoordinate,
   isUserMuted,
   isUserName,
@@ -76,14 +76,14 @@ export const setPeerOnConnection = () => {
       } else if (isScreenBoxInfo(data)) {
         console.log('screen box info')
         setRoomBoxInfo(data)
-      } else if (isUserAvatar(data)) {
+      } else if (isUserOriginalAvatar(data)) {
         console.log('user avatar', data)
         // TODO Refactor
         setRemoteUserInfos((preInfo) =>
           preInfo.map((remoteUserInfo) => {
             if (remoteUserInfo.peerId === dataConnection.remoteId) {
-              const arrayBuffer = data.image as unknown as ArrayBuffer
-              remoteUserInfo.image = new Blob([arrayBuffer], {
+              const arrayBuffer = data.originalImage as unknown as ArrayBuffer
+              remoteUserInfo.originalImage = new Blob([arrayBuffer], {
                 type: 'image/jpeg',
               }) as File
             }

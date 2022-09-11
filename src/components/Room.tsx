@@ -20,8 +20,8 @@ import {
   sendLocalUserNameToAll,
 } from '../utils/send/sendLocalUserName'
 import {
-  sendLocalUserAvatarTo,
-  sendLocalUserAvatarToAll,
+  sendLocalUserOriginalAvatarTo,
+  sendLocalUserOriginalAvatarToAll,
 } from '../utils/send/sendLocalUserAvatar'
 import {
   sendLocalUserCoordinateTo,
@@ -102,7 +102,7 @@ export const Room: Component<{ roomId: string }> = (props) => {
       // Send data
       sendLocalUserNameTo(peerId)
       sendLocalUserCoordinateTo(peerId)
-      sendLocalUserAvatarTo(peerId)
+      sendLocalUserOriginalAvatarTo(peerId)
       sendLocalUserMutedTo(peerId)
       // Send Room data
       if (
@@ -134,7 +134,7 @@ export const Room: Component<{ roomId: string }> = (props) => {
       // Send data
       sendLocalUserNameToAll()
       sendLocalUserCoordinateToAll()
-      sendLocalUserAvatarToAll()
+      sendLocalUserOriginalAvatarToAll()
       sendLocalUserMutedToAll()
     })
     tmpRoom.on('peerLeave', (peerId) => {

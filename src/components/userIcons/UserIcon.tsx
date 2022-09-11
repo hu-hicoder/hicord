@@ -21,7 +21,7 @@ const UserIcon: Component<{ info: UserInfo }> = (props) => {
   })
 
   createEffect(() => {
-    const file = props.info.image
+    const file = props.info.originalImage
     if (file) {
       const srcUrl = window.URL.createObjectURL(file)
       imgElement.src = srcUrl
@@ -43,7 +43,7 @@ const UserIcon: Component<{ info: UserInfo }> = (props) => {
     <div ref={iconPositionDiv} class="absolute w-16 flex flex-col">
       <div ref={iconDiv} class="avatar">
         <div class="w-16 h-16">
-          {props.info.image ? (
+          {props.info.originalImage ? (
             <img ref={imgElement} />
           ) : (
             <UserAvatar info={props.info} />

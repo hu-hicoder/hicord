@@ -1,18 +1,18 @@
-import { localUserInfo, UserAvatar, RemoteUserInfo } from '../user'
+import { localUserInfo, UserOriginalAvatar, RemoteUserInfo } from '../user'
 import { sendTo, sendToAll } from './send'
 
-export const sendLocalUserAvatarToAll = () => {
-  const data: UserAvatar = {
-    image: localUserInfo().image,
+export const sendLocalUserOriginalAvatarToAll = () => {
+  const data: UserOriginalAvatar = {
+    originalImage: localUserInfo().originalImage,
   }
   sendToAll(data)
 }
 
-export const sendLocalUserAvatarTo = (
+export const sendLocalUserOriginalAvatarTo = (
   remoteUserPeerId: RemoteUserInfo['peerId']
 ) => {
-  const data: UserAvatar = {
-    image: localUserInfo().image,
+  const data: UserOriginalAvatar = {
+    originalImage: localUserInfo().originalImage,
   }
   sendTo(remoteUserPeerId, data)
 }

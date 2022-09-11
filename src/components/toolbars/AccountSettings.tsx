@@ -1,7 +1,7 @@
 import { createSignal } from 'solid-js'
 import { localUserInfo, setLocalUserInfo } from '../../utils/user'
 import { sendLocalUserNameToAll } from '../../utils/send/sendLocalUserName'
-import { sendLocalUserAvatarToAll } from '../../utils/send/sendLocalUserAvatar'
+import { sendLocalUserOriginalAvatarToAll } from '../../utils/send/sendLocalUserAvatar'
 
 const EditProfile = () => {
   let nameElement: HTMLInputElement
@@ -19,10 +19,10 @@ const EditProfile = () => {
       const file = avatarElement.files.item(0)
       setLocalUserInfo((preInfo) => ({
         ...preInfo,
-        image: file,
+        originalImage: file,
       }))
-      sendLocalUserAvatarToAll()
-      console.log('send user avatar')
+      sendLocalUserOriginalAvatarToAll()
+      console.log('send user original avatar')
     }
   }
 
