@@ -2,6 +2,7 @@ import type { Component } from 'solid-js'
 import { createEffect } from 'solid-js'
 import UserIcon from './UserIcon'
 import { RemoteUserInfo } from '../../utils/user'
+import VisualizeAudio from './VisualizeAudio'
 
 const RemoteUserIcon: Component<{ info: RemoteUserInfo }> = (props) => {
   let gainRef: HTMLInputElement
@@ -47,7 +48,11 @@ const RemoteUserIcon: Component<{ info: RemoteUserInfo }> = (props) => {
             onInput={changeGain}
           />
         }
-      />
+      >
+        <div class="flex justify-center text-center text-sm absolute w-40 -bottom-10 -right-12">
+          <VisualizeAudio analyser={props.info.analyser} />
+        </div>
+      </UserIcon>
       <video class="hidden" ref={videoRef} />
     </div>
   )

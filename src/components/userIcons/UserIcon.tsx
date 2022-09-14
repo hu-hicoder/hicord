@@ -1,4 +1,4 @@
-import type { Component } from 'solid-js'
+import type { ParentComponent } from 'solid-js'
 import { createEffect, createSignal } from 'solid-js'
 import { UserInfo } from '../../utils/user'
 import UserAvatarIcon from './UserAvatarIcon'
@@ -8,7 +8,7 @@ const clickOutside = clickOutsideDirective
 export const USER_ICON_WIDTH = 64
 export const USER_ICON_HEIGHT = 64
 
-const UserIcon: Component<{ info: UserInfo; settings? }> = (props) => {
+const UserIcon: ParentComponent<{ info: UserInfo; settings? }> = (props) => {
   let iconPositionDiv: HTMLDivElement
   let iconDiv: HTMLDivElement
   let imgElement: HTMLImageElement
@@ -53,6 +53,8 @@ const UserIcon: Component<{ info: UserInfo; settings? }> = (props) => {
         setShowSettings(false)
       }}
     >
+      {props.children}
+
       <div ref={iconDiv} class="avatar">
         <div class="w-16 h-16">
           {props.info.originalImage ? (
