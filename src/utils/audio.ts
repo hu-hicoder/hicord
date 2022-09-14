@@ -103,8 +103,15 @@ export function initRemoteAudio(
     coneOuterGain: CONE_OUTER_GAIN,
   })
 
-  // Connect
-  sourceNode.connect(gainNode).connect(pannerNode).connect(audioCtx.destination)
+  // Analyser
+  const analyser = audioCtx.createAnalyser()
 
-  return { sourceNode, gainNode, pannerNode }
+  // Connect
+  sourceNode
+    .connect(analyser)
+    .connect(gainNode)
+    .connect(pannerNode)
+    .connect(audioCtx.destination)
+
+  return { sourceNode, analyser, gainNode, pannerNode }
 }
