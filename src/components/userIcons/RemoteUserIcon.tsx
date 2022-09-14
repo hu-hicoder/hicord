@@ -32,17 +32,21 @@ const RemoteUserIcon: Component<{ info: RemoteUserInfo }> = (props) => {
 
   return (
     <div>
-      <UserIcon info={props.info} />
-      <input
-        ref={gainRef}
-        type="range"
-        id="volume"
-        min="0"
-        max="2"
-        value="1"
-        list="gain-vals"
-        step="0.01"
-        onInput={changeGain}
+      <UserIcon
+        info={props.info}
+        settings={
+          <input
+            ref={gainRef}
+            type="range"
+            id="volume"
+            min="0"
+            max="2"
+            value="1"
+            list="gain-vals"
+            step="0.01"
+            onInput={changeGain}
+          />
+        }
       />
       <video class="hidden" ref={videoRef} />
     </div>
