@@ -18,7 +18,7 @@ const ChatToolbar = () => {
       height: 300,
       editorPeerId: null,
       // Chat Box
-      chatGroup: 0,
+      chatGroup: getRoomBoxInfos().length + 1,
     }
     setRoomBoxInfo(roomBox)
     sendRoomBoxInfoToAll(roomBox)
