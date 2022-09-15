@@ -1,5 +1,5 @@
 import { PEER } from '../components/Room'
-import { getScreenInfos } from './screen'
+import { getScreenInfos } from './boxes/screen'
 
 export const setCall = () => {
   PEER.on('call', (mediaConnection) => {

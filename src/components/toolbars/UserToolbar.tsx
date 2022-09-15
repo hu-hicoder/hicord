@@ -1,5 +1,5 @@
 import AccountSettings from './AccountSettings'
-import { onEnd } from '../utils/room'
+import { onEnd } from '../../utils/room'
 
 const UserToolbar = () => {
   return (

@@ -1,14 +1,13 @@
-/* eslint-disable solid/prefer-for */
 import { createMemo, createEffect } from 'solid-js'
 import type { Component } from 'solid-js'
 import {
   ScreenBoxInfo,
   getScreenInfos,
   setMediaStreamEventListener,
-} from '../../utils/screen'
+} from '../../utils/boxes/screen'
 import RoomBox from './RoomBox'
 import { getUserNameFromPeerId } from '../../utils/user'
-import { setRoomBoxInfo } from '../../utils/box'
+import { setRoomBoxInfo } from '../../utils/boxes/box'
 import { sendRoomBoxInfoToAll } from '../../utils/send/sendRoomBoxInfo'
 import { PEER } from '../Room'
 
@@ -42,6 +41,7 @@ const ScreenBox: Component<{ info: ScreenBoxInfo }> = (props) => {
     if (getScreenInfo()) {
       videoRef.srcObject = getScreenInfo().mStream
       videoRef.play().catch((e) => console.log(e))
+      videoRef.playsInline = true
       videoRef.muted = true
 
       videoRef.addEventListener(

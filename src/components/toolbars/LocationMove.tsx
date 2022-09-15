@@ -1,8 +1,8 @@
 import { createSignal } from 'solid-js'
-import { localUserInfo, setLocalUserInfo } from '../utils/user'
-import { sendLocalUserCoordinateToAll } from '../utils/send/sendLocalUserCoordinate'
-import { setListener as setAudioListener } from '../utils/audio'
-import { updateDeg } from '../utils/coordinate'
+import { localUserInfo, setLocalUserInfo } from '../../utils/user'
+import { sendLocalUserCoordinateToAll } from '../../utils/send/sendLocalUserCoordinate'
+import { setListener as setAudioListener } from '../../utils/audio'
+import { updateDeg } from '../../utils/coordinate'
 
 const options = {
   enableHighAccuracy: true,
@@ -14,13 +14,17 @@ const error = () => {
   alert('位置情報を利用できません')
 }
 
+const POSITION_RATE = 10000000
+
 const LocationMove = () => {
   const [getHasLocationMove, setHasLocationMove] = createSignal(false)
   const [getWatchID, setWatchID] = createSignal<number>()
   const [getBaseCoord, setBaseCoord] = createSignal<GeolocationCoordinates>()
   const success = (position: GeolocationPosition) => {
-    const dx = (position.coords.latitude - getBaseCoord().latitude) * 200000
-    const dy = (position.coords.longitude - getBaseCoord().longitude) * 200000
+    const dx =
+      (position.coords.latitude - getBaseCoord().latitude) * POSITION_RATE
+    const dy =
+      (position.coords.longitude - getBaseCoord().longitude) * POSITION_RATE
     console.log(
       position.coords.latitude,
       position.coords.longitude,

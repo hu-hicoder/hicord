@@ -1,10 +1,13 @@
-import { addLocalUserReaction } from '../utils/reaction'
+import { addLocalUserReaction } from '../../utils/reaction'
 import { onMount } from 'solid-js'
 import { createPopup, PopupPickerController } from '@picmo/popup-picker'
 import { EmojiSelection } from 'picmo'
-import { goToMyLocation } from '../utils/goToMyLocation'
-import { screenCapture } from '../utils/screenCapture'
+import { goToMyLocation } from '../../utils/goToMyLocation'
+import { localUserInfo, setLocalUserInfo } from '../../utils/user'
+import { sendLocalUserMutedToAll } from '../../utils/send/sendLocalUserMuted'
+import { screenCapture } from '../../utils/screenCapture'
 import LocationMove from './LocationMove'
+import AddImage from './AddImage'
 
 const MainToolbar = () => {
   let reactionButtonElement: HTMLInputElement
@@ -35,6 +38,11 @@ const MainToolbar = () => {
     picker.open()
   }
 
+  const onClickMicrophoneButton = () => {
+    setLocalUserInfo((preInfo) => ({ ...preInfo, muted: !preInfo.muted }))
+    sendLocalUserMutedToAll()
+  }
+
   return (
     <div
       class="fixed sm:left-6 sm:bottom-6 left-4 bottom-4 tb-card"
@@ -47,15 +55,33 @@ const MainToolbar = () => {
       >
         add_reaction
       </span>
-      <span class="material-symbols-outlined tb-item tb-icon-on">mic</span>
-      <span class="material-symbols-outlined tb-item" onClick={screenCapture}>
-        screen_share
-      </span>
       <span
         class="material-symbols-outlined tb-item"
         onClick={() => goToMyLocation()}
       >
         my_location
+      </span>
+      {localUserInfo()?.muted ?? true ? (
+        <div
+          class="material-symbols-outlined tb-item tb-item-off"
+          onClick={() => onClickMicrophoneButton()}
+        >
+          mic_off
+        </div>
+      ) : (
+        <div
+          class="material-symbols-outlined tb-item tb-item-on"
+          onClick={() => onClickMicrophoneButton()}
+        >
+          mic
+        </div>
+      )}
+      <AddImage />
+      <span
+        class="material-symbols-outlined tb-item hidden md:block"
+        onClick={screenCapture}
+      >
+        screen_share
       </span>
       <LocationMove />
     </div>

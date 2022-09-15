@@ -1,5 +1,10 @@
 import { RemoteUserInfo } from '../user'
-import { ChatInfo, localChatInfoFrom, ChatBoxInfo, getChatInfos } from '../chat'
+import {
+  ChatInfo,
+  localChatInfoFrom,
+  ChatBoxInfo,
+  getChatInfos,
+} from '../boxes/chat'
 import { sendTo, sendToAll } from './send'
 
 export const sendChatInfoToAll = (data: ChatInfo) => {

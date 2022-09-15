@@ -1,6 +1,6 @@
 import type { Component } from 'solid-js'
-import { sendChatInfoToAll } from '../utils/send/sendChatInfo'
-import { setChatInfos, localChatInfoFrom } from '../utils/chat'
+import { sendChatInfoToAll } from '../../utils/send/sendChatInfo'
+import { setChatInfos, localChatInfoFrom } from '../../utils/boxes/chat'
 
 const ChatInput: Component<{ chatGroup: number }> = (props) => {
   let chatRef: HTMLInputElement

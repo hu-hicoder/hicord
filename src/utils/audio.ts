@@ -16,8 +16,17 @@ function directionZ(userInfo: UserInfo) {
   return Math.sin((userInfo.deg * Math.PI) / 180)
 }
 
-const AudioContext = window.AudioContext
-const audioCtx = new AudioContext()
+// Aucio Context
+export let audioCtx: AudioContext
+declare global {
+  interface Window {
+    webkitAudioContext: typeof AudioContext
+  }
+}
+window.onload = function () {
+  const AudioContext = window.AudioContext || window.webkitAudioContext
+  audioCtx = new AudioContext()
+}
 
 export function audioProcessing(
   localUserInfo: UserInfo,
@@ -94,11 +103,15 @@ export function initRemoteAudio(
     coneOuterGain: CONE_OUTER_GAIN,
   })
 
-  // Connect
-  sourceNode.connect(gainNode).connect(pannerNode).connect(audioCtx.destination)
+  // Analyser
+  const analyser = audioCtx.createAnalyser()
 
-  if (audioCtx.state === 'suspended') {
-    audioCtx.resume()
-  }
-  return { sourceNode, gainNode, pannerNode }
+  // Connect
+  sourceNode
+    .connect(analyser)
+    .connect(gainNode)
+    .connect(pannerNode)
+    .connect(audioCtx.destination)
+
+  return { sourceNode, analyser, gainNode, pannerNode }
 }

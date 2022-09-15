@@ -1,15 +1,14 @@
 import { RemoteUserInfo } from '../user'
-import { ScreenBoxInfo } from '../boxes/screen'
 import { sendTo, sendToAll } from './send'
+import { ImageBoxInfo } from '../boxes/image'
 
-// Screen Box
-export const sendScreenBoxInfoToAll = (data: ScreenBoxInfo) => {
+export const sendImageBoxInfoToAll = (data: ImageBoxInfo) => {
   sendToAll(data)
 }
 
-export const sendScreenBoxInfoTo = (
+export const sendImageBoxInfoTo = (
   remoteUserPeerId: RemoteUserInfo['peerId'],
-  data: ScreenBoxInfo
+  data: ImageBoxInfo
 ) => {
   sendTo(remoteUserPeerId, data)
 }

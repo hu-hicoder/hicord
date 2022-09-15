@@ -1,4 +1,4 @@
-import { UserName, localUserInfo } from './user'
+import { UserName, localUserInfo } from '../user'
 import { createSignal } from 'solid-js'
 import { BoxInfo, BoxTypes } from './box'
 
