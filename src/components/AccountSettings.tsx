@@ -30,7 +30,7 @@ const EditProfile = () => {
     <div>
       <label for="edit-profile-modal" class="dd-item">
         <span class="material-symbols-outlined mr-3">person</span>
-        プロフェールの編集
+        プロフィールの編集
       </label>
       <input type="checkbox" id="edit-profile-modal" class="modal-toggle" />
       <label for="edit-profile-modal" class="modal cursor-pointer">
