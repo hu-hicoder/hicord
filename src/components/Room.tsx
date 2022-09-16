@@ -47,8 +47,9 @@ import UserToolbar from './toolbars/UserToolbar'
 import LocalUserIcon from './userIcons/LocalUserIcon'
 import RemoteUserIcon from './userIcons/RemoteUserIcon'
 
-const KEY = import.meta.env.VITE_SKY_WAY_API_KEY
-export const PEER = new Peer({ key: KEY as string })
+export const PEER = new Peer({
+  key: import.meta.env.VITE_SKY_WAY_API_KEY as string,
+}) // TODO: 保持したPeer IDから復元できるようにする？
 
 const ROOM_X = 4096
 const ROOM_Y = 4096
@@ -68,7 +69,7 @@ export const Room: Component<{ roomId: string }> = (props) => {
       .catch((e) => {
         console.log(e)
       })
-  }, [])
+  })
 
   const onStart = () => {
     if (PEER && !PEER.open) {
@@ -92,15 +93,15 @@ export const Room: Component<{ roomId: string }> = (props) => {
     })
     setListener(localUserInfo())
 
-    const tmpRoom = PEER.joinRoom<SfuRoom>(props.roomId, {
+    const _room = PEER.joinRoom<SfuRoom>(props.roomId, {
       mode: 'sfu',
       stream: localStream(),
     })
-    tmpRoom.once('open', () => {
+    _room.once('open', () => {
       console.log('=== あなたが参加しました ===\n')
       goToMyLocation()
     })
-    tmpRoom.on('peerJoin', (peerId) => {
+    _room.on('peerJoin', (peerId) => {
       console.log(`=== ${peerId} が入室しました ===\n`)
       // Send data
       sendLocalUserNameTo(peerId)
@@ -118,7 +119,7 @@ export const Room: Component<{ roomId: string }> = (props) => {
         sendChatInfosTo(peerId)
       }
     })
-    tmpRoom.on('stream', async (stream) => {
+    _room.on('stream', async (stream) => {
       const userInfo = {
         ...defaultUserAvatar,
         stream: stream,
@@ -143,7 +144,7 @@ export const Room: Component<{ roomId: string }> = (props) => {
       sendLocalUserOriginalAvatarToAll()
       sendLocalUserMutedToAll()
     })
-    tmpRoom.on('peerLeave', (peerId) => {
+    _room.on('peerLeave', (peerId) => {
       setRemoteUserInfos((prev) => {
         return prev.filter((userInfo) => {
           if (userInfo.peerId === peerId) {
@@ -154,11 +155,11 @@ export const Room: Component<{ roomId: string }> = (props) => {
       })
       console.log(`=== ${peerId} が退出しました ===\n`)
     })
-    tmpRoom.on('data', (roomData) => {
+    _room.on('data', (roomData) => {
       receivedDataAction(roomData.data, roomData.src)
     })
 
-    setRoom(tmpRoom)
+    setRoom(_room)
 
     // Media Connection
     setCall()
@@ -200,7 +201,7 @@ export const Room: Component<{ roomId: string }> = (props) => {
         {remoteUserInfos().map((info) => (
           <RemoteUserIcon info={info} />
         ))}
-        {/* <For each={remoteUserInfos()}> かぜかうまくいかない
+        {/* <For each={remoteUserInfos()}> なぜかうまくいかない
           {(info) => <RemoteUserIcon info={info} />}
         </For> */}
         {/* Local User Icon */}

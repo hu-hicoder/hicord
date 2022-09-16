@@ -6,11 +6,13 @@ export const sendTo = (
   remoteUserPeerId: RemoteUserInfo['peerId'],
   data: unknown
 ) => {
+  // TODO: 毎回DataConnectionを作り直さないようにする
   const dataConnection = PEER.connect(remoteUserPeerId)
 
-  dataConnection.on('open', () => {
+  dataConnection.once('open', () => {
     dataConnection.send(data)
     console.log(`send to ${remoteUserPeerId}`, data)
+    dataConnection.close()
   })
 }
 
