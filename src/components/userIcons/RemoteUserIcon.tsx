@@ -38,6 +38,7 @@ const RemoteUserIcon: Component<{ info: RemoteUserInfo }> = (props) => {
         settings={
           <input
             ref={gainRef}
+            class="range range-primary range-sm w-30"
             type="range"
             id="volume"
             min="0"
