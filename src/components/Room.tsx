@@ -1,60 +1,60 @@
 /* eslint-disable solid/prefer-for */
 import Peer, { SfuRoom } from 'skyway-js'
-import { Component, For, createEffect, createSignal } from 'solid-js'
-import LocalUserIcon from './userIcons/LocalUserIcon'
-import {
-  localUserInfo,
-  setLocalUserInfo,
-  remoteUserInfos,
-  RemoteUserInfo,
-  setRemoteUserInfos,
-  defaultUserAvatar,
-} from '../utils/user'
-import RemoteUserIcon from './userIcons/RemoteUserIcon'
-import ChatToolbar from './toolbars/ChatToolbar'
-import MainToolbar from './toolbars/MainToolbar'
-import UserToolbar from './toolbars/UserToolbar'
-import ChatBox from './boxes/ChatBox'
+import { Component, createEffect, createSignal, For } from 'solid-js'
 import { audioCtx, initRemoteAudio, setListener } from '../utils/audio'
+import { BoxTypes, getRoomBoxInfos } from '../utils/boxes/box'
+import { ChatBoxInfo } from '../utils/boxes/chat'
+import { ImageBoxInfo } from '../utils/boxes/image'
+import { ScreenBoxInfo } from '../utils/boxes/screen'
+import { goToMyLocation } from '../utils/goToMyLocation'
+import { receivedDataAction } from '../utils/receivedDataAction'
+import { setRoom } from '../utils/room'
+import { sendChatInfosTo } from '../utils/send/sendChatInfo'
 import {
-  sendLocalUserNameTo,
-  sendLocalUserNameToAll,
-} from '../utils/send/sendLocalUserName'
-import {
-  sendLocalUserOriginalAvatarTo,
-  sendLocalUserOriginalAvatarToAll,
   sendLocalUserAvatarTo,
   sendLocalUserAvatarToAll,
+  sendLocalUserOriginalAvatarTo,
+  sendLocalUserOriginalAvatarToAll,
 } from '../utils/send/sendLocalUserAvatar'
 import {
   sendLocalUserCoordinateTo,
   sendLocalUserCoordinateToAll,
 } from '../utils/send/sendLocalUserCoordinate'
-import { setPeerOnConnection } from '../utils/setPeerOnConnection'
-import { BoxTypes, getRoomBoxInfos } from '../utils/boxes/box'
-import { sendRoomBoxInfosTo } from '../utils/send/sendRoomBoxInfo'
-import { sendChatInfosTo } from '../utils/send/sendChatInfo'
-import { goToMyLocation } from '../utils/goToMyLocation'
 import {
   sendLocalUserMutedTo,
   sendLocalUserMutedToAll,
 } from '../utils/send/sendLocalUserMuted'
+import {
+  sendLocalUserNameTo,
+  sendLocalUserNameToAll,
+} from '../utils/send/sendLocalUserName'
+import { sendRoomBoxInfosTo } from '../utils/send/sendRoomBoxInfo'
 import { setCall } from '../utils/setCall'
-import { ChatBoxInfo } from '../utils/boxes/chat'
-import ScreenBox from './boxes/ScreenBox'
-import { ScreenBoxInfo } from '../utils/boxes/screen'
+import {
+  defaultUserAvatar,
+  localUserInfo,
+  RemoteUserInfo,
+  remoteUserInfos,
+  setLocalUserInfo,
+  setRemoteUserInfos,
+} from '../utils/user'
+import ChatBox from './boxes/ChatBox'
 import ImageBox from './boxes/ImageBox'
-import { ImageBoxInfo } from '../utils/boxes/image'
+import ScreenBox from './boxes/ScreenBox'
+import ChatToolbar from './toolbars/ChatToolbar'
+import MainToolbar from './toolbars/MainToolbar'
+import UserToolbar from './toolbars/UserToolbar'
+import LocalUserIcon from './userIcons/LocalUserIcon'
+import RemoteUserIcon from './userIcons/RemoteUserIcon'
 
-const KEY = import.meta.env.VITE_SKY_WAY_API_KEY
-export const PEER = new Peer({ key: KEY as string })
+export const PEER = new Peer({
+  key: import.meta.env.VITE_SKY_WAY_API_KEY as string,
+}) // TODO: 保持したPeer IDから復元できるようにする？
 
 const ROOM_X = 4096
 const ROOM_Y = 4096
 
-// Room
 export const [isStarted, setIsStarted] = createSignal(false)
-export const [room, setRoom] = createSignal<SfuRoom>()
 
 export const Room: Component<{ roomId: string }> = (props) => {
   // Local
@@ -69,7 +69,7 @@ export const Room: Component<{ roomId: string }> = (props) => {
       .catch((e) => {
         console.log(e)
       })
-  }, [])
+  })
 
   const onStart = () => {
     if (PEER && !PEER.open) {
@@ -93,15 +93,15 @@ export const Room: Component<{ roomId: string }> = (props) => {
     })
     setListener(localUserInfo())
 
-    const tmpRoom = PEER.joinRoom<SfuRoom>(props.roomId, {
+    const _room = PEER.joinRoom<SfuRoom>(props.roomId, {
       mode: 'sfu',
       stream: localStream(),
     })
-    tmpRoom.once('open', () => {
+    _room.once('open', () => {
       console.log('=== あなたが参加しました ===\n')
       goToMyLocation()
     })
-    tmpRoom.on('peerJoin', (peerId) => {
+    _room.on('peerJoin', (peerId) => {
       console.log(`=== ${peerId} が入室しました ===\n`)
       // Send data
       sendLocalUserNameTo(peerId)
@@ -119,7 +119,7 @@ export const Room: Component<{ roomId: string }> = (props) => {
         sendChatInfosTo(peerId)
       }
     })
-    tmpRoom.on('stream', async (stream) => {
+    _room.on('stream', async (stream) => {
       const userInfo = {
         ...defaultUserAvatar,
         stream: stream,
@@ -144,7 +144,7 @@ export const Room: Component<{ roomId: string }> = (props) => {
       sendLocalUserOriginalAvatarToAll()
       sendLocalUserMutedToAll()
     })
-    tmpRoom.on('peerLeave', (peerId) => {
+    _room.on('peerLeave', (peerId) => {
       setRemoteUserInfos((prev) => {
         return prev.filter((userInfo) => {
           if (userInfo.peerId === peerId) {
@@ -155,11 +155,20 @@ export const Room: Component<{ roomId: string }> = (props) => {
       })
       console.log(`=== ${peerId} が退出しました ===\n`)
     })
-    setRoom(tmpRoom)
+    _room.on('data', (roomData) => {
+      receivedDataAction(roomData.data, roomData.src)
+    })
+
+    setRoom(_room)
+
     // Media Connection
     setCall()
     // DataConnection
-    setPeerOnConnection()
+    PEER.on('connection', (dataConnection) => {
+      dataConnection.on('data', (data) => {
+        receivedDataAction(data, dataConnection.remoteId)
+      })
+    })
 
     // Start Audio
     if (audioCtx.state === 'suspended') {
@@ -192,7 +201,7 @@ export const Room: Component<{ roomId: string }> = (props) => {
         {remoteUserInfos().map((info) => (
           <RemoteUserIcon info={info} />
         ))}
-        {/* <For each={remoteUserInfos()}> かぜかうまくいかない
+        {/* <For each={remoteUserInfos()}> なぜかうまくいかない
           {(info) => <RemoteUserIcon info={info} />}
         </For> */}
         {/* Local User Icon */}

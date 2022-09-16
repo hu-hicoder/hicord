@@ -1,7 +1,10 @@
-import { room } from '../components/Room'
+import { SfuRoom } from 'skyway-js'
+import { createSignal } from 'solid-js'
 import { setRemoteUserInfos, setLocalUserInfo } from './user'
 
-export const onEnd = () => {
+export const [room, setRoom] = createSignal<SfuRoom>()
+
+export const leaveRoom = () => {
   if (room()) {
     room().close()
     setRemoteUserInfos((prev) => {
