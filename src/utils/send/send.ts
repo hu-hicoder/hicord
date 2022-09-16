@@ -1,5 +1,6 @@
 import { PEER } from '../../components/Room'
-import { RemoteUserInfo, remoteUserInfos } from '../user'
+import { room } from '../room'
+import { RemoteUserInfo } from '../user'
 
 export const sendTo = (
   remoteUserPeerId: RemoteUserInfo['peerId'],
@@ -14,7 +15,5 @@ export const sendTo = (
 }
 
 export const sendToAll = (data: unknown) => {
-  remoteUserInfos().forEach((info) => {
-    sendTo(info.peerId, data)
-  })
+  room().send(data)
 }
