@@ -34,7 +34,8 @@ pnpm install
 
 #### API キーの設定
 
-1. [https://webrtc.ecl.ntt.com](SkyWay)にログインし、新しいアプリケーションを作成し、API キーを取得
+1. [SkyWay](https://webrtc.ecl.ntt.com)にログインし、新しいアプリケーションを作成し、API キーを取得
+   - ローカル環境で試す場合は利用可能ドメイン名に`localhost`を入力
 2. `.env.example`ファイルを複製
 3. ファイル名を`.env.local`に変更
 4. API キーを入力
