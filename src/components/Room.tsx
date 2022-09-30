@@ -88,7 +88,7 @@ export const Room: Component<{ roomId: string }> = (props) => {
       x: ROOM_X / 2,
       y: ROOM_Y / 2,
       deg: 0,
-      userName: 'No Name', // TODO: 保存してある名前から参照する
+      userName: localStorage.getItem('localUserName'), // TODO: 保存してある名前から参照する
       muted: true,
     })
     setListener(localUserInfo())

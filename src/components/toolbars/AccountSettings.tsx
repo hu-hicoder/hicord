@@ -20,6 +20,7 @@ const EditProfile = () => {
         userName: nameElement.value,
       }))
       sendLocalUserNameToAll()
+      localStorage.setItem('localUserName', localUserInfo().userName)
     }
     if (
       localUserInfo().mainColor !== mainColorRef.value ||
