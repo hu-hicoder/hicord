@@ -1,4 +1,4 @@
-import type { Component } from 'solid-js'
+import { Component, createEffect } from 'solid-js'
 import UserIcon from './UserIcon'
 import { localUserInfo, setLocalUserInfo, UserInfo } from '../../utils/user'
 import { setListener as setAudioListener } from '../../utils/audio'
@@ -75,6 +75,23 @@ const LocalUserIcon: Component = () => {
 
   window.addEventListener('mousemove', mouseMoveListener, { passive: false })
   window.addEventListener('touchmove', touchMoveListener, { passive: false })
+
+  createEffect(() => {
+    console.log('mute change')
+    if (localUserInfo().muted) {
+      localUserInfo()
+        .stream.getAudioTracks()
+        .forEach((track) => {
+          track.enabled = false
+        })
+    } else {
+      localUserInfo()
+        .stream.getAudioTracks()
+        .forEach((track) => {
+          track.enabled = true
+        })
+    }
+  })
 
   return (
     <div
