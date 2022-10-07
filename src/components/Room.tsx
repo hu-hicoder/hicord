@@ -62,7 +62,13 @@ export const Room: Component<{ roomId: string }> = (props) => {
 
   createEffect(() => {
     navigator.mediaDevices
-      .getUserMedia({ audio: true })
+      .getUserMedia({
+        audio: {
+          // TODO: ユーザーが選択できるように？
+          echoCancellation: true,
+          noiseSuppression: true,
+        },
+      })
       .then((stream) => {
         setLocalStream(stream)
       })
