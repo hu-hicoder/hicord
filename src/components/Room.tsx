@@ -66,6 +66,7 @@ export const Room: Component<{ roomId: string }> = (props) => {
         audio: {
           // TODO: ユーザーが選択できるように？
           echoCancellation: true,
+          // echoCancellationType: 'system', // 使える？
           noiseSuppression: true,
         },
       })
