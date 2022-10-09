@@ -1,8 +1,8 @@
 import { createEffect } from 'solid-js'
 import type { Component } from 'solid-js'
 import { ImageBoxInfo } from '../../utils/boxes/image'
-import RoomBox from './RoomBox'
 import { getUserNameFromPeerId } from '../../utils/user'
+import RoomBox from './RoomBox'
 
 const ImageBox: Component<{ info: ImageBoxInfo }> = (props) => {
   let imageRef: HTMLImageElement | undefined

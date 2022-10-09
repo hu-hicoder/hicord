@@ -1,11 +1,11 @@
 import { RemoteUserInfo } from '../user'
 import { RoomBoxInfo, BoxTypes, getRoomBoxInfos } from '../boxes/box'
-import { sendChatBoxInfoTo, sendChatBoxInfoToAll } from './sendChatInfo'
-import { ChatBoxInfo } from '../boxes/chat'
-import { sendScreenBoxInfoTo, sendScreenBoxInfoToAll } from './sendScreen'
-import { ScreenBoxInfo } from '../boxes/screen'
-import { sendImageBoxInfoTo, sendImageBoxInfoToAll } from './sendImageBox'
 import { ImageBoxInfo } from '../boxes/image'
+import { ChatBoxInfo } from '../boxes/chat'
+import { ScreenBoxInfo } from '../boxes/screen'
+import { sendChatBoxInfoTo, sendChatBoxInfoToAll } from './sendChatInfo'
+import { sendScreenBoxInfoTo, sendScreenBoxInfoToAll } from './sendScreen'
+import { sendImageBoxInfoTo, sendImageBoxInfoToAll } from './sendImageBox'
 
 export const sendRoomBoxInfoToAll = (data: RoomBoxInfo) => {
   switch (data.boxType) {

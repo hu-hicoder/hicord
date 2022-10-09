@@ -7,6 +7,8 @@
     "eslint:recommended",
     "plugin:@typescript-eslint/recommended",
     "plugin:@typescript-eslint/recommended-requiring-type-checking",
+    "plugin:import/recommended",
+    "plugin:import/typescript",
     "plugin:solid/recommended",
     "prettier"
   ],
@@ -16,7 +18,12 @@
     "sourceType": "module",
     "project": ["./tsconfig.json"]
   },
-  "plugins": ["@typescript-eslint", "solid"],
+  "settings": {
+    "import/resolver": {
+      "typescript": true
+    }
+  },
+  "plugins": ["@typescript-eslint", "solid", "import"],
   "rules": {
     "linebreak-style": ["error", "unix"],
     "quotes": "off",
@@ -26,6 +33,7 @@
       "warn",
       "never",
       { "beforeStatementContinuationChars": "never" }
-    ]
+    ],
+    "import/order": "warn"
   }
 }

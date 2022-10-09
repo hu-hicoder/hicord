@@ -1,7 +1,7 @@
-import { addLocalUserReaction } from '../../utils/reaction'
 import { onMount } from 'solid-js'
 import { createPopup, PopupPickerController } from '@picmo/popup-picker'
 import { EmojiSelection } from 'picmo'
+import { addLocalUserReaction } from '../../utils/reaction'
 import { goToMyLocation } from '../../utils/goToMyLocation'
 import { localUserInfo, setLocalUserInfo } from '../../utils/user'
 import { sendLocalUserMutedToAll } from '../../utils/send/sendLocalUserMuted'

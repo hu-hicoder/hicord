@@ -1,10 +1,10 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { Component, createEffect } from 'solid-js'
-import UserIcon from './UserIcon'
 import { localUserInfo, setLocalUserInfo, UserInfo } from '../../utils/user'
 import { setAudioListener } from '../../utils/audio'
 import { sendLocalUserCoordinateToAll } from '../../utils/send/sendLocalUserCoordinate'
 import { updateDeg } from '../../utils/coordinate'
+import UserIcon from './UserIcon'
 
 const LocalUserIcon: Component = () => {
   let localUserIconDiv: HTMLDivElement | undefined

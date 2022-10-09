@@ -2,8 +2,8 @@
 import type { JSX, ParentComponent } from 'solid-js'
 import { createEffect, createSignal } from 'solid-js'
 import { UserInfo } from '../../utils/user'
-import UserAvatarIcon from './UserAvatarIcon'
 import clickOutsideDirective from '../../directives/clickOutside'
+import UserAvatarIcon from './UserAvatarIcon'
 const clickOutside = clickOutsideDirective
 
 export const USER_ICON_WIDTH = 64

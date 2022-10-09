@@ -1,5 +1,5 @@
-import AccountSettings from './AccountSettings'
 import { leaveRoom } from '../../utils/room'
+import AccountSettings from './AccountSettings'
 
 const UserToolbar = () => {
   return (

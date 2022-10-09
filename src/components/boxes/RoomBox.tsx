@@ -1,11 +1,11 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { createEffect, createMemo, JSX, onMount } from 'solid-js'
+import { createResizeObserver } from '@solid-primitives/resize-observer'
 import { RoomBoxInfo, setRoomBoxInfo, BoxInfo } from '../../utils/boxes/box'
 import { getUserNameFromPeerId, localUserInfo } from '../../utils/user'
 import { sendRoomBoxInfoToAll } from '../../utils/send/sendRoomBoxInfo'
 import clickOutsideDirective from '../../directives/clickOutside'
 const clickOutside = clickOutsideDirective
-import { createResizeObserver } from '@solid-primitives/resize-observer'
 
 const whoIsEditing = (editorPeerId: string): string => {
   return `${getUserNameFromPeerId(editorPeerId)}が編集中…`
