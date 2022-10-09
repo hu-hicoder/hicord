@@ -1,5 +1,5 @@
-import { Component, onMount } from 'solid-js'
-import { createEffect } from 'solid-js'
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
+import { Component, onMount, createEffect } from 'solid-js'
 import { defaultUserAvatar, UserAvatar } from '../../utils/user'
 
 function onColorChange(elements: NodeListOf<Element>, color: string) {
@@ -13,6 +13,7 @@ function onColorChange(elements: NodeListOf<Element>, color: string) {
 
 function changeColors(obj: HTMLObjectElement, avatar: UserAvatar) {
   const svgDoc = obj.contentDocument
+  if (svgDoc === null) return
 
   const mainColor = svgDoc.querySelectorAll(
     `*[style*='fill:${defaultUserAvatar.mainColor}']`
@@ -29,24 +30,27 @@ function changeColors(obj: HTMLObjectElement, avatar: UserAvatar) {
   onColorChange(subColor2, avatar.subColor2)
 }
 
-const UserAvatarIcon: Component<{ avatar: UserAvatar }> = (props) => {
-  let objRef: HTMLObjectElement
+const UserAvatarIcon: Component<{ avatar: UserAvatar | undefined }> = (
+  props
+) => {
+  let objRef: HTMLObjectElement | undefined
 
   onMount(() => {
-    if (objRef) {
-      console.log('on mount')
-      objRef.addEventListener(
-        'load',
-        () => changeColors(objRef, props.avatar),
-        { once: true }
-      )
-    }
+    console.log('on mount')
+    objRef!.addEventListener(
+      'load',
+      () => {
+        if (objRef !== undefined && props.avatar !== undefined)
+          changeColors(objRef, props.avatar)
+      },
+      { once: true }
+    )
   })
 
   createEffect(() => {
-    if (objRef) {
+    if (props.avatar !== undefined) {
       console.log('add event lis')
-      changeColors(objRef, props.avatar)
+      changeColors(objRef!, props.avatar)
     }
   })
 

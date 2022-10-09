@@ -8,7 +8,8 @@ export const screenCapture = async () => {
     video: true,
   })
   console.log('create screen capture')
-  const localPeerId = localUserInfo().peerId
+  const localPeerId = localUserInfo()?.peerId
+  if (localPeerId === undefined) return
 
   const screenInfo: ScreenInfo = {
     mStream,
@@ -24,7 +25,7 @@ export const screenCapture = async () => {
     deg: 0,
     width: 300,
     height: 300,
-    editorPeerId: null,
+    editorPeerId: undefined,
     // Screen Box
     peerId: localPeerId,
     mStreamId: screenInfo.mStream.id,

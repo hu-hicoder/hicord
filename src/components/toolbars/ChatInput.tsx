@@ -1,18 +1,20 @@
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import type { Component } from 'solid-js'
 import { sendChatInfoToAll } from '../../utils/send/sendChatInfo'
 import { setChatInfos, localChatInfoFrom } from '../../utils/boxes/chat'
 
 const ChatInput: Component<{ chatGroup: number }> = (props) => {
-  let chatRef: HTMLInputElement
+  let chatRef: HTMLInputElement | undefined
 
   function sendChat() {
-    const chatInfo = localChatInfoFrom({
+    const localChatInfo = localChatInfoFrom({
       chatGroup: props.chatGroup,
-      value: chatRef.value,
+      value: chatRef!.value,
     })
-    sendChatInfoToAll(chatInfo)
-    setChatInfos((prev) => [...prev, chatInfo])
-    chatRef.value = ''
+    if (localChatInfo === undefined) return
+    sendChatInfoToAll(localChatInfo)
+    setChatInfos((prev) => [...prev, localChatInfo])
+    chatRef!.value = ''
   }
 
   return (

@@ -1,4 +1,5 @@
-import type { ParentComponent } from 'solid-js'
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
+import type { JSX, ParentComponent } from 'solid-js'
 import { createEffect, createSignal } from 'solid-js'
 import { UserInfo } from '../../utils/user'
 import UserAvatarIcon from './UserAvatarIcon'
@@ -8,37 +9,37 @@ const clickOutside = clickOutsideDirective
 export const USER_ICON_WIDTH = 64
 export const USER_ICON_HEIGHT = 64
 
-const UserIcon: ParentComponent<{ info: UserInfo; settings? }> = (props) => {
-  let iconPositionDiv: HTMLDivElement
-  let iconDiv: HTMLDivElement
-  let imgElement: HTMLImageElement
-  let userReactionElement: HTMLDivElement
+const UserIcon: ParentComponent<{
+  info: UserInfo | undefined
+  settings?: JSX.Element
+}> = (props) => {
+  let iconPositionDiv: HTMLDivElement | undefined
+  let iconDiv: HTMLDivElement | undefined
+  let imgElement: HTMLImageElement | undefined
+  let userReactionElement: HTMLDivElement | undefined
 
   const [getShowSettings, setShowSettings] = createSignal(false)
 
   createEffect(() => {
-    iconPositionDiv.style.left = `${props.info.x - USER_ICON_WIDTH / 2}px`
-    iconPositionDiv.style.top = `${props.info.y - USER_ICON_HEIGHT / 2}px`
-  })
+    // TODO: 別々に更新する
+    if (props.info === undefined) return
 
-  createEffect(() => {
-    iconDiv.style.transform = `rotate(${props.info.deg}deg)`
-  })
+    iconPositionDiv!.style.left = `${props.info.x - USER_ICON_WIDTH / 2}px`
+    iconPositionDiv!.style.top = `${props.info.y - USER_ICON_HEIGHT / 2}px`
 
-  createEffect(() => {
+    iconDiv!.style.transform = `rotate(${props.info.deg}deg)`
+
     const file = props.info.originalImage
     if (file) {
       const srcUrl = window.URL.createObjectURL(file)
-      imgElement.src = srcUrl
+      imgElement!.src = srcUrl
     }
-  })
 
-  createEffect(() => {
     if (props.info.userReactionURIEncoded === undefined) {
-      userReactionElement.style.display = 'none'
+      userReactionElement!.style.display = 'none'
     } else {
-      userReactionElement.style.removeProperty('display')
-      userReactionElement.textContent = decodeURI(
+      userReactionElement!.style.removeProperty('display')
+      userReactionElement!.textContent = decodeURI(
         props.info.userReactionURIEncoded
       )
     }
@@ -57,7 +58,7 @@ const UserIcon: ParentComponent<{ info: UserInfo; settings? }> = (props) => {
 
       <div ref={iconDiv} class="avatar">
         <div class="w-16 h-16">
-          {props.info.originalImage ? (
+          {props.info?.originalImage ? (
             <img ref={imgElement} />
           ) : (
             <UserAvatarIcon avatar={props.info} />
@@ -72,13 +73,13 @@ const UserIcon: ParentComponent<{ info: UserInfo; settings? }> = (props) => {
       ) : null}
 
       <div class="text-center text-sm absolute w-40 -bottom-8 -right-12">
-        {props.info.userName}
+        {props.info?.userName}
       </div>
       <div
         ref={userReactionElement}
         class="text-center text-4xl w-16 absolute -top-12"
       />
-      {props.info.muted ? (
+      {props.info?.muted ?? true ? (
         <div class="swap-off material-symbols-outlined absolute text-xl -bottom-2 -left-2 w-6 h-6 leading-6 rounded-full text-center text-error bg-base-200 bg-opacity-50">
           mic_off
         </div>

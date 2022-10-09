@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { createMemo, createEffect } from 'solid-js'
 import type { Component } from 'solid-js'
 import {
@@ -12,7 +13,7 @@ import { sendRoomBoxInfoToAll } from '../../utils/send/sendRoomBoxInfo'
 import { PEER } from '../Room'
 
 const ScreenBox: Component<{ info: ScreenBoxInfo }> = (props) => {
-  let videoRef: HTMLVideoElement
+  let videoRef: HTMLVideoElement | undefined
 
   const getScreenInfo = createMemo(() => {
     const screenInfo = getScreenInfos().find(
@@ -38,13 +39,14 @@ const ScreenBox: Component<{ info: ScreenBoxInfo }> = (props) => {
 
   createEffect(() => {
     // Set stream to video element
-    if (getScreenInfo()) {
-      videoRef.srcObject = getScreenInfo().mStream
-      videoRef.play().catch((e) => console.log(e))
-      videoRef.playsInline = true
-      videoRef.muted = true
+    const screenInfo = getScreenInfo()
+    if (screenInfo) {
+      videoRef!.srcObject = screenInfo.mStream
+      videoRef!.play().catch((e) => console.log(e))
+      videoRef!.playsInline = true
+      videoRef!.muted = true
 
-      videoRef.addEventListener(
+      videoRef!.addEventListener(
         'loadedmetadata',
         function (this: HTMLVideoElement) {
           const width = this.clientWidth

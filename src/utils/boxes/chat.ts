@@ -32,11 +32,13 @@ export const isChatInfo = (data: unknown): data is ChatInfo =>
 //  &&
 // typeof (data as ChatInfo).date === 'string'
 
-export function localChatInfoFrom(chatRaw: ChatRaw): ChatInfo {
+export function localChatInfoFrom(chatRaw: ChatRaw): ChatInfo | undefined {
+  const _localUserInfo = localUserInfo()
+  if (_localUserInfo === undefined) return
   return {
-    userName: localUserInfo().userName,
+    userName: _localUserInfo.userName,
     chatGroup: chatRaw.chatGroup,
-    peerId: localUserInfo().peerId,
+    peerId: _localUserInfo.peerId,
     value: chatRaw.value,
     date: new Date(),
   }

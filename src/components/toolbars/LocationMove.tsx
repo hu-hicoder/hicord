@@ -1,7 +1,7 @@
 import { createSignal } from 'solid-js'
-import { localUserInfo, setLocalUserInfo } from '../../utils/user'
+import { setLocalUserInfo } from '../../utils/user'
 import { sendLocalUserCoordinateToAll } from '../../utils/send/sendLocalUserCoordinate'
-import { setListener as setAudioListener } from '../../utils/audio'
+import { setAudioListener } from '../../utils/audio'
 import { updateDeg } from '../../utils/coordinate'
 
 const options = {
@@ -19,12 +19,17 @@ const POSITION_RATE = 10000000
 const LocationMove = () => {
   const [getHasLocationMove, setHasLocationMove] = createSignal(false)
   const [getWatchID, setWatchID] = createSignal<number>()
-  const [getBaseCoord, setBaseCoord] = createSignal<GeolocationCoordinates>()
+  const [getBaseCoordinate, setBaseCoordinate] =
+    createSignal<GeolocationCoordinates>()
+
   const success = (position: GeolocationPosition) => {
+    const baseCoordinate = getBaseCoordinate()
+    if (baseCoordinate === undefined) return
+
     const dx =
-      (position.coords.latitude - getBaseCoord().latitude) * POSITION_RATE
+      (position.coords.latitude - baseCoordinate.latitude) * POSITION_RATE
     const dy =
-      (position.coords.longitude - getBaseCoord().longitude) * POSITION_RATE
+      (position.coords.longitude - baseCoordinate.longitude) * POSITION_RATE
     console.log(
       position.coords.latitude,
       position.coords.longitude,
@@ -33,6 +38,7 @@ const LocationMove = () => {
 
     // set info
     setLocalUserInfo((preUserInfo) => {
+      if (preUserInfo === undefined) return
       return {
         ...preUserInfo,
         x: preUserInfo.x + dx,
@@ -42,23 +48,24 @@ const LocationMove = () => {
     })
 
     // set audio listener
-    setAudioListener(localUserInfo())
+    setAudioListener()
 
     sendLocalUserCoordinateToAll()
     // update BaseCoord
-    setBaseCoord(position.coords)
+    setBaseCoordinate(position.coords)
   }
 
   const clickLocationMove = () => {
     if (getHasLocationMove()) {
-      if (getWatchID()) {
-        navigator.geolocation.clearWatch(getWatchID())
+      const watchID = getWatchID()
+      if (watchID) {
+        navigator.geolocation.clearWatch(watchID)
       }
       setHasLocationMove(false)
     } else {
       if ('geolocation' in navigator) {
         navigator.geolocation.getCurrentPosition((position) => {
-          setBaseCoord(position.coords)
+          setBaseCoordinate(position.coords)
         })
         // watch position
         const watchID = navigator.geolocation.watchPosition(

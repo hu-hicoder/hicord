@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { createSignal } from 'solid-js'
 import { localUserInfo, setLocalUserInfo } from '../../utils/user'
 import { sendLocalUserNameToAll } from '../../utils/send/sendLocalUserName'
@@ -7,42 +8,56 @@ import {
 } from '../../utils/send/sendLocalUserAvatar'
 
 const EditProfile = () => {
-  let nameElement: HTMLInputElement
-  let mainColorRef: HTMLInputElement
-  let subColor1Ref: HTMLInputElement
-  let subColor2Ref: HTMLInputElement
-  let avatarElement: HTMLInputElement
+  let nameElement: HTMLInputElement | undefined
+  let mainColorRef: HTMLInputElement | undefined
+  let subColor1Ref: HTMLInputElement | undefined
+  let subColor2Ref: HTMLInputElement | undefined
+  let avatarElement: HTMLInputElement | undefined
 
   function updateProfile() {
-    if (localUserInfo().userName !== nameElement.value) {
-      setLocalUserInfo((preInfo) => ({
-        ...preInfo,
-        userName: nameElement.value,
-      }))
+    const _localUserInfo = localUserInfo()
+    if (_localUserInfo === undefined) return
+
+    if (_localUserInfo.userName !== nameElement!.value) {
+      setLocalUserInfo((preInfo) => {
+        if (preInfo === undefined) return
+        return {
+          ...preInfo,
+          userName: nameElement!.value,
+        }
+      })
       sendLocalUserNameToAll()
-      localStorage.setItem('localUserName', localUserInfo().userName)
+      localStorage.setItem('localUserName', nameElement!.value)
     }
     if (
-      localUserInfo().mainColor !== mainColorRef.value ||
-      localUserInfo().subColor1 !== subColor1Ref.value ||
-      localUserInfo().subColor2 !== subColor2Ref.value
+      _localUserInfo.mainColor !== mainColorRef!.value ||
+      _localUserInfo.subColor1 !== subColor1Ref!.value ||
+      _localUserInfo.subColor2 !== subColor2Ref!.value
     ) {
-      setLocalUserInfo((preInfo) => ({
-        ...preInfo,
-        mainColor: mainColorRef.value,
-        subColor1: subColor1Ref.value,
-        subColor2: subColor2Ref.value,
-      }))
+      setLocalUserInfo((preInfo) => {
+        if (preInfo === undefined) return
+        return {
+          ...preInfo,
+          mainColor: mainColorRef!.value,
+          subColor1: subColor1Ref!.value,
+          subColor2: subColor2Ref!.value,
+        }
+      })
       sendLocalUserAvatarToAll()
     }
-    if (avatarElement.files.length === 1) {
-      const file = avatarElement.files.item(0)
-      setLocalUserInfo((preInfo) => ({
-        ...preInfo,
-        originalImage: file,
-      }))
-      sendLocalUserOriginalAvatarToAll()
-      console.log('send user original avatar')
+    if (avatarElement!.files?.length === 1) {
+      const file = avatarElement!.files.item(0)
+      if (file !== null) {
+        setLocalUserInfo((preInfo) => {
+          if (preInfo === undefined) return
+          return {
+            ...preInfo,
+            originalImage: file,
+          }
+        })
+        sendLocalUserOriginalAvatarToAll()
+        console.log('send user original avatar')
+      }
     }
   }
 
@@ -73,7 +88,7 @@ const EditProfile = () => {
                 type="text"
                 ref={nameElement}
                 class="input input-bordered"
-                value={localUserInfo() ? localUserInfo().userName : 'No Name'}
+                value={localUserInfo()?.userName ?? 'No Name'}
               />
             </div>
             {/* User Avatar */}
@@ -86,9 +101,7 @@ const EditProfile = () => {
                 <input
                   type="color"
                   ref={mainColorRef}
-                  value={
-                    localUserInfo() ? localUserInfo().mainColor : '#ffffff'
-                  }
+                  value={localUserInfo()?.mainColor ?? '#ffffff'}
                 />
               </div>
               <div class="form-control w-full max-w-xs">
@@ -98,9 +111,7 @@ const EditProfile = () => {
                 <input
                   type="color"
                   ref={subColor1Ref}
-                  value={
-                    localUserInfo() ? localUserInfo().subColor1 : '#ffffff'
-                  }
+                  value={localUserInfo()?.subColor1 ?? '#ffffff'}
                 />
               </div>
               <div class="form-control w-full max-w-xs">
@@ -110,9 +121,7 @@ const EditProfile = () => {
                 <input
                   type="color"
                   ref={subColor2Ref}
-                  value={
-                    localUserInfo() ? localUserInfo().subColor2 : '#ffffff'
-                  }
+                  value={localUserInfo()?.subColor2 ?? '#ffffff'}
                 />
               </div>
               {/* User Original Avatar */}
