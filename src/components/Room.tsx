@@ -129,7 +129,7 @@ export const Room: Component<{ roomId: string }> = (props) => {
         sendChatInfosTo(peerId)
       }
     })
-    _room.on('stream', async (stream) => {
+    _room.on('stream', (stream) => {
       const userInfo = {
         ...defaultUserAvatar,
         stream: stream,
@@ -182,7 +182,7 @@ export const Room: Component<{ roomId: string }> = (props) => {
 
     // Start Audio
     if (audioCtx.state === 'suspended') {
-      audioCtx.resume().then(() => {
+      void audioCtx.resume().then(() => {
         console.log('音声の再生を開始しました')
       })
     }

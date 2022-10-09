@@ -83,7 +83,7 @@ const AddImage = () => {
         type="file"
         ref={imageRef}
         accept="image/*"
-        onInput={addImage}
+        onInput={() => void addImage()}
       />
       <span class={'material-symbols-outlined'}>image</span>
     </label>
