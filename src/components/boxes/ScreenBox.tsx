@@ -12,6 +12,10 @@ import { setRoomBoxInfo } from '../../utils/boxes/box'
 import { sendRoomBoxInfoToAll } from '../../utils/send/sendRoomBoxInfo'
 import { PEER } from '../Room'
 
+export type ScreenBoxMediaMetadata = {
+  mStreamId: string
+}
+
 const ScreenBox: Component<{ info: ScreenBoxInfo }> = (props) => {
   let videoRef: HTMLVideoElement | undefined
 
@@ -24,7 +28,7 @@ const ScreenBox: Component<{ info: ScreenBoxInfo }> = (props) => {
       const mediaConnection = PEER.call(props.info.peerId, undefined, {
         metadata: {
           mStreamId: props.info.mStreamId,
-        },
+        }, // satisfies ScreenBoxMediaMetadata // TODO: enable when typescript supports
       })
       console.log(`call screen to ${mediaConnection.remoteId}`)
 

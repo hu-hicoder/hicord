@@ -35,7 +35,7 @@ const MainToolbar = () => {
   })
 
   const onClickReactionButton = () => {
-    picker.open()
+    void picker.open()
   }
 
   const onClickMicrophoneButton = () => {
@@ -82,7 +82,7 @@ const MainToolbar = () => {
       <AddImage />
       <span
         class="material-symbols-outlined tb-item hidden md:block"
-        onClick={screenCapture}
+        onClick={() => void screenCapture()}
       >
         screen_share
       </span>
