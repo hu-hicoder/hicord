@@ -2,17 +2,27 @@
   "name": "hicord",
   "version": "0.1.0",
   "description": "",
+  "license": "MIT OR Apache-2.0",
   "scripts": {
     "dev": "vite",
     "build": "pnpm run type-check && vite build",
     "serve": "vite preview",
     "type-check": "tsc -p tsconfig.json",
-    "lint": "eslint . --cache --ext .ts,.tsx",
-    "lint:fix": "eslint . --cache --fix --ext .ts,.tsx",
-    "fmt": "prettier --write .",
-    "fmt:check": "prettier --check ."
+    "lint": "eslint --cache --ext .ts,.tsx .",
+    "lint:fix": "eslint --cache --fix --ext .ts,.tsx .",
+    "fmt": "prettier --write --cache .",
+    "fmt:check": "prettier --check --cache .",
+    "prepare": "husky install"
   },
-  "license": "MIT OR Apache-2.0",
+  "lint-staged": {
+    "*.{js,jsx,ts,tsx}": [
+      "eslint --fix --cache",
+      "prettier --write --cache"
+    ],
+    "*.{json,yaml,yml}": [
+      "prettier --write --cache"
+    ]
+  },
   "devDependencies": {
     "@types/babel__core": "^7.1.19",
     "@types/eslint": "^8.4.6",
@@ -23,7 +33,11 @@
     "daisyui": "^2.24.0",
     "eslint": "^8.23.0",
     "eslint-config-prettier": "^8.5.0",
+    "eslint-import-resolver-typescript": "^3.5.1",
+    "eslint-plugin-import": "^2.26.0",
     "eslint-plugin-solid": "^0.7.1",
+    "husky": "^8.0.0",
+    "lint-staged": "^13.0.3",
     "postcss": "^8.4.16",
     "prettier": "2.7.1",
     "tailwindcss": "^3.1.8",

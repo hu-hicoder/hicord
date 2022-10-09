@@ -11,8 +11,8 @@ import { receivedDataAction } from '../utils/receivedDataAction'
 import { setRoom } from '../utils/room'
 import { sendChatInfosTo } from '../utils/send/sendChatInfo'
 import {
-  sendLocalUserAvatarTo,
   sendLocalUserAvatarToAll,
+  sendLocalUserAvatarTo,
   sendLocalUserOriginalAvatarTo,
   sendLocalUserOriginalAvatarToAll,
 } from '../utils/send/sendLocalUserAvatar'

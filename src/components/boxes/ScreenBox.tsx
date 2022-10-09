@@ -6,11 +6,11 @@ import {
   getScreenInfos,
   setMediaStreamEventListener,
 } from '../../utils/boxes/screen'
-import RoomBox from './RoomBox'
 import { getUserNameFromPeerId } from '../../utils/user'
 import { setRoomBoxInfo } from '../../utils/boxes/box'
 import { sendRoomBoxInfoToAll } from '../../utils/send/sendRoomBoxInfo'
 import { PEER } from '../Room'
+import RoomBox from './RoomBox'
 
 export type ScreenBoxMediaMetadata = {
   mStreamId: string

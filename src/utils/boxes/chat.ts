@@ -1,5 +1,5 @@
-import { UserName, localUserInfo } from '../user'
 import { createSignal } from 'solid-js'
+import { UserName, localUserInfo } from '../user'
 import { BoxInfo, BoxTypes } from './box'
 
 export const [getChatInfos, setChatInfos] = createSignal<ChatInfo[]>([])

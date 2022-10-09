@@ -1,7 +1,7 @@
-import { Coordinate } from '../coordinate'
 import { createSignal } from 'solid-js'
-import { ChatBoxInfo } from './chat'
+import { Coordinate } from '../coordinate'
 import { addOrUpdateInfoFromPrev } from '../info'
+import { ChatBoxInfo } from './chat'
 import { ScreenBoxInfo } from './screen'
 import { ImageBoxInfo } from './image'
 
