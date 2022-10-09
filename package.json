@@ -8,19 +8,19 @@
     "build": "pnpm run type-check && vite build",
     "serve": "vite preview",
     "type-check": "tsc -p tsconfig.json",
-    "lint": "eslint . --cache --ext .ts,.tsx",
-    "lint:fix": "eslint . --cache --fix --ext .ts,.tsx",
-    "fmt": "prettier --write .",
-    "fmt:check": "prettier --check .",
+    "lint": "eslint --cache --ext .ts,.tsx .",
+    "lint:fix": "eslint --cache --fix --ext .ts,.tsx .",
+    "fmt": "prettier --write --cache .",
+    "fmt:check": "prettier --check --cache .",
     "prepare": "husky install"
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx}": [
       "eslint --fix --cache",
-      "prettier --write"
+      "prettier --write --cache"
     ],
     "*.{json,yaml,yml}": [
-      "prettier --write"
+      "prettier --write --cache"
     ]
   },
   "devDependencies": {
