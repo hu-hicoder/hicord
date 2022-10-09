@@ -1,12 +1,13 @@
-import { Component, createEffect } from 'solid-js'
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
+import { Component, createEffect, createMemo, Show } from 'solid-js'
 import UserIcon from './UserIcon'
 import { localUserInfo, setLocalUserInfo, UserInfo } from '../../utils/user'
-import { setListener as setAudioListener } from '../../utils/audio'
+import { setAudioListener } from '../../utils/audio'
 import { sendLocalUserCoordinateToAll } from '../../utils/send/sendLocalUserCoordinate'
 import { updateDeg } from '../../utils/coordinate'
 
 const LocalUserIcon: Component = () => {
-  let localUserIconDiv: HTMLDivElement
+  let localUserIconDiv: HTMLDivElement | undefined
   let isMoving = false
   let preTimeMs = Date.now()
   let actualSendDurationMs = 0
@@ -33,6 +34,8 @@ const LocalUserIcon: Component = () => {
   const setOnMovement = (x: UserInfo['x'], y: UserInfo['y']) => {
     // set info
     setLocalUserInfo((preUserInfo) => {
+      if (preUserInfo === undefined) return
+
       const dx = x - preUserInfo.x
       const dy = y - preUserInfo.y
       const deg = updateDeg(dx, dy, preUserInfo.deg)
@@ -45,7 +48,7 @@ const LocalUserIcon: Component = () => {
       }
     })
     // set audio listener
-    setAudioListener(localUserInfo())
+    setAudioListener()
 
     const sendDurationMs = 500
     const nowTimeMs = Date.now()
@@ -70,7 +73,7 @@ const LocalUserIcon: Component = () => {
 
     event.preventDefault()
     const touch = event.touches.item(0)
-    setOnMovement(touch.pageX, touch.pageY)
+    if (touch !== null) setOnMovement(touch.pageX, touch.pageY)
   }
 
   window.addEventListener('mousemove', mouseMoveListener, { passive: false })
@@ -78,18 +81,17 @@ const LocalUserIcon: Component = () => {
 
   createEffect(() => {
     console.log('mute change')
-    if (localUserInfo().muted) {
-      localUserInfo()
-        .stream.getAudioTracks()
-        .forEach((track) => {
-          track.enabled = false
-        })
+    const _localUserInfo = localUserInfo()
+    if (_localUserInfo === undefined) return
+
+    if (_localUserInfo.muted) {
+      _localUserInfo?.stream.getAudioTracks().forEach((track) => {
+        track.enabled = false
+      })
     } else {
-      localUserInfo()
-        .stream.getAudioTracks()
-        .forEach((track) => {
-          track.enabled = true
-        })
+      _localUserInfo.stream.getAudioTracks().forEach((track) => {
+        track.enabled = true
+      })
     }
   })
 

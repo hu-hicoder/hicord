@@ -16,7 +16,7 @@ const ChatToolbar = () => {
       deg: 0,
       width: 400,
       height: 300,
-      editorPeerId: null,
+      editorPeerId: undefined,
       // Chat Box
       chatGroup: getRoomBoxInfos().length + 1,
     }

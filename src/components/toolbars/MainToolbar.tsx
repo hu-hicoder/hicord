@@ -10,8 +10,8 @@ import LocationMove from './LocationMove'
 import AddImage from './AddImage'
 
 const MainToolbar = () => {
-  let reactionButtonElement: HTMLInputElement
-  let mainToolbarElement: HTMLDivElement
+  let reactionButtonElement: HTMLInputElement | undefined
+  let mainToolbarElement: HTMLDivElement | undefined
   let picker: PopupPickerController
 
   onMount(() => {
@@ -39,7 +39,10 @@ const MainToolbar = () => {
   }
 
   const onClickMicrophoneButton = () => {
-    setLocalUserInfo((preInfo) => ({ ...preInfo, muted: !preInfo.muted }))
+    setLocalUserInfo((preInfo) => {
+      if (preInfo === undefined) return
+      return { ...preInfo, muted: !preInfo.muted }
+    })
     sendLocalUserMutedToAll()
   }
 

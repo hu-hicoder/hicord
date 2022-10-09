@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { onMount, onCleanup } from 'solid-js'
 import type { Component } from 'solid-js'
 
@@ -5,9 +6,10 @@ const WIDTH = 64
 const HEIGHT = 32
 
 const VisualizeAudio: Component<{ analyser: AnalyserNode }> = (props) => {
-  let canvas: HTMLCanvasElement
+  let canvas: HTMLCanvasElement | undefined
+
   onMount(() => {
-    const canvasCtx: CanvasRenderingContext2D = canvas.getContext('2d')
+    const canvasCtx = canvas!.getContext('2d')
     let frame = requestAnimationFrame(loop)
 
     props.analyser.fftSize = 1024
@@ -16,6 +18,7 @@ const VisualizeAudio: Component<{ analyser: AnalyserNode }> = (props) => {
     const dataArray = new Float32Array(bufferLength)
 
     function loop() {
+      if (canvasCtx === null) return
       frame = requestAnimationFrame(loop)
 
       canvasCtx.clearRect(0, 0, WIDTH, HEIGHT)
@@ -46,7 +49,7 @@ const VisualizeAudio: Component<{ analyser: AnalyserNode }> = (props) => {
         x += sliceWidth
       }
 
-      canvasCtx.lineTo(canvas.width, canvas.height / 2)
+      canvasCtx.lineTo(canvas!.width, canvas!.height / 2)
       canvasCtx.stroke()
     }
 

@@ -5,11 +5,13 @@ import RoomBox from './RoomBox'
 import { getUserNameFromPeerId } from '../../utils/user'
 
 const ImageBox: Component<{ info: ImageBoxInfo }> = (props) => {
-  let imageRef: HTMLImageElement
+  let imageRef: HTMLImageElement | undefined
+
   createEffect(() => {
     const srcUrl = window.URL.createObjectURL(props.info.image)
 
-    imageRef.src = srcUrl
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    imageRef!.src = srcUrl
   })
 
   return (

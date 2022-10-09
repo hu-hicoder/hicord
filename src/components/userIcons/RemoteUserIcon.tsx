@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import type { Component } from 'solid-js'
 import { createEffect } from 'solid-js'
 import UserIcon from './UserIcon'
@@ -5,15 +6,15 @@ import { RemoteUserInfo } from '../../utils/user'
 import VisualizeAudio from './VisualizeAudio'
 
 const RemoteUserIcon: Component<{ info: RemoteUserInfo }> = (props) => {
-  let gainRef: HTMLInputElement
-  let videoRef: HTMLVideoElement
+  let gainRef: HTMLInputElement | undefined
+  let videoRef: HTMLVideoElement | undefined
 
   createEffect(() => {
     // Set stream to video element
-    videoRef.srcObject = props.info.stream
-    videoRef.play().catch((e) => console.log(e))
-    videoRef.playsInline = true
-    videoRef.muted = true
+    videoRef!.srcObject = props.info.stream
+    videoRef!.play().catch((e) => console.log(e))
+    videoRef!.playsInline = true
+    videoRef!.muted = true
   })
 
   function changeGain(e: InputEvent & { currentTarget: HTMLInputElement }) {

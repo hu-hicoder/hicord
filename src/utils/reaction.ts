@@ -15,19 +15,25 @@ export const addLocalUserReaction = (
   reaction: UserReaction['userReactionURIEncoded']
 ) => {
   sendLocalUserReactionToAll(reaction)
-  setLocalUserInfo((preInfo) => ({
-    ...preInfo,
-    userReactionURIEncoded: reaction,
-  }))
+  setLocalUserInfo((preInfo) => {
+    if (preInfo === undefined) return
+    return {
+      ...preInfo,
+      userReactionURIEncoded: reaction,
+    }
+  })
   const thisReactionAddedTime = Date.now()
   newLocalUserReactionAddedTimeMs = thisReactionAddedTime
   void (async () => {
     await sleep(REACTION_DISPLAY_TIME_MS)
     if (newLocalUserReactionAddedTimeMs === thisReactionAddedTime) {
-      setLocalUserInfo((preInfo) => ({
-        ...preInfo,
-        userReactionURIEncoded: undefined,
-      }))
+      setLocalUserInfo((preInfo) => {
+        if (preInfo === undefined) return
+        return {
+          ...preInfo,
+          userReactionURIEncoded: undefined,
+        }
+      })
     }
   })()
 }

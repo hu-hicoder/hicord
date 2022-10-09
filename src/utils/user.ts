@@ -97,7 +97,7 @@ export const isUserMuted = (data: unknown): data is UserMuted =>
   typeof (data as UserMuted).muted === 'boolean'
 
 export const getUserNameFromPeerId = (peerId: string): string => {
-  if (peerId === localUserInfo().peerId) {
+  if (peerId === localUserInfo()?.peerId) {
     return 'あなた'
   } else {
     const initialValue = peerId

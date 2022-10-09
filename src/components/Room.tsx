@@ -1,7 +1,7 @@
 /* eslint-disable solid/prefer-for */
 import Peer, { SfuRoom } from 'skyway-js'
 import { Component, createEffect, createSignal, For } from 'solid-js'
-import { audioCtx, initRemoteAudio, setListener } from '../utils/audio'
+import { audioCtx, initRemoteAudio, setAudioListener } from '../utils/audio'
 import { BoxTypes, getRoomBoxInfos } from '../utils/boxes/box'
 import { ChatBoxInfo } from '../utils/boxes/chat'
 import { ImageBoxInfo } from '../utils/boxes/image'
@@ -82,7 +82,8 @@ export const Room: Component<{ roomId: string }> = (props) => {
     if (PEER && !PEER.open) {
       return
     }
-    if (localStream() === undefined) {
+    const _localStream = localStream()
+    if (_localStream === undefined) {
       return
     }
 
@@ -90,15 +91,15 @@ export const Room: Component<{ roomId: string }> = (props) => {
 
     setLocalUserInfo({
       ...defaultUserAvatar,
-      stream: localStream(),
+      stream: _localStream,
       peerId: PEER.id,
       x: ROOM_X / 2,
       y: ROOM_Y / 2,
       deg: 0,
-      userName: localStorage.getItem('localUserName'), // TODO: 保存してある名前から参照する
+      userName: localStorage.getItem('localUserName') ?? 'No Name',
       muted: true,
     })
-    setListener(localUserInfo())
+    setAudioListener()
 
     const _room = PEER.joinRoom<SfuRoom>(props.roomId, {
       mode: 'sfu',
@@ -116,10 +117,12 @@ export const Room: Component<{ roomId: string }> = (props) => {
       sendLocalUserAvatarTo(peerId)
       sendLocalUserOriginalAvatarTo(peerId)
       sendLocalUserMutedTo(peerId)
+      const _localUserInfo = localUserInfo()
       // Send Room data
       if (
+        _localUserInfo !== undefined &&
         !remoteUserInfos().some(
-          (element) => element.peerId.localeCompare(localUserInfo().peerId) > 0
+          (element) => element.peerId.localeCompare(_localUserInfo.peerId) > 0
         )
       ) {
         sendRoomBoxInfosTo(peerId)

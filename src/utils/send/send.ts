@@ -17,5 +17,5 @@ export const sendTo = (
 }
 
 export const sendToAll = (data: unknown) => {
-  room().send(data)
+  room()?.send(data)
 }

@@ -8,7 +8,9 @@ import {
 import { sendTo, sendToAll } from './send'
 
 export const sendChatInfoToAll = (data: ChatInfo) => {
-  sendToAll(localChatInfoFrom(data))
+  const localChatInfo = localChatInfoFrom(data)
+  if (localChatInfo === undefined) return
+  sendToAll(localChatInfo)
 }
 
 export const sendChatInfoTo = (

@@ -10,8 +10,12 @@ declare module 'solid-js' {
   }
 }
 
-export default function clickOutside(el: HTMLElement, accessor) {
-  const onClick = (e) => !el.contains(e.target) && accessor()?.()
+export default function clickOutside(
+  element: HTMLElement,
+  accessor: () => unknown
+) {
+  const onClick = (e: MouseEvent) =>
+    !element.contains(e.target as Node) && accessor()?.()
   document.body.addEventListener('click', onClick)
 
   onCleanup(() => document.body.removeEventListener('click', onClick))

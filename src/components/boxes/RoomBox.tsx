@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { createEffect, createMemo, JSX, onMount } from 'solid-js'
 import { RoomBoxInfo, setRoomBoxInfo, BoxInfo } from '../../utils/boxes/box'
 import { getUserNameFromPeerId, localUserInfo } from '../../utils/user'
@@ -15,15 +16,18 @@ function RoomBox(props: {
   class: string
   children: JSX.Element
 }) {
-  let coordRef: HTMLDivElement
-  let divRef: HTMLDivElement
+  let coordRef: HTMLDivElement | undefined
+  let divRef: HTMLDivElement | undefined
+
   const isEditing = createMemo(
     () =>
-      localUserInfo() && localUserInfo().peerId === props.boxInfo.editorPeerId
+      localUserInfo() && localUserInfo()?.peerId === props.boxInfo.editorPeerId
   )
 
   onMount(() => {
-    createResizeObserver(divRef, () => {
+    createResizeObserver(divRef!, () => {
+      if (divRef === undefined) return
+
       const width = divRef.clientWidth
       const height = divRef.clientHeight
       if (
@@ -43,12 +47,12 @@ function RoomBox(props: {
   })
 
   createEffect(() => {
-    coordRef.style.left = `${props.boxInfo.x}px`
-    coordRef.style.top = `${props.boxInfo.y}px`
+    coordRef!.style.left = `${props.boxInfo.x}px`
+    coordRef!.style.top = `${props.boxInfo.y}px`
   })
   createEffect(() => {
-    divRef.style.width = `${props.boxInfo.width}px`
-    divRef.style.height = `${props.boxInfo.height}px`
+    divRef!.style.width = `${props.boxInfo.width}px`
+    divRef!.style.height = `${props.boxInfo.height}px`
   })
 
   //
@@ -109,7 +113,7 @@ function RoomBox(props: {
 
     event.preventDefault()
     const touch = event.touches.item(0)
-    setOnMovement(touch.pageX, touch.pageY)
+    if (touch !== null) setOnMovement(touch.pageX, touch.pageY)
   }
 
   window.addEventListener('mousemove', mouseMoveListener, { passive: false })
@@ -143,10 +147,11 @@ function RoomBox(props: {
         class={`${isEditing() ? 'resize overflow-hidden' : ''} ${props.class}`}
         onClick={() => {
           console.log('inside click')
-          if (localUserInfo() && !isEditing() && !props.boxInfo.editorPeerId) {
+          const localUserPeerId = localUserInfo()?.peerId
+          if (localUserPeerId && !isEditing() && !props.boxInfo.editorPeerId) {
             const roomBoxInfo: RoomBoxInfo = {
               ...props.boxInfo,
-              editorPeerId: localUserInfo().peerId,
+              editorPeerId: localUserPeerId,
             }
             setRoomBoxInfo(roomBoxInfo)
             sendRoomBoxInfoToAll(roomBoxInfo)
@@ -158,7 +163,7 @@ function RoomBox(props: {
           if (isEditing()) {
             const roomBoxInfo: RoomBoxInfo = {
               ...props.boxInfo,
-              editorPeerId: null,
+              editorPeerId: undefined,
             }
             setRoomBoxInfo(roomBoxInfo)
             sendRoomBoxInfoToAll(roomBoxInfo)

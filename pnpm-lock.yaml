@@ -3,6 +3,8 @@ lockfileVersion: 5.4
 specifiers:
   '@picmo/popup-picker': ^5.6.1
   '@solid-primitives/resize-observer': ^2.0.4
+  '@types/babel__core': ^7.1.19
+  '@types/eslint': ^8.4.6
   '@types/luxon': ^3.0.1
   '@typescript-eslint/eslint-plugin': ^5.35.1
   '@typescript-eslint/parser': ^5.35.1
@@ -34,6 +36,8 @@ dependencies:
   solid-js: 1.5.1
 
 devDependencies:
+  '@types/babel__core': 7.1.19
+  '@types/eslint': 8.4.6
   '@types/luxon': 3.0.1
   '@typescript-eslint/eslint-plugin': 5.35.1_pfwtupu3r4wxmgbx6hj7gwmyuu
   '@typescript-eslint/parser': 5.35.1_yqf6kl63nyoq5megxukfnom5rm
@@ -44,7 +48,7 @@ devDependencies:
   eslint-plugin-solid: 0.7.1_yqf6kl63nyoq5megxukfnom5rm
   postcss: 8.4.16
   prettier: 2.7.1
-  tailwindcss: 3.1.8
+  tailwindcss: 3.1.8_postcss@8.4.16
   typescript: 4.8.2
   vite: 2.9.15
   vite-plugin-checker: 0.4.9_vite@2.9.15
@@ -535,6 +539,46 @@ packages:
     dependencies:
       solid-js: 1.5.1
     dev: false
+
+  /@types/babel__core/7.1.19:
+    resolution: {integrity: sha512-WEOTgRsbYkvA/KCsDwVEGkd7WAr1e3g31VHQ8zy5gul/V1qKullU/BU5I68X5v7V3GnB9eotmom4v5a5gjxorw==}
+    dependencies:
+      '@babel/parser': 7.18.13
+      '@babel/types': 7.18.13
+      '@types/babel__generator': 7.6.4
+      '@types/babel__template': 7.4.1
+      '@types/babel__traverse': 7.18.2
+    dev: true
+
+  /@types/babel__generator/7.6.4:
+    resolution: {integrity: sha512-tFkciB9j2K755yrTALxD44McOrk+gfpIpvC3sxHjRawj6PfnQxrse4Clq5y/Rq+G3mrBurMax/lG8Qn2t9mSsg==}
+    dependencies:
+      '@babel/types': 7.18.13
+    dev: true
+
+  /@types/babel__template/7.4.1:
+    resolution: {integrity: sha512-azBFKemX6kMg5Io+/rdGT0dkGreboUVR0Cdm3fz9QJWpaQGJRQXl7C+6hOTCZcMll7KFyEQpgbYI2lHdsS4U7g==}
+    dependencies:
+      '@babel/parser': 7.18.13
+      '@babel/types': 7.18.13
+    dev: true
+
+  /@types/babel__traverse/7.18.2:
+    resolution: {integrity: sha512-FcFaxOr2V5KZCviw1TnutEMVUVsGt4D2hP1TAfXZAMKuHYW3xQhe3jTxNPWutgCJ3/X1c5yX8ZoGVEItxKbwBg==}
+    dependencies:
+      '@babel/types': 7.18.13
+    dev: true
+
+  /@types/eslint/8.4.6:
+    resolution: {integrity: sha512-/fqTbjxyFUaYNO7VcW5g+4npmqVACz1bB7RTHYuLj+PRjw9hrCwrUXVQFpChUS0JsyEFvMZ7U/PfmvWgxJhI9g==}
+    dependencies:
+      '@types/estree': 1.0.0
+      '@types/json-schema': 7.0.11
+    dev: true
+
+  /@types/estree/1.0.0:
+    resolution: {integrity: sha512-WulqXMDUTYAXCjZnk6JtIHPigp55cVtDgDrO2gHRwhyJto21+1zbVCtOYB2L1F9w4qCQ0rOGWBnBe0FNTiEJIQ==}
+    dev: true
 
   /@types/json-schema/7.0.11:
     resolution: {integrity: sha512-wOuvG1SN4Us4rez+tylwwwCV1psiNVOkJeM3AUWUNWg/jDQY2+HE/444y5gc+jBmRqASOm2Oeh5c1axHobwRKQ==}
@@ -1029,7 +1073,7 @@ packages:
       css-selector-tokenizer: 0.8.0
       postcss: 8.4.16
       postcss-js: 4.0.0_postcss@8.4.16
-      tailwindcss: 3.1.8
+      tailwindcss: 3.1.8_postcss@8.4.16
     transitivePeerDependencies:
       - ts-node
     dev: true
@@ -2645,10 +2689,12 @@ packages:
     engines: {node: '>= 0.4'}
     dev: true
 
-  /tailwindcss/3.1.8:
+  /tailwindcss/3.1.8_postcss@8.4.16:
     resolution: {integrity: sha512-YSneUCZSFDYMwk+TGq8qYFdCA3yfBRdBlS7txSq0LUmzyeqRe3a8fBQzbz9M3WS/iFT4BNf/nmw9mEzrnSaC0g==}
     engines: {node: '>=12.13.0'}
     hasBin: true
+    peerDependencies:
+      postcss: ^8.0.9
     dependencies:
       arg: 5.0.2
       chokidar: 3.5.3

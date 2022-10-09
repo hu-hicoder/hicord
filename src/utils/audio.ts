@@ -1,4 +1,9 @@
-import { UserInfo, RemoteUserAudioNodes, RemoteUserInfo } from './user'
+import {
+  UserInfo,
+  RemoteUserAudioNodes,
+  RemoteUserInfo,
+  localUserInfo,
+} from './user'
 
 // Panner
 const MAX_DISTANCE = 1000
@@ -32,23 +37,25 @@ export function audioProcessing(
   localUserInfo: UserInfo,
   remoteUserInfo: UserInfo
 ): RemoteUserAudioNodes {
-  setListener(localUserInfo)
+  setAudioListener()
   return initRemoteAudio(remoteUserInfo)
 }
 
-export function setListener(localUserInfo: UserInfo) {
+export function setAudioListener() {
+  const _localUserInfo = localUserInfo()
+  if (_localUserInfo === undefined) return
   // Listener
   const listener = audioCtx.listener
-  listener.positionX.setValueAtTime(localUserInfo.x, audioCtx.currentTime)
-  listener.positionZ.setValueAtTime(localUserInfo.y, audioCtx.currentTime)
+  listener.positionX.setValueAtTime(_localUserInfo.x, audioCtx.currentTime)
+  listener.positionZ.setValueAtTime(_localUserInfo.y, audioCtx.currentTime)
   // listener.positionZ.value
   listener.forwardX.setValueAtTime(
-    directionX(localUserInfo),
+    directionX(_localUserInfo),
     audioCtx.currentTime
   )
   listener.forwardY.setValueAtTime(0, audioCtx.currentTime)
   listener.forwardZ.setValueAtTime(
-    directionZ(localUserInfo),
+    directionZ(_localUserInfo),
     audioCtx.currentTime
   )
   listener.upX.setValueAtTime(0, audioCtx.currentTime)
