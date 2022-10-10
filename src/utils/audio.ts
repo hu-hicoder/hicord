@@ -1,9 +1,8 @@
 import {
-  __UserInfo,
   RemoteUserAudioNodes,
   RemoteUserInfo,
   localUserInfo,
-  UserInfo,
+  LocalUserInfo,
 } from './user'
 
 // Panner
@@ -14,11 +13,11 @@ const CONE_INNER_ANGLE = 60
 const CONE_OUTER_ANGLE = 120
 const CONE_OUTER_GAIN = 0.1
 
-function directionX(deg: UserInfo['deg']) {
+function directionX(deg: LocalUserInfo['deg']) {
   return Math.cos((deg * Math.PI) / 180)
 }
 
-function directionZ(deg: UserInfo['deg']) {
+function directionZ(deg: LocalUserInfo['deg']) {
   return Math.sin((deg * Math.PI) / 180)
 }
 
@@ -35,8 +34,8 @@ window.onload = function () {
 }
 
 export function audioProcessing(
-  localUserInfo: __UserInfo,
-  remoteUserInfo: __UserInfo
+  localUserInfo: LocalUserInfo,
+  remoteUserInfo: RemoteUserInfo
 ): RemoteUserAudioNodes {
   setAudioListener()
   return initRemoteAudio(remoteUserInfo)
@@ -82,7 +81,7 @@ export function setPanner(remoteUserInfo: RemoteUserInfo) {
 }
 
 export function initRemoteAudio(
-  remoteUserInfo: __UserInfo
+  remoteUserInfo: Omit<RemoteUserInfo, keyof RemoteUserAudioNodes>
 ): RemoteUserAudioNodes {
   const sourceNode = audioCtx.createMediaStreamSource(remoteUserInfo.stream)
 

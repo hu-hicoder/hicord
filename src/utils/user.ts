@@ -20,7 +20,7 @@ export const initialLocalUserInfo = () => ({
   ...defaultUserAvatar, // TODO: 参照になってるから元が変更されるかも
 })
 
-export const [localUserInfo, setLocalUserInfo] = createStore<UserInfo>(
+export const [localUserInfo, setLocalUserInfo] = createStore<LocalUserInfo>(
   initialLocalUserInfo()
 )
 
@@ -32,7 +32,7 @@ type FlattenObjectType<T extends object> = {
   [Key in keyof T]: T[Key]
 }
 
-export type UserInfo = FlattenObjectType<
+export type LocalUserInfo = FlattenObjectType<
   {
     peerId: string | undefined
     stream: MediaStream | undefined
@@ -44,15 +44,18 @@ export type UserInfo = FlattenObjectType<
     UserMuted
 >
 
-export type __UserInfo = Coordinate &
-  UserName &
-  UserOriginalAvatar &
-  UserAvatar &
-  UserReaction &
-  UserMuted & {
-    stream: MediaStream
+export type RemoteUserInfo = FlattenObjectType<
+  {
     peerId: string
-  }
+    stream: MediaStream
+  } & Coordinate &
+    UserName &
+    UserOriginalAvatar &
+    UserAvatar &
+    UserReaction &
+    UserMuted &
+    RemoteUserAudioNodes
+>
 
 export type RemoteUserAudioNodes = {
   sourceNode: MediaStreamAudioSourceNode
@@ -60,8 +63,6 @@ export type RemoteUserAudioNodes = {
   gainNode: GainNode
   pannerNode: PannerNode
 }
-
-export type RemoteUserInfo = __UserInfo & RemoteUserAudioNodes
 
 export type UserName = {
   userName: string

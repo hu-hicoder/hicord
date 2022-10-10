@@ -1,6 +1,10 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { Component, createEffect } from 'solid-js'
-import { localUserInfo, setLocalUserInfo, __UserInfo } from '../../utils/user'
+import {
+  localUserInfo,
+  setLocalUserInfo,
+  LocalUserInfo,
+} from '../../utils/user'
 import { setAudioListener } from '../../utils/audio'
 import { sendLocalUserCoordinateToAll } from '../../utils/send/sendLocalUserCoordinate'
 import { updateDeg } from '../../utils/coordinate'
@@ -31,7 +35,7 @@ const LocalUserIcon: Component = () => {
     })
   })
 
-  const setOnMovement = (x: __UserInfo['x'], y: __UserInfo['y']) => {
+  const setOnMovement = (x: LocalUserInfo['x'], y: LocalUserInfo['y']) => {
     // set info
     setLocalUserInfo((prev) => ({
       x: x,

@@ -32,11 +32,11 @@ import { sendRoomBoxInfosTo } from '../utils/send/sendRoomBoxInfo'
 import { setCall } from '../utils/setCall'
 import {
   defaultUserAvatar,
-  RemoteUserInfo,
   remoteUserInfos,
   setRemoteUserInfos,
   setLocalUserInfo,
   localUserInfo,
+  RemoteUserInfo,
 } from '../utils/user'
 import ChatBox from './boxes/ChatBox'
 import ImageBox from './boxes/ImageBox'
