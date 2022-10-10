@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { Component, createEffect } from 'solid-js'
-import { localUserInfo, setLocalUserInfo, UserInfo } from '../../utils/user'
+import { localUserInfo, setLocalUserInfo, __UserInfo } from '../../utils/user'
 import { setAudioListener } from '../../utils/audio'
 import { sendLocalUserCoordinateToAll } from '../../utils/send/sendLocalUserCoordinate'
 import { updateDeg } from '../../utils/coordinate'
@@ -31,22 +31,13 @@ const LocalUserIcon: Component = () => {
     })
   })
 
-  const setOnMovement = (x: UserInfo['x'], y: UserInfo['y']) => {
+  const setOnMovement = (x: __UserInfo['x'], y: __UserInfo['y']) => {
     // set info
-    setLocalUserInfo((preUserInfo) => {
-      if (preUserInfo === undefined) return
-
-      const dx = x - preUserInfo.x
-      const dy = y - preUserInfo.y
-      const deg = updateDeg(dx, dy, preUserInfo.deg)
-
-      return {
-        ...preUserInfo,
-        x: x,
-        y: y,
-        deg: deg,
-      }
-    })
+    setLocalUserInfo((prev) => ({
+      x: x,
+      y: y,
+      deg: updateDeg(x - prev.x, y - prev.y, prev.deg),
+    }))
     // set audio listener
     setAudioListener()
 
@@ -81,15 +72,12 @@ const LocalUserIcon: Component = () => {
 
   createEffect(() => {
     console.log('mute change')
-    const _localUserInfo = localUserInfo()
-    if (_localUserInfo === undefined) return
-
-    if (_localUserInfo.muted) {
-      _localUserInfo?.stream.getAudioTracks().forEach((track) => {
+    if (localUserInfo.muted) {
+      localUserInfo.stream?.getAudioTracks().forEach((track) => {
         track.enabled = false
       })
     } else {
-      _localUserInfo.stream.getAudioTracks().forEach((track) => {
+      localUserInfo.stream?.getAudioTracks().forEach((track) => {
         track.enabled = true
       })
     }
@@ -102,7 +90,7 @@ const LocalUserIcon: Component = () => {
       onTouchStart={onTouchStart}
       class="cursor-grab"
     >
-      <UserIcon info={localUserInfo()} />
+      <UserIcon info={localUserInfo} />
     </div>
   )
 }

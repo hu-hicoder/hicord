@@ -1,11 +1,9 @@
-import { localUserInfo, RemoteUserInfo, UserMuted } from '../user'
+import { RemoteUserInfo, UserMuted, localUserInfo } from '../user'
 import { sendTo, sendToAll } from './send'
 
 export const sendLocalUserMutedToAll = () => {
-  const _localUserInfo = localUserInfo()
-  if (_localUserInfo === undefined) return
   const data: UserMuted = {
-    muted: _localUserInfo.muted,
+    muted: localUserInfo.muted,
   }
   sendToAll(data)
 }
@@ -13,10 +11,8 @@ export const sendLocalUserMutedToAll = () => {
 export const sendLocalUserMutedTo = (
   remoteUserPeerId: RemoteUserInfo['peerId']
 ) => {
-  const _localUserInfo = localUserInfo()
-  if (_localUserInfo === undefined) return
   const data: UserMuted = {
-    muted: _localUserInfo.muted,
+    muted: localUserInfo.muted,
   }
   sendTo(remoteUserPeerId, data)
 }

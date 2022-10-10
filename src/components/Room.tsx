@@ -8,7 +8,7 @@ import { ImageBoxInfo } from '../utils/boxes/image'
 import { ScreenBoxInfo } from '../utils/boxes/screen'
 import { goToMyLocation } from '../utils/goToMyLocation'
 import { receivedDataAction } from '../utils/receivedDataAction'
-import { setRoom } from '../utils/room'
+import { ROOM_HEIGHT, ROOM_WIDTH, setRoom } from '../utils/room'
 import { sendChatInfosTo } from '../utils/send/sendChatInfo'
 import {
   sendLocalUserAvatarToAll,
@@ -32,11 +32,11 @@ import { sendRoomBoxInfosTo } from '../utils/send/sendRoomBoxInfo'
 import { setCall } from '../utils/setCall'
 import {
   defaultUserAvatar,
-  localUserInfo,
   RemoteUserInfo,
   remoteUserInfos,
-  setLocalUserInfo,
   setRemoteUserInfos,
+  setLocalUserInfo,
+  localUserInfo,
 } from '../utils/user'
 import ChatBox from './boxes/ChatBox'
 import ImageBox from './boxes/ImageBox'
@@ -50,9 +50,6 @@ import RemoteUserIcon from './userIcons/RemoteUserIcon'
 export const PEER = new Peer({
   key: import.meta.env.VITE_SKY_WAY_API_KEY as string,
 }) // TODO: 保持したPeer IDから復元できるようにする？
-
-const ROOM_X = 4096
-const ROOM_Y = 4096
 
 export const [isStarted, setIsStarted] = createSignal(false)
 
@@ -89,16 +86,7 @@ export const Room: Component<{ roomId: string }> = (props) => {
 
     setIsStarted(true)
 
-    setLocalUserInfo({
-      ...defaultUserAvatar,
-      stream: _localStream,
-      peerId: PEER.id,
-      x: ROOM_X / 2,
-      y: ROOM_Y / 2,
-      deg: 0,
-      userName: localStorage.getItem('localUserName') ?? 'No Name',
-      muted: true,
-    })
+    setLocalUserInfo({ peerId: PEER.id, stream: _localStream })
     setAudioListener()
 
     const _room = PEER.joinRoom<SfuRoom>(props.roomId, {
@@ -117,12 +105,12 @@ export const Room: Component<{ roomId: string }> = (props) => {
       sendLocalUserAvatarTo(peerId)
       sendLocalUserOriginalAvatarTo(peerId)
       sendLocalUserMutedTo(peerId)
-      const _localUserInfo = localUserInfo()
+      const localUserPeerId = localUserInfo.peerId
       // Send Room data
       if (
-        _localUserInfo !== undefined &&
+        localUserPeerId !== undefined &&
         !remoteUserInfos().some(
-          (element) => element.peerId.localeCompare(_localUserInfo.peerId) > 0
+          (element) => element.peerId.localeCompare(localUserPeerId) > 0
         )
       ) {
         sendRoomBoxInfosTo(peerId)
@@ -134,8 +122,8 @@ export const Room: Component<{ roomId: string }> = (props) => {
         ...defaultUserAvatar,
         stream: stream,
         peerId: stream.peerId,
-        x: ROOM_X / 2,
-        y: ROOM_Y / 2,
+        x: ROOM_WIDTH / 2,
+        y: ROOM_HEIGHT / 2,
         deg: 0,
         userName: 'No Name', // TODO:
         muted: true,
@@ -192,7 +180,7 @@ export const Room: Component<{ roomId: string }> = (props) => {
     <div>
       <div
         class="relative bg-main"
-        style={{ height: `${ROOM_X}px`, width: `${ROOM_Y}px` }}
+        style={{ height: `${ROOM_WIDTH}px`, width: `${ROOM_HEIGHT}px` }}
       >
         {/* Boxes */}
         <For each={getRoomBoxInfos()}>
@@ -215,7 +203,7 @@ export const Room: Component<{ roomId: string }> = (props) => {
           {(info) => <RemoteUserIcon info={info} />}
         </For> */}
         {/* Local User Icon */}
-        {localUserInfo() ? <LocalUserIcon /> : null}
+        {localUserInfo.peerId ? <LocalUserIcon /> : null}
         {/* buttons */}
         {isStarted() ? null : (
           <div

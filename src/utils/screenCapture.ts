@@ -8,8 +8,8 @@ export const screenCapture = async () => {
     video: true,
   })
   console.log('create screen capture')
-  const localPeerId = localUserInfo()?.peerId
-  if (localPeerId === undefined) return
+  const localUserPeerId = localUserInfo.peerId
+  if (localUserPeerId === undefined) return
 
   const screenInfo: ScreenInfo = {
     mStream,
@@ -27,7 +27,7 @@ export const screenCapture = async () => {
     height: 300,
     editorPeerId: undefined,
     // Screen Box
-    peerId: localPeerId,
+    peerId: localUserPeerId,
     mStreamId: screenInfo.mStream.id,
   }
   setRoomBoxInfo(roomBox)

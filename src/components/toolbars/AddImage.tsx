@@ -54,7 +54,7 @@ const AddImage = () => {
       height = MAX_SIZE
     }
 
-    const localUserPeerId = localUserInfo()?.peerId
+    const localUserPeerId = localUserInfo.peerId
     if (localUserPeerId === undefined) return
 
     const roomBox: ImageBoxInfo = {

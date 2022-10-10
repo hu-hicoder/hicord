@@ -1,8 +1,9 @@
 import {
-  UserInfo,
+  __UserInfo,
   RemoteUserAudioNodes,
   RemoteUserInfo,
   localUserInfo,
+  UserInfo,
 } from './user'
 
 // Panner
@@ -13,12 +14,12 @@ const CONE_INNER_ANGLE = 60
 const CONE_OUTER_ANGLE = 120
 const CONE_OUTER_GAIN = 0.1
 
-function directionX(userInfo: UserInfo) {
-  return Math.cos((userInfo.deg * Math.PI) / 180)
+function directionX(deg: UserInfo['deg']) {
+  return Math.cos((deg * Math.PI) / 180)
 }
 
-function directionZ(userInfo: UserInfo) {
-  return Math.sin((userInfo.deg * Math.PI) / 180)
+function directionZ(deg: UserInfo['deg']) {
+  return Math.sin((deg * Math.PI) / 180)
 }
 
 // Aucio Context
@@ -34,28 +35,26 @@ window.onload = function () {
 }
 
 export function audioProcessing(
-  localUserInfo: UserInfo,
-  remoteUserInfo: UserInfo
+  localUserInfo: __UserInfo,
+  remoteUserInfo: __UserInfo
 ): RemoteUserAudioNodes {
   setAudioListener()
   return initRemoteAudio(remoteUserInfo)
 }
 
 export function setAudioListener() {
-  const _localUserInfo = localUserInfo()
-  if (_localUserInfo === undefined) return
   // Listener
   const listener = audioCtx.listener
-  listener.positionX.setValueAtTime(_localUserInfo.x, audioCtx.currentTime)
-  listener.positionZ.setValueAtTime(_localUserInfo.y, audioCtx.currentTime)
+  listener.positionX.setValueAtTime(localUserInfo.x, audioCtx.currentTime)
+  listener.positionZ.setValueAtTime(localUserInfo.y, audioCtx.currentTime)
   // listener.positionZ.value
   listener.forwardX.setValueAtTime(
-    directionX(_localUserInfo),
+    directionX(localUserInfo.deg),
     audioCtx.currentTime
   )
   listener.forwardY.setValueAtTime(0, audioCtx.currentTime)
   listener.forwardZ.setValueAtTime(
-    directionZ(_localUserInfo),
+    directionZ(localUserInfo.deg),
     audioCtx.currentTime
   )
   listener.upX.setValueAtTime(0, audioCtx.currentTime)
@@ -73,17 +72,17 @@ export function setPanner(remoteUserInfo: RemoteUserInfo) {
     audioCtx.currentTime
   )
   remoteUserInfo.pannerNode.orientationX.setValueAtTime(
-    directionX(remoteUserInfo),
+    directionX(remoteUserInfo.deg),
     audioCtx.currentTime
   )
   remoteUserInfo.pannerNode.orientationZ.setValueAtTime(
-    directionZ(remoteUserInfo),
+    directionZ(remoteUserInfo.deg),
     audioCtx.currentTime
   )
 }
 
 export function initRemoteAudio(
-  remoteUserInfo: UserInfo
+  remoteUserInfo: __UserInfo
 ): RemoteUserAudioNodes {
   const sourceNode = audioCtx.createMediaStreamSource(remoteUserInfo.stream)
 
@@ -99,8 +98,8 @@ export function initRemoteAudio(
     positionX: remoteUserInfo.x,
     positionZ: remoteUserInfo.y,
     // positionZ: 0,
-    orientationX: directionX(remoteUserInfo),
-    orientationZ: directionZ(remoteUserInfo),
+    orientationX: directionX(remoteUserInfo.deg),
+    orientationZ: directionZ(remoteUserInfo.deg),
     // orientationZ: 0,
     maxDistance: MAX_DISTANCE,
     refDistance: REF_DISTANCE,
