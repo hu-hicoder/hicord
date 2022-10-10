@@ -21,7 +21,8 @@ function RoomBox(props: {
 
   const isEditing = createMemo(
     () =>
-      localUserInfo() && localUserInfo()?.peerId === props.boxInfo.editorPeerId
+      localUserInfo.peerId !== undefined &&
+      localUserInfo.peerId === props.boxInfo.editorPeerId
   )
 
   onMount(() => {
@@ -147,8 +148,12 @@ function RoomBox(props: {
         class={`${isEditing() ? 'resize overflow-hidden' : ''} ${props.class}`}
         onClick={() => {
           console.log('inside click')
-          const localUserPeerId = localUserInfo()?.peerId
-          if (localUserPeerId && !isEditing() && !props.boxInfo.editorPeerId) {
+          const localUserPeerId = localUserInfo.peerId
+          if (
+            localUserPeerId !== undefined &&
+            !isEditing() &&
+            !props.boxInfo.editorPeerId
+          ) {
             const roomBoxInfo: RoomBoxInfo = {
               ...props.boxInfo,
               editorPeerId: localUserPeerId,

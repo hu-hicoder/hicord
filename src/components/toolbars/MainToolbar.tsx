@@ -39,10 +39,7 @@ const MainToolbar = () => {
   }
 
   const onClickMicrophoneButton = () => {
-    setLocalUserInfo((preInfo) => {
-      if (preInfo === undefined) return
-      return { ...preInfo, muted: !preInfo.muted }
-    })
+    setLocalUserInfo('muted', (prev) => !prev)
     sendLocalUserMutedToAll()
   }
 
@@ -64,7 +61,7 @@ const MainToolbar = () => {
       >
         my_location
       </span>
-      {localUserInfo()?.muted ?? true ? (
+      {localUserInfo.muted ? (
         <div
           class="material-symbols-outlined tb-item tb-item-off"
           onClick={() => onClickMicrophoneButton()}

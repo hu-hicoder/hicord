@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import type { JSX, ParentComponent } from 'solid-js'
 import { createEffect, createSignal } from 'solid-js'
-import { UserInfo } from '../../utils/user'
+import { LocalUserInfo } from '../../utils/user'
 import clickOutsideDirective from '../../directives/clickOutside'
 import UserAvatarIcon from './UserAvatarIcon'
 const clickOutside = clickOutsideDirective
@@ -10,7 +10,7 @@ export const USER_ICON_WIDTH = 64
 export const USER_ICON_HEIGHT = 64
 
 const UserIcon: ParentComponent<{
-  info: UserInfo | undefined
+  info: LocalUserInfo
   settings?: JSX.Element
 }> = (props) => {
   let iconPositionDiv: HTMLDivElement | undefined
@@ -21,20 +21,23 @@ const UserIcon: ParentComponent<{
   const [getShowSettings, setShowSettings] = createSignal(false)
 
   createEffect(() => {
-    // TODO: 別々に更新する
-    if (props.info === undefined) return
-
     iconPositionDiv!.style.left = `${props.info.x - USER_ICON_WIDTH / 2}px`
     iconPositionDiv!.style.top = `${props.info.y - USER_ICON_HEIGHT / 2}px`
+  })
 
+  createEffect(() => {
     iconDiv!.style.transform = `rotate(${props.info.deg}deg)`
+  })
 
+  createEffect(() => {
     const file = props.info.originalImage
     if (file) {
       const srcUrl = window.URL.createObjectURL(file)
       imgElement!.src = srcUrl
     }
+  })
 
+  createEffect(() => {
     if (props.info.userReactionURIEncoded === undefined) {
       userReactionElement!.style.display = 'none'
     } else {

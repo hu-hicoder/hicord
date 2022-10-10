@@ -15,46 +15,27 @@ const EditProfile = () => {
   let avatarElement: HTMLInputElement | undefined
 
   function updateProfile() {
-    const _localUserInfo = localUserInfo()
-    if (_localUserInfo === undefined) return
-
-    if (_localUserInfo.userName !== nameElement!.value) {
-      setLocalUserInfo((preInfo) => {
-        if (preInfo === undefined) return
-        return {
-          ...preInfo,
-          userName: nameElement!.value,
-        }
-      })
+    if (localUserInfo.userName !== nameElement!.value) {
+      setLocalUserInfo('userName', nameElement!.value)
       sendLocalUserNameToAll()
       localStorage.setItem('localUserName', nameElement!.value)
     }
     if (
-      _localUserInfo.mainColor !== mainColorRef!.value ||
-      _localUserInfo.subColor1 !== subColor1Ref!.value ||
-      _localUserInfo.subColor2 !== subColor2Ref!.value
+      localUserInfo.mainColor !== mainColorRef!.value ||
+      localUserInfo.subColor1 !== subColor1Ref!.value ||
+      localUserInfo.subColor2 !== subColor2Ref!.value
     ) {
-      setLocalUserInfo((preInfo) => {
-        if (preInfo === undefined) return
-        return {
-          ...preInfo,
-          mainColor: mainColorRef!.value,
-          subColor1: subColor1Ref!.value,
-          subColor2: subColor2Ref!.value,
-        }
+      setLocalUserInfo({
+        mainColor: mainColorRef!.value,
+        subColor1: subColor1Ref!.value,
+        subColor2: subColor2Ref!.value,
       })
       sendLocalUserAvatarToAll()
     }
     if (avatarElement!.files?.length === 1) {
       const file = avatarElement!.files.item(0)
       if (file !== null) {
-        setLocalUserInfo((preInfo) => {
-          if (preInfo === undefined) return
-          return {
-            ...preInfo,
-            originalImage: file,
-          }
-        })
+        setLocalUserInfo('originalImage', file)
         sendLocalUserOriginalAvatarToAll()
         console.log('send user original avatar')
       }
@@ -88,7 +69,7 @@ const EditProfile = () => {
                 type="text"
                 ref={nameElement}
                 class="input input-bordered"
-                value={localUserInfo()?.userName ?? 'No Name'}
+                value={localUserInfo.userName}
               />
             </div>
             {/* User Avatar */}
@@ -101,7 +82,7 @@ const EditProfile = () => {
                 <input
                   type="color"
                   ref={mainColorRef}
-                  value={localUserInfo()?.mainColor ?? '#ffffff'}
+                  value={localUserInfo.mainColor}
                 />
               </div>
               <div class="form-control w-full max-w-xs">
@@ -111,7 +92,7 @@ const EditProfile = () => {
                 <input
                   type="color"
                   ref={subColor1Ref}
-                  value={localUserInfo()?.subColor1 ?? '#ffffff'}
+                  value={localUserInfo.subColor1}
                 />
               </div>
               <div class="form-control w-full max-w-xs">
@@ -121,7 +102,7 @@ const EditProfile = () => {
                 <input
                   type="color"
                   ref={subColor2Ref}
-                  value={localUserInfo()?.subColor2 ?? '#ffffff'}
+                  value={localUserInfo.subColor2}
                 />
               </div>
               {/* User Original Avatar */}

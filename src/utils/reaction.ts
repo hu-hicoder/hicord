@@ -3,9 +3,9 @@ import { sleep } from './sleep'
 import {
   RemoteUserInfo,
   remoteUserInfos,
-  setLocalUserInfo,
   setRemoteUserInfos,
   UserReaction,
+  setLocalUserInfo,
 } from './user'
 
 const REACTION_DISPLAY_TIME_MS = 5000
@@ -15,25 +15,13 @@ export const addLocalUserReaction = (
   reaction: UserReaction['userReactionURIEncoded']
 ) => {
   sendLocalUserReactionToAll(reaction)
-  setLocalUserInfo((preInfo) => {
-    if (preInfo === undefined) return
-    return {
-      ...preInfo,
-      userReactionURIEncoded: reaction,
-    }
-  })
+  setLocalUserInfo('userReactionURIEncoded', reaction)
   const thisReactionAddedTime = Date.now()
   newLocalUserReactionAddedTimeMs = thisReactionAddedTime
   void (async () => {
     await sleep(REACTION_DISPLAY_TIME_MS)
     if (newLocalUserReactionAddedTimeMs === thisReactionAddedTime) {
-      setLocalUserInfo((preInfo) => {
-        if (preInfo === undefined) return
-        return {
-          ...preInfo,
-          userReactionURIEncoded: undefined,
-        }
-      })
+      setLocalUserInfo('userReactionURIEncoded', undefined)
     }
   })()
 }

@@ -1,20 +1,61 @@
 import { createSignal } from 'solid-js'
+import { createStore } from 'solid-js/store'
+import { Coordinate } from './coordinate'
+import { ROOM_HEIGHT, ROOM_WIDTH } from './room'
 
-export const [localUserInfo, setLocalUserInfo] = createSignal<UserInfo>()
+export const defaultUserAvatar = {
+  mainColor: '#ffffff',
+  subColor1: '#f4a460',
+  subColor2: '#696969',
+}
+
+export const initialLocalUserInfo = () => ({
+  stream: undefined,
+  peerId: undefined,
+  x: ROOM_WIDTH / 2,
+  y: ROOM_HEIGHT / 2,
+  deg: 0,
+  userName: localStorage.getItem('localUserName') ?? 'No Name',
+  muted: true,
+  ...defaultUserAvatar, // TODO: 参照になってるから元が変更されるかも
+})
+
+export const [localUserInfo, setLocalUserInfo] = createStore<LocalUserInfo>(
+  initialLocalUserInfo()
+)
+
 export const [remoteUserInfos, setRemoteUserInfos] = createSignal<
   RemoteUserInfo[]
 >([])
-import { Coordinate } from './coordinate'
 
-export type UserInfo = Coordinate &
-  UserName &
-  UserOriginalAvatar &
-  UserAvatar &
-  UserReaction &
-  UserMuted & {
-    stream: MediaStream
+type FlattenObjectType<T extends object> = {
+  [Key in keyof T]: T[Key]
+}
+
+export type LocalUserInfo = FlattenObjectType<
+  {
+    peerId: string | undefined
+    stream: MediaStream | undefined
+  } & Coordinate &
+    UserName &
+    UserOriginalAvatar &
+    UserAvatar &
+    UserReaction &
+    UserMuted
+>
+
+export type RemoteUserInfo = FlattenObjectType<
+  {
     peerId: string
-  }
+    stream: MediaStream
+  } & Coordinate &
+    UserName &
+    UserOriginalAvatar &
+    UserAvatar &
+    UserReaction &
+    UserMuted &
+    RemoteUserAudioNodes
+>
 
 export type RemoteUserAudioNodes = {
   sourceNode: MediaStreamAudioSourceNode
@@ -22,8 +63,6 @@ export type RemoteUserAudioNodes = {
   gainNode: GainNode
   pannerNode: PannerNode
 }
-
-export type RemoteUserInfo = UserInfo & RemoteUserAudioNodes
 
 export type UserName = {
   userName: string
@@ -37,11 +76,6 @@ export type UserAvatar = {
   mainColor: string
   subColor1: string
   subColor2: string
-}
-export const defaultUserAvatar = {
-  mainColor: '#ffffff',
-  subColor1: '#f4a460',
-  subColor2: '#696969',
 }
 
 export type UserReaction = {
@@ -97,7 +131,7 @@ export const isUserMuted = (data: unknown): data is UserMuted =>
   typeof (data as UserMuted).muted === 'boolean'
 
 export const getUserNameFromPeerId = (peerId: string): string => {
-  if (peerId === localUserInfo()?.peerId) {
+  if (peerId === localUserInfo.peerId) {
     return 'あなた'
   } else {
     const initialValue = peerId

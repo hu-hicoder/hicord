@@ -37,15 +37,11 @@ const LocationMove = () => {
     )
 
     // set info
-    setLocalUserInfo((preUserInfo) => {
-      if (preUserInfo === undefined) return
-      return {
-        ...preUserInfo,
-        x: preUserInfo.x + dx,
-        y: preUserInfo.y + dy,
-        deg: updateDeg(dx, dy, preUserInfo.deg),
-      }
-    })
+    setLocalUserInfo((prev) => ({
+      x: prev.x + dx,
+      y: prev.y + dy,
+      deg: updateDeg(dx, dy, prev.deg),
+    }))
 
     // set audio listener
     setAudioListener()

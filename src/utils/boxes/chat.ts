@@ -1,5 +1,5 @@
 import { createSignal } from 'solid-js'
-import { UserName, localUserInfo } from '../user'
+import { localUserInfo, UserName } from '../user'
 import { BoxInfo, BoxTypes } from './box'
 
 export const [getChatInfos, setChatInfos] = createSignal<ChatInfo[]>([])
@@ -33,12 +33,11 @@ export const isChatInfo = (data: unknown): data is ChatInfo =>
 // typeof (data as ChatInfo).date === 'string'
 
 export function localChatInfoFrom(chatRaw: ChatRaw): ChatInfo | undefined {
-  const _localUserInfo = localUserInfo()
-  if (_localUserInfo === undefined) return
+  if (localUserInfo.peerId === undefined) return
   return {
-    userName: _localUserInfo.userName,
+    userName: localUserInfo.userName,
     chatGroup: chatRaw.chatGroup,
-    peerId: _localUserInfo.peerId,
+    peerId: localUserInfo.peerId,
     value: chatRaw.value,
     date: new Date(),
   }
