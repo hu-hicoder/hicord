@@ -15,6 +15,7 @@ import { talkBoxIdFromUser, TalkBoxInfo } from '../utils/boxes/talk'
 import { goToMyLocation } from '../utils/goToMyLocation'
 import { receivedDataAction } from '../utils/receivedDataAction'
 import { ROOM_HEIGHT, ROOM_WIDTH, setRoom } from '../utils/room'
+import { closeDataConnection } from '../utils/send/send'
 import { sendChatInfosTo } from '../utils/send/sendChatInfo'
 import {
   sendLocalUserAvatarToAll,
@@ -163,6 +164,7 @@ export const Room: Component<{ roomId: string }> = (props) => {
           return userInfo.peerId !== peerId
         })
       })
+      closeDataConnection(peerId)
       console.log(`=== ${peerId} が退出しました ===\n`)
     })
     _room.on('data', (roomData) => {
