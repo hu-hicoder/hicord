@@ -18,7 +18,7 @@ function changeColors(obj: HTMLObjectElement, avatar: UserAvatar) {
   const mainColor = svgDoc.querySelectorAll(
     `*[style*='fill:${defaultUserAvatar.mainColor}']`
   )
-  console.log('main c', mainColor.length)
+
   const subColor1 = svgDoc.querySelectorAll(
     `*[style*='fill:${defaultUserAvatar.subColor1}']`
   )
@@ -36,7 +36,6 @@ const UserAvatarIcon: Component<{ avatar: UserAvatar | undefined }> = (
   let objRef: HTMLObjectElement | undefined
 
   onMount(() => {
-    console.log('on mount')
     objRef!.addEventListener(
       'load',
       () => {
@@ -49,7 +48,6 @@ const UserAvatarIcon: Component<{ avatar: UserAvatar | undefined }> = (
 
   createEffect(() => {
     if (props.avatar !== undefined) {
-      console.log('add event lis')
       changeColors(objRef!, props.avatar)
     }
   })

@@ -1,11 +1,17 @@
 /* eslint-disable solid/prefer-for */
 import Peer, { SfuRoom } from 'skyway-js'
 import { Component, createEffect, createSignal, For } from 'solid-js'
-import { audioCtx, initRemoteAudio, setAudioListener } from '../utils/audio'
+import {
+  audioCtx,
+  initRemoteAudio,
+  muteOtherTalkBox,
+  setAudioListener,
+} from '../utils/audio'
 import { BoxTypes, getRoomBoxInfos } from '../utils/boxes/box'
 import { ChatBoxInfo } from '../utils/boxes/chat'
 import { ImageBoxInfo } from '../utils/boxes/image'
 import { ScreenBoxInfo } from '../utils/boxes/screen'
+import { talkBoxIdFromUser, TalkBoxInfo } from '../utils/boxes/talk'
 import { goToMyLocation } from '../utils/goToMyLocation'
 import { receivedDataAction } from '../utils/receivedDataAction'
 import { ROOM_HEIGHT, ROOM_WIDTH, setRoom } from '../utils/room'
@@ -41,7 +47,8 @@ import {
 import ChatBox from './boxes/ChatBox'
 import ImageBox from './boxes/ImageBox'
 import ScreenBox from './boxes/ScreenBox'
-import ChatToolbar from './toolbars/ChatToolbar'
+import TalkBox from './boxes/TalkBox'
+import BoxToolbar from './toolbars/BoxToolbar'
 import MainToolbar from './toolbars/MainToolbar'
 import UserToolbar from './toolbars/UserToolbar'
 import LocalUserIcon from './userIcons/LocalUserIcon'
@@ -118,15 +125,19 @@ export const Room: Component<{ roomId: string }> = (props) => {
       }
     })
     _room.on('stream', (stream) => {
+      const x = ROOM_WIDTH / 2
+      const y = ROOM_HEIGHT / 2
+      const talkBoxId = talkBoxIdFromUser(x, y)
       const userInfo = {
         ...defaultUserAvatar,
         stream: stream,
         peerId: stream.peerId,
-        x: ROOM_WIDTH / 2,
-        y: ROOM_HEIGHT / 2,
+        x: x,
+        y: y,
         deg: 0,
         userName: 'No Name', // TODO:
         muted: true,
+        talkBoxId,
       }
       const audioNodes = initRemoteAudio(userInfo)
       console.log('create remote user info')
@@ -135,6 +146,7 @@ export const Room: Component<{ roomId: string }> = (props) => {
         ...audioNodes,
       }
       setRemoteUserInfos((prev) => [...prev, remoteUserInfo])
+      muteOtherTalkBox()
       // Send data
       sendLocalUserNameToAll()
       sendLocalUserCoordinateToAll()
@@ -174,6 +186,7 @@ export const Room: Component<{ roomId: string }> = (props) => {
         console.log('音声の再生を開始しました')
       })
     }
+    muteOtherTalkBox()
   }
 
   return (
@@ -192,6 +205,8 @@ export const Room: Component<{ roomId: string }> = (props) => {
                 return <ImageBox info={info as ImageBoxInfo} />
               case BoxTypes.SCREEN:
                 return <ScreenBox info={info as ScreenBoxInfo} />
+              case BoxTypes.TALK:
+                return <TalkBox info={info as TalkBoxInfo} />
             }
           }}
         </For>
@@ -224,7 +239,7 @@ export const Room: Component<{ roomId: string }> = (props) => {
         {/* Toolbar */}
         <UserToolbar />
         <MainToolbar />
-        <ChatToolbar />
+        <BoxToolbar />
       </div>
     </div>
   )

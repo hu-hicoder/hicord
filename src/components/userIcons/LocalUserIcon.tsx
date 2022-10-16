@@ -5,9 +5,10 @@ import {
   setLocalUserInfo,
   LocalUserInfo,
 } from '../../utils/user'
-import { setAudioListener } from '../../utils/audio'
+import { muteOtherTalkBox, setAudioListener } from '../../utils/audio'
 import { sendLocalUserCoordinateToAll } from '../../utils/send/sendLocalUserCoordinate'
 import { updateDeg } from '../../utils/coordinate'
+import { talkBoxIdFromUser } from '../../utils/boxes/talk'
 import UserIcon from './UserIcon'
 
 const LocalUserIcon: Component = () => {
@@ -84,6 +85,20 @@ const LocalUserIcon: Component = () => {
       localUserInfo.stream?.getAudioTracks().forEach((track) => {
         track.enabled = true
       })
+    }
+  })
+
+  // on a talk box
+  createEffect(() => {
+    const talkBoxId = talkBoxIdFromUser(localUserInfo.x, localUserInfo.y)
+    if (localUserInfo.talkBoxId !== talkBoxId) {
+      setLocalUserInfo((prev) => {
+        return {
+          ...prev,
+          talkBoxId: talkBoxId,
+        }
+      })
+      muteOtherTalkBox()
     }
   })
 

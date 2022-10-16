@@ -1,6 +1,7 @@
 import { createSignal } from 'solid-js'
 import { createStore } from 'solid-js/store'
 import { Coordinate } from './coordinate'
+import { addOrUpdateInfoFromPrev } from './info'
 import { ROOM_HEIGHT, ROOM_WIDTH } from './room'
 
 export const defaultUserAvatar = {
@@ -12,6 +13,7 @@ export const defaultUserAvatar = {
 export const initialLocalUserInfo = () => ({
   stream: undefined,
   peerId: undefined,
+  talkBoxId: 0,
   x: ROOM_WIDTH / 2,
   y: ROOM_HEIGHT / 2,
   deg: 0,
@@ -28,6 +30,15 @@ export const [remoteUserInfos, setRemoteUserInfos] = createSignal<
   RemoteUserInfo[]
 >([])
 
+export const setRemoteUserInfo = (remoteUserInfo: RemoteUserInfo) => {
+  setRemoteUserInfos(
+    addOrUpdateInfoFromPrev(
+      remoteUserInfo,
+      (curr, info) => curr.peerId === info.peerId
+    )
+  )
+}
+
 type FlattenObjectType<T extends object> = {
   [Key in keyof T]: T[Key]
 }
@@ -36,7 +47,8 @@ export type LocalUserInfo = FlattenObjectType<
   {
     peerId: string | undefined
     stream: MediaStream | undefined
-  } & Coordinate &
+  } & TalkBoxId &
+    Coordinate &
     UserName &
     UserOriginalAvatar &
     UserAvatar &
@@ -48,7 +60,8 @@ export type RemoteUserInfo = FlattenObjectType<
   {
     peerId: string
     stream: MediaStream
-  } & Coordinate &
+  } & TalkBoxId &
+    Coordinate &
     UserName &
     UserOriginalAvatar &
     UserAvatar &
@@ -62,6 +75,13 @@ export type RemoteUserAudioNodes = {
   analyser: AnalyserNode
   gainNode: GainNode
   pannerNode: PannerNode
+}
+
+// Talk box Id
+// 0: main room
+// 1~: talk box id
+export type TalkBoxId = {
+  talkBoxId: number
 }
 
 export type UserName = {

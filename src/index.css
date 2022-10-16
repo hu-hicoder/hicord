@@ -47,6 +47,11 @@
     background: rgba(220, 220, 220, 0.75);
   }
 
+  .talk-box {
+    @apply rounded-sm;
+    background: rgba(168, 168, 168, 0.75);
+  }
+
   /* Chat */
   /* .chat-input {
     

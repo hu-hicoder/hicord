@@ -3,6 +3,7 @@ import {
   RemoteUserInfo,
   localUserInfo,
   LocalUserInfo,
+  remoteUserInfos,
 } from './user'
 
 // Panner
@@ -119,4 +120,23 @@ export function initRemoteAudio(
     .connect(audioCtx.destination)
 
   return { sourceNode, analyser, gainNode, pannerNode }
+}
+
+// talk box
+export const muteOtherTalkBox = () => {
+  const localTalkBoxId = localUserInfo.talkBoxId
+  remoteUserInfos().forEach((remoteUser) => {
+    // same talk box
+    if (remoteUser.talkBoxId === localTalkBoxId) {
+      if (!remoteUser.muted) {
+        remoteUser.stream?.getAudioTracks().forEach((track) => {
+          track.enabled = true
+        })
+      }
+    } else {
+      remoteUser.stream?.getAudioTracks().forEach((track) => {
+        track.enabled = false
+      })
+    }
+  })
 }

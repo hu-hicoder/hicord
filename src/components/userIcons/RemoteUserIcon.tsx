@@ -1,7 +1,9 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import type { Component } from 'solid-js'
 import { createEffect } from 'solid-js'
-import { RemoteUserInfo } from '../../utils/user'
+import { muteOtherTalkBox } from '../../utils/audio'
+import { talkBoxIdFromUser } from '../../utils/boxes/talk'
+import { RemoteUserInfo, setRemoteUserInfo } from '../../utils/user'
 import UserIcon from './UserIcon'
 import VisualizeAudio from './VisualizeAudio'
 
@@ -21,6 +23,18 @@ const RemoteUserIcon: Component<{ info: RemoteUserInfo }> = (props) => {
     const value = e.currentTarget.value
     props.info.gainNode.gain.value = Number(value)
   }
+
+  // current talk box
+  createEffect(() => {
+    const talkBoxId = talkBoxIdFromUser(props.info.x, props.info.y)
+    if (props.info.talkBoxId !== talkBoxId) {
+      setRemoteUserInfo({
+        ...props.info,
+        talkBoxId: talkBoxId,
+      })
+      muteOtherTalkBox()
+    }
+  })
 
   return (
     <div>

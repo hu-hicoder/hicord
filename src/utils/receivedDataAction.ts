@@ -3,6 +3,7 @@ import { setRoomBoxInfo } from './boxes/box'
 import { isChatBoxInfo, isChatInfo, setChatInfos } from './boxes/chat'
 import { isImageBoxInfo } from './boxes/image'
 import { isScreenBoxInfo } from './boxes/screen'
+import { isTalkBoxInfo } from './boxes/talk'
 import { addRemoteUserReaction } from './reaction'
 import {
   isUserAvatar,
@@ -71,6 +72,9 @@ export const receivedDataAction = (data: unknown, sourcePeerId: string) => {
     setRoomBoxInfo(data)
   } else if (isScreenBoxInfo(data)) {
     console.log('screen box info')
+    setRoomBoxInfo(data)
+  } else if (isTalkBoxInfo(data)) {
+    console.log('talk box info')
     setRoomBoxInfo(data)
   } else if (isUserAvatar(data)) {
     console.log('user avatar')
