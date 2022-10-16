@@ -32,7 +32,6 @@ export const sendTo = (
   remoteUserPeerId: RemoteUserInfo['peerId'],
   data: unknown
 ) => {
-  // TODO: 毎回DataConnectionを作り直さないようにする
   const dataConnection = getDataConnection(remoteUserPeerId)
 
   if (dataConnection.open) {
