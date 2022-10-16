@@ -1,4 +1,4 @@
-import { onCleanup } from 'solid-js'
+import { Accessor, onCleanup } from 'solid-js'
 
 declare module 'solid-js' {
   // eslint-disable-next-line @typescript-eslint/no-namespace
@@ -12,7 +12,7 @@ declare module 'solid-js' {
 
 export default function clickOutside(
   element: HTMLElement,
-  accessor: () => unknown
+  accessor: Accessor<() => void>
 ) {
   const onClick = (e: MouseEvent) =>
     !element.contains(e.target as Node) && accessor()?.()
