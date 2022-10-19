@@ -14,7 +14,7 @@ const error = () => {
   alert('位置情報を利用できません')
 }
 
-const POSITION_RATE = 6000000
+const POSITION_RATE = 4500000
 
 const LocationMove = () => {
   const [getHasLocationMove, setHasLocationMove] = createSignal(false)
