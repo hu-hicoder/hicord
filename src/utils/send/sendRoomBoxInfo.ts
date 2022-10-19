@@ -3,6 +3,8 @@ import { RoomBoxInfo, BoxTypes, getRoomBoxInfos } from '../boxes/box'
 import { ImageBoxInfo } from '../boxes/image'
 import { ChatBoxInfo } from '../boxes/chat'
 import { ScreenBoxInfo } from '../boxes/screen'
+import { TalkBoxInfo } from './../boxes/talk'
+import { sendTalkBoxInfoTo, sendTalkBoxInfoToAll } from './sendTalkBox'
 import { sendChatBoxInfoTo, sendChatBoxInfoToAll } from './sendChatInfo'
 import { sendScreenBoxInfoTo, sendScreenBoxInfoToAll } from './sendScreen'
 import { sendImageBoxInfoTo, sendImageBoxInfoToAll } from './sendImageBox'
@@ -17,6 +19,9 @@ export const sendRoomBoxInfoToAll = (data: RoomBoxInfo) => {
       break
     case BoxTypes.SCREEN:
       sendScreenBoxInfoToAll(data as ScreenBoxInfo)
+      break
+    case BoxTypes.TALK:
+      sendTalkBoxInfoToAll(data as TalkBoxInfo)
       break
   }
 }
@@ -35,6 +40,8 @@ export const sendRoomBoxInfoTo = (
     case BoxTypes.SCREEN:
       sendScreenBoxInfoTo(remoteUserPeerId, data as ScreenBoxInfo)
       break
+    case BoxTypes.TALK:
+      sendTalkBoxInfoTo(remoteUserPeerId, data as TalkBoxInfo)
   }
 }
 
