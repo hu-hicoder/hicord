@@ -7,19 +7,19 @@ import {
 } from './user'
 
 // Panner
-const MAX_DISTANCE = 1000
-const REF_DISTANCE = 1
+const MAX_DISTANCE = 300
+const REF_DISTANCE = 50
 const ROLL_OFF = 1
-const CONE_INNER_ANGLE = 60
-const CONE_OUTER_ANGLE = 120
+const CONE_INNER_ANGLE = 90
+const CONE_OUTER_ANGLE = 210
 const CONE_OUTER_GAIN = 0.1
 
 function directionX(deg: LocalUserInfo['deg']) {
-  return Math.cos((deg * Math.PI) / 180)
+  return Math.cos(Math.PI / 2 + (deg * Math.PI) / 180)
 }
 
 function directionZ(deg: LocalUserInfo['deg']) {
-  return Math.sin((deg * Math.PI) / 180)
+  return Math.sin(Math.PI / 2 + (deg * Math.PI) / 180)
 }
 
 // Aucio Context
@@ -32,14 +32,6 @@ declare global {
 window.onload = function () {
   const AudioContext = window.AudioContext || window.webkitAudioContext
   audioCtx = new AudioContext()
-}
-
-export function audioProcessing(
-  localUserInfo: LocalUserInfo,
-  remoteUserInfo: RemoteUserInfo
-): RemoteUserAudioNodes {
-  setAudioListener()
-  return initRemoteAudio(remoteUserInfo)
 }
 
 export function setAudioListener() {
