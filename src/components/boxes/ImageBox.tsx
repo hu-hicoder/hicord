@@ -18,9 +18,9 @@ const ImageBox: Component<{ info: ImageBoxInfo }> = (props) => {
     <RoomBox boxInfo={props.info} class="image-box">
       <img ref={imageRef} />
 
-      <div class="absolute left-2" style={{ top: '-1.5rem' }}>
+      {/* <div class="absolute left-2" style={{ top: '-1.5rem' }}>
         {getUserNameFromPeerId(props.info.peerId)}
-      </div>
+      </div> */}
     </RoomBox>
   )
 }
