@@ -8,10 +8,12 @@ const ImageBox: Component<{ info: ImageBoxInfo }> = (props) => {
   let imageRef: HTMLImageElement | undefined
 
   createEffect(() => {
-    const srcUrl = window.URL.createObjectURL(props.info.image)
-
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    imageRef!.src = srcUrl
+    if (props.info.image) {
+      const srcUrl = window.URL.createObjectURL(props.info.image)
+      if (imageRef) {
+        imageRef.src = srcUrl
+      }
+    }
   })
 
   return (
