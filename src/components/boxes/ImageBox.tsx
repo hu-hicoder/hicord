@@ -1,7 +1,7 @@
 import { createEffect } from 'solid-js'
 import type { Component } from 'solid-js'
 import { ImageBoxInfo } from '../../utils/boxes/image'
-import { getUserNameFromPeerId } from '../../utils/user'
+// import { getUserNameFromPeerId } from '../../utils/user'
 import RoomBox from './RoomBox'
 
 const ImageBox: Component<{ info: ImageBoxInfo }> = (props) => {
@@ -9,7 +9,12 @@ const ImageBox: Component<{ info: ImageBoxInfo }> = (props) => {
 
   createEffect(() => {
     if (props.info.image) {
-      const srcUrl = window.URL.createObjectURL(props.info.image)
+      const binaryData = []
+
+      binaryData.push(props.info.image)
+      const srcUrl = window.URL.createObjectURL(
+        new Blob(binaryData, { type: 'image/jpeg' })
+      )
       if (imageRef) {
         imageRef.src = srcUrl
       }
