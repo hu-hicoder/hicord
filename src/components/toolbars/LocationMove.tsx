@@ -1,8 +1,8 @@
 import { createSignal } from 'solid-js'
-import { setLocalUserInfo } from '../../utils/user'
+import { localUserInfo, setLocalUserInfo } from '../../utils/user'
 import { sendLocalUserCoordinateToAll } from '../../utils/send/sendLocalUserCoordinate'
 import { setAudioListener } from '../../utils/audio'
-import { updateDeg } from '../../utils/coordinate'
+import { Coordinate, updateDeg } from '../../utils/coordinate'
 
 const options = {
   enableHighAccuracy: true,
@@ -14,41 +14,38 @@ const error = () => {
   alert('位置情報を利用できません')
 }
 
-const POSITION_RATE = 4500000
+const POSITION_RATE = 4000000
 
 const LocationMove = () => {
   const [getHasLocationMove, setHasLocationMove] = createSignal(false)
   const [getWatchID, setWatchID] = createSignal<number>()
-  const [getBaseCoordinate, setBaseCoordinate] =
+  const [getBaseGeolocation, setBaseGeolocation] =
     createSignal<GeolocationCoordinates>()
+  const [getBaseCoordinate, setBaseCoordinate] = createSignal<Coordinate>()
 
   const success = (position: GeolocationPosition) => {
+    const baseGeolocation = getBaseGeolocation()
+    if (baseGeolocation === undefined) return
     const baseCoordinate = getBaseCoordinate()
     if (baseCoordinate === undefined) return
 
     const dx =
-      (position.coords.latitude - baseCoordinate.latitude) * POSITION_RATE
+      (position.coords.latitude - baseGeolocation.latitude) * POSITION_RATE
     const dy =
-      (position.coords.longitude - baseCoordinate.longitude) * POSITION_RATE
-    console.log(
-      position.coords.latitude,
-      position.coords.longitude,
-      position.coords.heading
-    )
+      (position.coords.longitude - baseGeolocation.longitude) * POSITION_RATE
 
     // set info
     setLocalUserInfo((prev) => ({
-      x: prev.x + dx,
-      y: prev.y + dy,
-      deg: updateDeg(dx, dy, prev.deg),
+      x: baseCoordinate.x + dx,
+      y: baseCoordinate.y + dy,
+      // TODO: change degree
+      deg: prev.deg,
     }))
 
     // set audio listener
     setAudioListener()
-
+    // send local user coordinate
     sendLocalUserCoordinateToAll()
-    // update BaseCoord
-    setBaseCoordinate(position.coords)
   }
 
   const clickLocationMove = () => {
@@ -61,7 +58,8 @@ const LocationMove = () => {
     } else {
       if ('geolocation' in navigator) {
         navigator.geolocation.getCurrentPosition((position) => {
-          setBaseCoordinate(position.coords)
+          setBaseGeolocation(position.coords)
+          setBaseCoordinate(localUserInfo)
         })
         // watch position
         const watchID = navigator.geolocation.watchPosition(
