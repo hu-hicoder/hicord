@@ -5,9 +5,9 @@ import { setAudioListener } from '../../utils/audio'
 import { Coordinate } from '../../utils/coordinate'
 
 const options = {
-  enableHighAccuracy: true,
-  maximumAge: 3000,
-  timeout: 20000,
+  // enableHighAccuracy: true,
+  // maximumAge: 3000,
+  // timeout: 20000,
 }
 
 const error = () => {
