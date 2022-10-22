@@ -10,6 +10,7 @@ export type Coordinate = {
   deg: number
 }
 
+// -90 ~ 270
 export const updateDeg = (dx: number, dy: number, deg: number) => {
   if (4 < dx ** 2 + dy ** 2) {
     let r = Math.atan2(dy, dx)

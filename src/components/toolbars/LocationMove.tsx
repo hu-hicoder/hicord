@@ -2,19 +2,19 @@ import { createSignal } from 'solid-js'
 import { localUserInfo, setLocalUserInfo } from '../../utils/user'
 import { sendLocalUserCoordinateToAll } from '../../utils/send/sendLocalUserCoordinate'
 import { setAudioListener } from '../../utils/audio'
-import { Coordinate, updateDeg } from '../../utils/coordinate'
+import { Coordinate } from '../../utils/coordinate'
 
 const options = {
   enableHighAccuracy: true,
-  maximumAge: 30000,
-  timeout: 27000,
+  maximumAge: 3000,
+  timeout: 20000,
 }
 
 const error = () => {
   alert('位置情報を利用できません')
 }
 
-const POSITION_RATE = 4000000
+const POSITION_RATE = 40000
 
 const LocationMove = () => {
   const [getHasLocationMove, setHasLocationMove] = createSignal(false)
@@ -24,23 +24,29 @@ const LocationMove = () => {
   const [getBaseCoordinate, setBaseCoordinate] = createSignal<Coordinate>()
 
   const success = (position: GeolocationPosition) => {
+    const currGeolocation = position.coords
     const baseGeolocation = getBaseGeolocation()
     if (baseGeolocation === undefined) return
     const baseCoordinate = getBaseCoordinate()
     if (baseCoordinate === undefined) return
 
     const dx =
-      (position.coords.latitude - baseGeolocation.latitude) * POSITION_RATE
+      (currGeolocation.latitude - baseGeolocation.latitude) * POSITION_RATE
     const dy =
-      (position.coords.longitude - baseGeolocation.longitude) * POSITION_RATE
+      (currGeolocation.longitude - baseGeolocation.longitude) * POSITION_RATE
 
     // set info
-    setLocalUserInfo((prev) => ({
-      x: baseCoordinate.x + dx,
-      y: baseCoordinate.y + dy,
-      // TODO: change degree
-      deg: prev.deg,
-    }))
+    setLocalUserInfo((prev) => {
+      let deg = prev.deg
+      if (position.coords.heading && !isNaN(position.coords.heading)) {
+        deg = position.coords.heading
+      }
+      return {
+        x: baseCoordinate.x + dx,
+        y: baseCoordinate.y + dy,
+        deg,
+      }
+    })
 
     // set audio listener
     setAudioListener()
@@ -57,10 +63,15 @@ const LocationMove = () => {
       setHasLocationMove(false)
     } else {
       if ('geolocation' in navigator) {
-        navigator.geolocation.getCurrentPosition((position) => {
-          setBaseGeolocation(position.coords)
-          setBaseCoordinate(localUserInfo)
-        })
+        navigator.geolocation.getCurrentPosition(
+          (position) => {
+            // initialize
+            setBaseGeolocation(position.coords)
+            setBaseCoordinate(localUserInfo)
+          },
+          error,
+          options
+        )
         // watch position
         const watchID = navigator.geolocation.watchPosition(
           success,
