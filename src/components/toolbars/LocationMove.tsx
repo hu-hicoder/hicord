@@ -14,7 +14,7 @@ const error = () => {
   alert('位置情報を利用できません')
 }
 
-const POSITION_RATE = 400000
+const POSITION_RATE = 500000
 
 const LocationMove = () => {
   const [getHasLocationMove, setHasLocationMove] = createSignal(false)
@@ -73,8 +73,13 @@ const LocationMove = () => {
         navigator.geolocation.getCurrentPosition(
           (position) => {
             // initialize
+            console.log('update geolocation')
             setBaseGeolocation(position.coords)
-            setBaseCoordinate(localUserInfo)
+            setBaseCoordinate({
+              x: localUserInfo.x,
+              y: localUserInfo.y,
+              deg: localUserInfo.deg,
+            })
           },
           error,
           options
@@ -105,6 +110,7 @@ const LocationMove = () => {
       </span>
       <div>{getDx()}</div>
       <div>{getDy()}</div>
+      <div>{getBaseCoordinate()?.x}</div>
     </div>
   )
 }
