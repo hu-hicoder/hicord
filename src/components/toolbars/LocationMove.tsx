@@ -14,7 +14,7 @@ const error = () => {
   alert('位置情報を利用できません')
 }
 
-const POSITION_RATE = 40000
+const POSITION_RATE = 400000
 
 const LocationMove = () => {
   const [getHasLocationMove, setHasLocationMove] = createSignal(false)
@@ -22,6 +22,9 @@ const LocationMove = () => {
   const [getBaseGeolocation, setBaseGeolocation] =
     createSignal<GeolocationCoordinates>()
   const [getBaseCoordinate, setBaseCoordinate] = createSignal<Coordinate>()
+  // TODO use only for log
+  const [getDx, setDx] = createSignal<number>(0.136543235)
+  const [getDy, setDy] = createSignal<number>(0.765223542)
 
   const success = (position: GeolocationPosition) => {
     const currGeolocation = position.coords
@@ -34,6 +37,10 @@ const LocationMove = () => {
       (currGeolocation.latitude - baseGeolocation.latitude) * POSITION_RATE
     const dy =
       (currGeolocation.longitude - baseGeolocation.longitude) * POSITION_RATE
+
+    // log
+    setDx(dx)
+    setDy(dy)
 
     // set info
     setLocalUserInfo((prev) => {
@@ -96,6 +103,8 @@ const LocationMove = () => {
       >
         person_pin_circle
       </span>
+      <div>{getDx()}</div>
+      <div>{getDy()}</div>
     </div>
   )
 }
