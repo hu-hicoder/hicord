@@ -39,36 +39,32 @@ export const setRemoteUserInfo = (remoteUserInfo: RemoteUserInfo) => {
   )
 }
 
-type FlattenObjectType<T extends object> = {
-  [Key in keyof T]: T[Key]
-}
+export type LocalUserInfo = {
+  peerId: string | undefined
+  stream: MediaStream | undefined
+} & TalkBoxId &
+  Coordinate &
+  UserName &
+  UserOriginalAvatar &
+  UserAvatar &
+  UserReaction &
+  UserMuted extends infer T
+  ? { [Key in keyof T]: T[Key] }
+  : never
 
-export type LocalUserInfo = FlattenObjectType<
-  {
-    peerId: string | undefined
-    stream: MediaStream | undefined
-  } & TalkBoxId &
-    Coordinate &
-    UserName &
-    UserOriginalAvatar &
-    UserAvatar &
-    UserReaction &
-    UserMuted
->
-
-export type RemoteUserInfo = FlattenObjectType<
-  {
-    peerId: string
-    stream: MediaStream
-  } & TalkBoxId &
-    Coordinate &
-    UserName &
-    UserOriginalAvatar &
-    UserAvatar &
-    UserReaction &
-    UserMuted &
-    RemoteUserAudioNodes
->
+export type RemoteUserInfo = {
+  peerId: string
+  stream: MediaStream
+} & TalkBoxId &
+  Coordinate &
+  UserName &
+  UserOriginalAvatar &
+  UserAvatar &
+  UserReaction &
+  UserMuted &
+  RemoteUserAudioNodes extends infer T
+  ? { [Key in keyof T]: T[Key] }
+  : never
 
 export type RemoteUserAudioNodes = {
   sourceNode: MediaStreamAudioSourceNode
