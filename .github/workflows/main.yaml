@@ -1,4 +1,4 @@
-name: type-check
+name: main
 
 on:
   push:
@@ -8,6 +8,12 @@ on:
   workflow_dispatch:
 
 jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: ./.github/actions/pnpm-install
+      - run: pnpm lint
   type-check:
     runs-on: ubuntu-latest
     steps:
