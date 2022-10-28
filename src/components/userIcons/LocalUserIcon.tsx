@@ -79,10 +79,12 @@ const LocalUserIcon: Component = () => {
     console.log('mute change')
     if (localUserInfo.muted) {
       localUserInfo.stream?.getAudioTracks().forEach((track) => {
+        // eslint-disable-next-line no-param-reassign
         track.enabled = false
       })
     } else {
       localUserInfo.stream?.getAudioTracks().forEach((track) => {
+        // eslint-disable-next-line no-param-reassign
         track.enabled = true
       })
     }

@@ -122,11 +122,13 @@ export const muteOtherTalkBox = () => {
     if (remoteUser.talkBoxId === localTalkBoxId) {
       if (!remoteUser.muted) {
         remoteUser.stream?.getAudioTracks().forEach((track) => {
+          // eslint-disable-next-line no-param-reassign
           track.enabled = true
         })
       }
     } else {
       remoteUser.stream?.getAudioTracks().forEach((track) => {
+        // eslint-disable-next-line no-param-reassign
         track.enabled = false
       })
     }

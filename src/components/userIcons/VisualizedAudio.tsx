@@ -5,7 +5,7 @@ import type { Component } from 'solid-js'
 const WIDTH = 64
 const HEIGHT = 32
 
-const VisualizeAudio: Component<{ analyser: AnalyserNode }> = (props) => {
+const VisualizedAudio: Component<{ analyser: AnalyserNode }> = (props) => {
   let canvas: HTMLCanvasElement | undefined
 
   onMount(() => {
@@ -59,4 +59,4 @@ const VisualizeAudio: Component<{ analyser: AnalyserNode }> = (props) => {
   return <canvas ref={canvas} width={WIDTH} height={HEIGHT} />
 }
 
-export default VisualizeAudio
+export default VisualizedAudio
