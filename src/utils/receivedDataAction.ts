@@ -23,12 +23,9 @@ export const receivedDataAction = (data: unknown, sourcePeerId: string) => {
     setRemoteUserInfos((preInfo) =>
       preInfo.map((remoteUserInfo) => {
         if (remoteUserInfo.peerId === sourcePeerId) {
-          // Coordinate
-          remoteUserInfo.x = data.x
-          remoteUserInfo.y = data.y
-          remoteUserInfo.deg = data.deg
-          // Panner Node
-          setPanner(remoteUserInfo)
+          const _remoteUserInfo = { ...remoteUserInfo, ...data }
+          setPanner(_remoteUserInfo)
+          return _remoteUserInfo
         }
         return remoteUserInfo
       })
@@ -41,7 +38,7 @@ export const receivedDataAction = (data: unknown, sourcePeerId: string) => {
     setRemoteUserInfos((preInfos) =>
       preInfos.map((remoteUserInfo) => {
         if (remoteUserInfo.peerId === sourcePeerId) {
-          remoteUserInfo.muted = data.muted
+          return { ...remoteUserInfo, ...data }
         }
         return remoteUserInfo
       })
@@ -51,7 +48,7 @@ export const receivedDataAction = (data: unknown, sourcePeerId: string) => {
     setRemoteUserInfos((preInfo) =>
       preInfo.map((remoteUserInfo) => {
         if (remoteUserInfo.peerId === sourcePeerId) {
-          remoteUserInfo.userName = data.userName
+          return { ...remoteUserInfo, ...data }
         }
         return remoteUserInfo
       })
@@ -81,9 +78,7 @@ export const receivedDataAction = (data: unknown, sourcePeerId: string) => {
     setRemoteUserInfos((preInfo) =>
       preInfo.map((remoteUserInfo) => {
         if (remoteUserInfo.peerId === sourcePeerId) {
-          remoteUserInfo.mainColor = data.mainColor
-          remoteUserInfo.subColor1 = data.subColor1
-          remoteUserInfo.subColor2 = data.subColor2
+          return { ...remoteUserInfo, ...data }
         }
         return remoteUserInfo
       })
@@ -94,10 +89,15 @@ export const receivedDataAction = (data: unknown, sourcePeerId: string) => {
     setRemoteUserInfos((preInfo) =>
       preInfo.map((remoteUserInfo) => {
         if (remoteUserInfo.peerId === sourcePeerId) {
-          const arrayBuffer = data.originalImage as unknown as ArrayBuffer
-          remoteUserInfo.originalImage = new Blob([arrayBuffer], {
-            type: 'image/jpeg',
-          }) as File
+          return {
+            ...remoteUserInfo,
+            originalImage: new Blob(
+              [data.originalImage as unknown as ArrayBuffer],
+              {
+                type: 'image/jpeg',
+              }
+            ) as File,
+          }
         }
         return remoteUserInfo
       })
