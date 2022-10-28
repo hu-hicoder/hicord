@@ -34,6 +34,7 @@
       "never",
       { "beforeStatementContinuationChars": "never" }
     ],
-    "import/order": "warn"
+    "import/order": "warn",
+    "no-param-reassign": ["warn", { "props": true }]
   }
 }

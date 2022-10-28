@@ -55,18 +55,19 @@ export const receivedDataAction = (data: unknown, sourcePeerId: string) => {
     )
   } else if (isChatInfo(data)) {
     console.log('get chat info')
-    data.date = new Date(data.date)
-    setChatInfos((prev) => [...prev, data])
+    setChatInfos((prev) => [...prev, { ...data, date: new Date(data.date) }])
   } else if (isChatBoxInfo(data)) {
     console.log('chat box info')
     setRoomBoxInfo(data)
   } else if (isImageBoxInfo(data)) {
     console.log('image box info')
     const arrayBuffer = data.image as unknown as ArrayBuffer
-    data.image = new Blob([arrayBuffer], {
-      type: 'image/jpeg',
-    }) as File
-    setRoomBoxInfo(data)
+    setRoomBoxInfo({
+      ...data,
+      image: new Blob([arrayBuffer], {
+        type: 'image/jpeg',
+      }) as File,
+    })
   } else if (isScreenBoxInfo(data)) {
     console.log('screen box info')
     setRoomBoxInfo(data)

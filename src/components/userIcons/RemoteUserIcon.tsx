@@ -5,7 +5,7 @@ import { muteOtherTalkBox } from '../../utils/audio'
 import { talkBoxIdFromUser } from '../../utils/boxes/talk'
 import { RemoteUserInfo, setRemoteUserInfo } from '../../utils/user'
 import UserIcon from './UserIcon'
-import VisualizeAudio from './VisualizeAudio'
+import VisualizedAudio from './VisualizedAudio'
 
 const RemoteUserIcon: Component<{ info: RemoteUserInfo }> = (props) => {
   let gainRef: HTMLInputElement | undefined
@@ -56,7 +56,7 @@ const RemoteUserIcon: Component<{ info: RemoteUserInfo }> = (props) => {
         }
       >
         <div class="flex justify-center text-center text-sm absolute w-40 -bottom-10 -right-12">
-          <VisualizeAudio analyser={props.info.analyser} />
+          <VisualizedAudio analyser={props.info.analyser} />
         </div>
       </UserIcon>
       <video class="hidden" ref={videoRef} />
