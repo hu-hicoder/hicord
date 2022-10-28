@@ -125,7 +125,7 @@ function RoomBox(props: {
       {/* Move cursor */}
       {isEditing() ? (
         <div
-          class="absolute cursor-move"
+          class="absolute cursor-move z-20"
           style={{ left: '-1.5rem', top: '-1.5rem' }}
           onMouseDown={onMouseDown}
           onTouchStart={onTouchStart}
