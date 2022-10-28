@@ -213,12 +213,9 @@ export const Room: Component<{ roomId: string }> = (props) => {
           }}
         </For>
         {/* Remote User Icons */}
-        {remoteUserInfos().map((info) => (
-          <RemoteUserIcon info={info} />
-        ))}
-        {/* <For each={remoteUserInfos()}> なぜかうまくいかない
+        <For each={remoteUserInfos()}>
           {(info) => <RemoteUserIcon info={info} />}
-        </For> */}
+        </For>
         {/* Local User Icon */}
         {localUserInfo.peerId ? <LocalUserIcon /> : null}
         {/* buttons */}
