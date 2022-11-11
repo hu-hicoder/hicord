@@ -4,6 +4,7 @@ import {
   localUserInfo,
   LocalUserInfo,
   remoteUserInfos,
+  setLocalUserInfo,
 } from './user'
 
 // Panner
@@ -34,7 +35,7 @@ window.onload = function () {
   audioCtx = new AudioContext()
 }
 
-export function setAudioListener() {
+export function setUpAudioListener() {
   // Listener
   const listener = audioCtx.listener
   listener.positionX.setValueAtTime(localUserInfo.x, audioCtx.currentTime)
@@ -73,9 +74,18 @@ export function setPanner(remoteUserInfo: RemoteUserInfo) {
   )
 }
 
-export function initRemoteAudio(
+export const setUpLocalUserAudioAnalyzer = () => {
+  if (localUserInfo.stream === undefined) return
+
+  const sourceNode = audioCtx.createMediaStreamSource(localUserInfo.stream)
+  const analyserNode = audioCtx.createAnalyser()
+  sourceNode.connect(analyserNode)
+  setLocalUserInfo('analyzerNode', analyserNode)
+}
+
+export const initRemoteUserAudio = (
   remoteUserInfo: Omit<RemoteUserInfo, keyof RemoteUserAudioNodes>
-): RemoteUserAudioNodes {
+): RemoteUserAudioNodes => {
   const sourceNode = audioCtx.createMediaStreamSource(remoteUserInfo.stream)
 
   // Gain
@@ -102,16 +112,16 @@ export function initRemoteAudio(
   })
 
   // Analyser
-  const analyser = audioCtx.createAnalyser()
+  const analyserNode = audioCtx.createAnalyser()
 
   // Connect
   sourceNode
-    .connect(analyser)
+    .connect(analyserNode)
     .connect(gainNode)
     .connect(pannerNode)
     .connect(audioCtx.destination)
 
-  return { sourceNode, analyser, gainNode, pannerNode }
+  return { sourceNode, analyserNode, gainNode, pannerNode }
 }
 
 // talk box

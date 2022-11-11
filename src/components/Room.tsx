@@ -3,9 +3,10 @@ import Peer, { SfuRoom } from 'skyway-js'
 import { Component, createEffect, createSignal, For } from 'solid-js'
 import {
   audioCtx,
-  initRemoteAudio,
+  initRemoteUserAudio,
   muteOtherTalkBox,
-  setAudioListener,
+  setUpAudioListener,
+  setUpLocalUserAudioAnalyzer,
 } from '../utils/audio'
 import { BoxTypes, getRoomBoxInfos } from '../utils/boxes/box'
 import { ChatBoxInfo } from '../utils/boxes/chat'
@@ -94,7 +95,8 @@ export const Room: Component<{ roomId: string }> = (props) => {
     setIsStarted(true)
 
     setLocalUserInfo({ peerId: PEER.id, stream: _localStream })
-    setAudioListener()
+    setUpLocalUserAudioAnalyzer()
+    setUpAudioListener()
 
     const _room = PEER.joinRoom<SfuRoom>(props.roomId, {
       mode: 'sfu',
@@ -139,7 +141,7 @@ export const Room: Component<{ roomId: string }> = (props) => {
         muted: true,
         talkBoxId,
       }
-      const audioNodes = initRemoteAudio(userInfo)
+      const audioNodes = initRemoteUserAudio(userInfo)
       console.log('create remote user info')
       const remoteUserInfo: RemoteUserInfo = {
         ...userInfo,

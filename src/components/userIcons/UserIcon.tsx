@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import type { JSX, ParentComponent } from 'solid-js'
 import { createEffect, createSignal } from 'solid-js'
-import { LocalUserInfo } from '../../utils/user'
+import { UserInfoBaseType } from '../../utils/user'
 import clickOutsideDirective from '../../directives/clickOutside'
 import UserAvatarIcon from './UserAvatarIcon'
 const clickOutside = clickOutsideDirective
@@ -10,7 +10,7 @@ export const USER_ICON_WIDTH = 64
 export const USER_ICON_HEIGHT = 64
 
 const UserIcon: ParentComponent<{
-  info: LocalUserInfo
+  info: UserInfoBaseType
   settings?: JSX.Element
 }> = (props) => {
   let iconPositionDiv: HTMLDivElement | undefined
@@ -70,7 +70,7 @@ const UserIcon: ParentComponent<{
       </div>
 
       {getShowSettings() ? (
-        <div class="absolute -top-12 w-40 text-center -right-12">
+        <div class="absolute -top-12 w-40 text-center -right-12 z-20">
           {props.settings}
         </div>
       ) : null}
