@@ -56,7 +56,7 @@ const RemoteUserIcon: Component<{ info: RemoteUserInfo }> = (props) => {
         }
       >
         <div class="flex justify-center text-center text-sm absolute w-40 -bottom-10 -right-12">
-          <VisualizedAudio analyser={props.info.analyser} />
+          <VisualizedAudio analyserNode={props.info.analyserNode} />
         </div>
       </UserIcon>
       <video class="hidden" ref={videoRef} />

@@ -1,7 +1,7 @@
 import { createSignal } from 'solid-js'
 import { localUserInfo, setLocalUserInfo } from '../../utils/user'
 import { sendLocalUserCoordinateToAll } from '../../utils/send/sendLocalUserCoordinate'
-import { setAudioListener } from '../../utils/audio'
+import { setUpAudioListener } from '../../utils/audio'
 import { Coordinate } from '../../utils/coordinate'
 
 const options = {
@@ -49,7 +49,7 @@ const LocationMove = () => {
     })
 
     // set audio listener
-    setAudioListener()
+    setUpAudioListener()
     // send local user coordinate
     sendLocalUserCoordinateToAll()
   }

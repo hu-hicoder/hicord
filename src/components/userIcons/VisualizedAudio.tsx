@@ -5,15 +5,15 @@ import type { Component } from 'solid-js'
 const WIDTH = 64
 const HEIGHT = 32
 
-const VisualizedAudio: Component<{ analyser: AnalyserNode }> = (props) => {
+const VisualizedAudio: Component<{ analyserNode: AnalyserNode }> = (props) => {
   let canvas: HTMLCanvasElement | undefined
 
   onMount(() => {
     const canvasCtx = canvas!.getContext('2d')
     let frame = requestAnimationFrame(loop)
 
-    props.analyser.fftSize = 1024
-    const bufferLength = props.analyser.fftSize
+    props.analyserNode.fftSize = 1024
+    const bufferLength = props.analyserNode.fftSize
     console.log(bufferLength)
     const dataArray = new Float32Array(bufferLength)
 
@@ -23,7 +23,7 @@ const VisualizedAudio: Component<{ analyser: AnalyserNode }> = (props) => {
 
       canvasCtx.clearRect(0, 0, WIDTH, HEIGHT)
 
-      props.analyser.getFloatTimeDomainData(dataArray)
+      props.analyserNode.getFloatTimeDomainData(dataArray)
 
       canvasCtx.fillStyle = 'rgba(0, 0, 0, 0)'
       canvasCtx.fillRect(0, 0, WIDTH, HEIGHT)

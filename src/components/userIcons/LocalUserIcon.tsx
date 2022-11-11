@@ -5,11 +5,12 @@ import {
   setLocalUserInfo,
   LocalUserInfo,
 } from '../../utils/user'
-import { muteOtherTalkBox, setAudioListener } from '../../utils/audio'
+import { muteOtherTalkBox, setUpAudioListener } from '../../utils/audio'
 import { sendLocalUserCoordinateToAll } from '../../utils/send/sendLocalUserCoordinate'
 import { updateDeg } from '../../utils/coordinate'
 import { talkBoxIdFromUser } from '../../utils/boxes/talk'
 import UserIcon from './UserIcon'
+import VisualizedAudio from './VisualizedAudio'
 
 const LocalUserIcon: Component = () => {
   let localUserIconDiv: HTMLDivElement | undefined
@@ -44,7 +45,7 @@ const LocalUserIcon: Component = () => {
       deg: updateDeg(x - prev.x, y - prev.y, prev.deg),
     }))
     // set audio listener
-    setAudioListener()
+    setUpAudioListener()
 
     const sendDurationMs = 500
     const nowTimeMs = Date.now()
@@ -111,7 +112,13 @@ const LocalUserIcon: Component = () => {
       onTouchStart={onTouchStart}
       class="cursor-grab"
     >
-      <UserIcon info={localUserInfo} />
+      <UserIcon info={localUserInfo}>
+        <div class="flex justify-center text-center text-sm absolute w-40 -bottom-10 -right-12">
+          {localUserInfo.analyzerNode !== undefined && (
+            <VisualizedAudio analyserNode={localUserInfo.analyzerNode} />
+          )}
+        </div>
+      </UserIcon>
     </div>
   )
 }
