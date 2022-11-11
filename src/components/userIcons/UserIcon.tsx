@@ -70,7 +70,7 @@ const UserIcon: ParentComponent<{
       </div>
 
       {getShowSettings() ? (
-        <div class="absolute -top-12 w-40 text-center -right-12">
+        <div class="absolute -top-12 w-40 text-center -right-12 z-20">
           {props.settings}
         </div>
       ) : null}
