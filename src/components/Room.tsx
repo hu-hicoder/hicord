@@ -88,14 +88,11 @@ export const Room: Component<{ roomId: string }> = (props) => {
       return
     }
     const _localStream = localStream()
-    if (_localStream === undefined) {
-      return
-    }
 
     setIsStarted(true)
 
     setLocalUserInfo({ peerId: PEER.id, stream: _localStream })
-    setUpLocalUserAudioAnalyzer()
+    setUpLocalUserAudioAnalyzer() // TODO: getUserMediaが完了しておらずstreamガセットされてない場合の対処
     setUpAudioListener()
 
     const _room = PEER.joinRoom<SfuRoom>(props.roomId, {
@@ -137,7 +134,7 @@ export const Room: Component<{ roomId: string }> = (props) => {
         x: x,
         y: y,
         deg: 0,
-        userName: 'No Name', // TODO:
+        userName: 'No Name',
         muted: true,
         talkBoxId,
       }
@@ -160,7 +157,7 @@ export const Room: Component<{ roomId: string }> = (props) => {
       setRemoteUserInfos((prev) => {
         return prev.filter((userInfo) => {
           if (userInfo.peerId === peerId) {
-            userInfo.stream.getTracks().forEach((track) => track.stop())
+            userInfo.stream?.getTracks().forEach((track) => track.stop())
           }
           return userInfo.peerId !== peerId
         })

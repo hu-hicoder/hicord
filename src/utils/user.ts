@@ -12,7 +12,7 @@ export const defaultUserAvatar = {
 
 export const initialLocalUserInfo = () => ({
   stream: undefined,
-  analyzerNode: undefined,
+  audioNodes: undefined,
   peerId: undefined,
   talkBoxId: 0,
   x: ROOM_WIDTH / 2,
@@ -43,14 +43,14 @@ export const setRemoteUserInfo = (remoteUserInfo: RemoteUserInfo) => {
 export type LocalUserInfo = {
   peerId: string | undefined
   stream: MediaStream | undefined
-  analyzerNode: AnalyserNode | undefined
-} & UserInfoBaseType extends infer T
+} & LocalUserAudioNodes &
+  UserInfoBaseType extends infer T
   ? { [Key in keyof T]: T[Key] }
   : never
 
 export type RemoteUserInfo = {
   peerId: string
-  stream: MediaStream
+  stream: MediaStream | undefined
 } & RemoteUserAudioNodes &
   UserInfoBaseType extends infer T
   ? { [Key in keyof T]: T[Key] }
@@ -64,11 +64,23 @@ export type UserInfoBaseType = TalkBoxId &
   UserReaction &
   UserMuted
 
+export type LocalUserAudioNodes = {
+  audioNodes:
+    | {
+        analyserNode: AnalyserNode
+      }
+    | undefined
+}
+
 export type RemoteUserAudioNodes = {
-  sourceNode: MediaStreamAudioSourceNode
-  analyserNode: AnalyserNode
-  gainNode: GainNode
-  pannerNode: PannerNode
+  audioNodes:
+    | {
+        sourceNode: MediaStreamAudioSourceNode
+        analyserNode: AnalyserNode
+        gainNode: GainNode
+        pannerNode: PannerNode
+      }
+    | undefined
 }
 
 export type TalkBoxId = {

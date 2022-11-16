@@ -39,6 +39,12 @@ const MainToolbar = () => {
   }
 
   const onClickMicrophoneButton = () => {
+    if (localUserInfo.stream === undefined) {
+      if (localUserInfo.muted === true) {
+        // TODO: あとから有効化されていた場合streamとaudioNodesをセットしてミュート解除する
+      }
+      return
+    }
     setLocalUserInfo('muted', (prev) => !prev)
     sendLocalUserMutedToAll()
   }
