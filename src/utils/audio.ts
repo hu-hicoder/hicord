@@ -1,11 +1,12 @@
 import {
-  RemoteUserAudioNodes,
   RemoteUserInfo,
   localUserInfo,
   LocalUserInfo,
   remoteUserInfos,
   setLocalUserInfo,
+  RemoteUserAudioNodes,
 } from './user'
+import { MyOmit } from './utils'
 
 // Panner
 const MAX_DISTANCE = 300
@@ -56,19 +57,16 @@ export function setUpAudioListener() {
 }
 
 export function setPanner(remoteUserInfo: RemoteUserInfo) {
-  remoteUserInfo.pannerNode.positionX.setValueAtTime(
-    remoteUserInfo.x,
-    audioCtx.currentTime
-  )
-  remoteUserInfo.pannerNode.positionZ.setValueAtTime(
-    remoteUserInfo.y,
-    audioCtx.currentTime
-  )
-  remoteUserInfo.pannerNode.orientationX.setValueAtTime(
+  const pannerNode = remoteUserInfo.audioNodes?.pannerNode
+  if (pannerNode === undefined) return
+
+  pannerNode.positionX.setValueAtTime(remoteUserInfo.x, audioCtx.currentTime)
+  pannerNode.positionZ.setValueAtTime(remoteUserInfo.y, audioCtx.currentTime)
+  pannerNode.orientationX.setValueAtTime(
     directionX(remoteUserInfo.deg),
     audioCtx.currentTime
   )
-  remoteUserInfo.pannerNode.orientationZ.setValueAtTime(
+  pannerNode.orientationZ.setValueAtTime(
     directionZ(remoteUserInfo.deg),
     audioCtx.currentTime
   )
@@ -80,12 +78,16 @@ export const setUpLocalUserAudioAnalyzer = () => {
   const sourceNode = audioCtx.createMediaStreamSource(localUserInfo.stream)
   const analyserNode = audioCtx.createAnalyser()
   sourceNode.connect(analyserNode)
-  setLocalUserInfo('analyzerNode', analyserNode)
+  setLocalUserInfo('audioNodes', { analyserNode })
 }
 
 export const initRemoteUserAudio = (
-  remoteUserInfo: Omit<RemoteUserInfo, keyof RemoteUserAudioNodes>
+  remoteUserInfo: MyOmit<RemoteUserInfo, 'audioNodes'>
 ): RemoteUserAudioNodes => {
+  if (remoteUserInfo.stream === undefined) {
+    return { audioNodes: undefined }
+  }
+
   const sourceNode = audioCtx.createMediaStreamSource(remoteUserInfo.stream)
 
   // Gain
@@ -121,7 +123,7 @@ export const initRemoteUserAudio = (
     .connect(pannerNode)
     .connect(audioCtx.destination)
 
-  return { sourceNode, analyserNode, gainNode, pannerNode }
+  return { audioNodes: { sourceNode, analyserNode, gainNode, pannerNode } }
 }
 
 // talk box

@@ -17,7 +17,7 @@ export const leaveRoom = () => {
     _room.close()
     setRemoteUserInfos((prev) => {
       return prev.filter((userInfo) => {
-        userInfo.stream.getTracks().forEach((track) => track.stop())
+        userInfo.stream?.getTracks().forEach((track) => track.stop())
         return false
       })
     })

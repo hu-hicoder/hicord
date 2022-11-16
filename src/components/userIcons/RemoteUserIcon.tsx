@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
-import type { Component } from 'solid-js'
-import { createEffect } from 'solid-js'
+import { Component, createEffect } from 'solid-js'
 import { muteOtherTalkBox } from '../../utils/audio'
 import { talkBoxIdFromUser } from '../../utils/boxes/talk'
 import { RemoteUserInfo, setRemoteUserInfo } from '../../utils/user'
@@ -13,15 +12,17 @@ const RemoteUserIcon: Component<{ info: RemoteUserInfo }> = (props) => {
 
   createEffect(() => {
     // Set stream to video element
-    videoRef!.srcObject = props.info.stream
+    videoRef!.srcObject = props.info.stream ?? null
     videoRef!.play().catch((e) => console.log(e))
     videoRef!.playsInline = true
     videoRef!.muted = true
   })
 
   function changeGain(e: InputEvent & { currentTarget: HTMLInputElement }) {
-    const value = e.currentTarget.value
-    props.info.gainNode.gain.value = Number(value)
+    if (props.info.audioNodes !== undefined) {
+      const value = e.currentTarget.value
+      props.info.audioNodes.gainNode.gain.value = Number(value)
+    }
   }
 
   // current talk box
@@ -55,9 +56,13 @@ const RemoteUserIcon: Component<{ info: RemoteUserInfo }> = (props) => {
           />
         }
       >
-        <div class="flex justify-center text-center text-sm absolute w-40 -bottom-10 -right-12">
-          <VisualizedAudio analyserNode={props.info.analyserNode} />
-        </div>
+        {props.info.audioNodes !== undefined ? (
+          <div class="flex justify-center text-center text-sm absolute w-40 -bottom-10 -right-12">
+            <VisualizedAudio
+              analyserNode={props.info.audioNodes.analyserNode}
+            />
+          </div>
+        ) : undefined}
       </UserIcon>
       <video class="hidden" ref={videoRef} />
     </div>

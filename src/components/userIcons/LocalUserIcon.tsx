@@ -114,8 +114,10 @@ const LocalUserIcon: Component = () => {
     >
       <UserIcon info={localUserInfo}>
         <div class="flex justify-center text-center text-sm absolute w-40 -bottom-10 -right-12">
-          {localUserInfo.analyzerNode !== undefined && (
-            <VisualizedAudio analyserNode={localUserInfo.analyzerNode} />
+          {localUserInfo.audioNodes !== undefined && (
+            <VisualizedAudio
+              analyserNode={localUserInfo.audioNodes.analyserNode}
+            />
           )}
         </div>
       </UserIcon>
