@@ -7,9 +7,25 @@ import ChatInput from '../toolbars/ChatInput'
 import RoomBox from './RoomBox'
 
 const ChatBox: Component<{ info: ChatBoxInfo }> = (props) => {
-  const getIdChats = createMemo(() =>
-    getChatInfos().filter((c) => c.chatGroup === props.info.chatGroup)
-  )
+  const getIdChats = createMemo(() => {
+    const chats = getChatInfos().filter(
+      (c) => c.chatGroup === props.info.chatGroup
+    )
+    chats.sort((a, b) => {
+      const dateA = a.date
+      const dateB = b.date
+      if (dateA < dateB) {
+        return 1
+      }
+      if (dateA > dateB) {
+        return -1
+      }
+
+      return 0
+    })
+
+    return chats
+  })
 
   return (
     <RoomBox boxInfo={props.info} class="chat-box">
