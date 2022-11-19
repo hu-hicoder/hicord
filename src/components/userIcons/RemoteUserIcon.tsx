@@ -2,7 +2,13 @@
 import { Component, createEffect } from 'solid-js'
 import { muteOtherTalkBox } from '../../utils/audio'
 import { talkBoxIdFromUser } from '../../utils/boxes/talk'
-import { RemoteUserInfo, setRemoteUserInfo } from '../../utils/user'
+import { sendLocalUserCoordinateToAll } from '../../utils/send/sendLocalUserCoordinate'
+import {
+  localUserInfo,
+  RemoteUserInfo,
+  setLocalUserInfo,
+  setRemoteUserInfo,
+} from '../../utils/user'
 import UserIcon from './UserIcon'
 import VisualizedAudio from './VisualizedAudio'
 
@@ -38,7 +44,21 @@ const RemoteUserIcon: Component<{ info: RemoteUserInfo }> = (props) => {
   })
 
   return (
-    <div>
+    <div
+      class="cursor-pointer"
+      onClick={() => {
+        setLocalUserInfo(
+          'deg',
+          Math.atan2(
+            props.info.y - localUserInfo.y,
+            props.info.x - localUserInfo.x
+          ) *
+            (180 / Math.PI) -
+            90
+        )
+        sendLocalUserCoordinateToAll()
+      }}
+    >
       <UserIcon
         info={props.info}
         settings={
