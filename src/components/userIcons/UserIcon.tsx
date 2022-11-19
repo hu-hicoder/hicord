@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import type { JSX, ParentComponent } from 'solid-js'
-import { createEffect, createSignal } from 'solid-js'
+import { createEffect, createSignal, createMemo } from 'solid-js'
 import { UserInfoBaseType } from '../../utils/user'
 import clickOutsideDirective from '../../directives/clickOutside'
 import UserAvatarIcon from './UserAvatarIcon'
@@ -11,6 +11,7 @@ export const USER_ICON_HEIGHT = 64
 
 const UserIcon: ParentComponent<{
   info: UserInfoBaseType
+  onClick?: JSX.EventHandlerUnion<HTMLDivElement, MouseEvent>
   settings?: JSX.Element
 }> = (props) => {
   let iconPositionDiv: HTMLDivElement | undefined
@@ -18,7 +19,7 @@ const UserIcon: ParentComponent<{
   let imgElement: HTMLImageElement | undefined
   let userReactionElement: HTMLDivElement | undefined
 
-  const [getShowSettings, setShowSettings] = createSignal(false)
+  const [isShowingSettings, setIsShowingSettings] = createSignal(false)
 
   createEffect(() => {
     iconPositionDiv!.style.left = `${props.info.x - USER_ICON_WIDTH / 2}px`
@@ -48,13 +49,19 @@ const UserIcon: ParentComponent<{
     }
   })
 
+  const onClick = createMemo(() => props.onClick)
+
   return (
     <div
       ref={iconPositionDiv}
       class="absolute w-16 flex flex-col"
-      onClick={() => setShowSettings(true)}
+      onClick={onClick}
+      onContextMenu={(event) => {
+        event.preventDefault()
+        setIsShowingSettings(true)
+      }}
       use:clickOutside={() => {
-        setShowSettings(false)
+        setIsShowingSettings(false)
       }}
     >
       {props.children}
@@ -69,7 +76,7 @@ const UserIcon: ParentComponent<{
         </div>
       </div>
 
-      {getShowSettings() ? (
+      {isShowingSettings() ? (
         <div class="absolute -top-12 w-40 text-center -right-12 z-20">
           {props.settings}
         </div>
