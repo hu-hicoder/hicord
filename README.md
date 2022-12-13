@@ -4,6 +4,12 @@ Hicord は、「位置」の概念を取り入れた新感覚のボイスチャ�
 
 使いやすさを追及した様々な新機能を備えています。
 
+![](/docs/hicord-poster.png)
+
+## 関連記事
+
+- [サークル用のボイスチャットアプリ開発のために、ふれっしゅ IT あわ～どへ参加した話](https://bkbkb.net/articles/hicord-and-fresh-it-award)
+
 ## Getting Started
 
 ### 初期インストール
