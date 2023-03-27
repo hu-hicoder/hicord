@@ -32,7 +32,7 @@ specifiers:
   tailwindcss: ^3.2.7
   typescript: ^4.9.5
   vite: 3.1.6
-  vite-plugin-checker: ^0.5.6
+  vite-plugin-checker: 0.5.1
   vite-plugin-solid: ^2.6.1
   vitest: ^0.24.5
 
@@ -67,10 +67,10 @@ devDependencies:
   postcss: 8.4.21
   prettier: 2.7.1
   solid-testing-library: 0.3.0_solid-js@1.6.16
-  tailwindcss: 3.2.7_postcss@8.4.21
+  tailwindcss: 3.2.7
   typescript: 4.9.5
   vite: 3.1.6
-  vite-plugin-checker: 0.5.6_srqatnge7i6fjgragebmqon44y
+  vite-plugin-checker: 0.5.1_srqatnge7i6fjgragebmqon44y
   vite-plugin-solid: 2.6.1_solid-js@1.6.16+vite@3.1.6
   vitest: 0.24.5_dqdgb7kmrwjzw7obuvi3phyqmu
 
@@ -1418,7 +1418,7 @@ packages:
     dev: false
 
   /concat-map/0.0.1:
-    resolution: {integrity: sha512-/Srv4dswyQNBfohGpz9o6Yb3Gz3SrUDqBH5rTuhGR7ahtlbYKnVxw2bCFMRljaA7EXHaXZ8wsHdodFvbkhKmqg==}
+    resolution: {integrity: sha1-2Klr13/Wjfd5OnMDajug1UBdR3s=}
     dev: true
 
   /convert-source-map/1.9.0:
@@ -1481,7 +1481,7 @@ packages:
       css-selector-tokenizer: 0.8.0
       postcss: 8.4.21
       postcss-js: 4.0.1_postcss@8.4.21
-      tailwindcss: 3.2.7_postcss@8.4.21
+      tailwindcss: 3.2.7
     transitivePeerDependencies:
       - ts-node
     dev: true
@@ -2348,15 +2348,6 @@ packages:
     resolution: {integrity: sha512-MhLuK+2gUcnZe8ZHlaaINnQLl0xRIGRfcGk2yl8xoQAfHrSsL3rYu6FCmBdkdbhc9EPlwyGHewaRsvwRMJtAlA==}
     dev: true
 
-  /fs-extra/11.1.1:
-    resolution: {integrity: sha512-MGIE4HOvQCeUCzmlHs0vXpih4ysz4wg9qiSAu6cd42lVwPbTM1TjV7RusoyQqMmk/95gdQZX72u+YW+c3eEpFQ==}
-    engines: {node: '>=14.14'}
-    dependencies:
-      graceful-fs: 4.2.11
-      jsonfile: 6.1.0
-      universalify: 2.0.0
-    dev: true
-
   /fs.realpath/1.0.0:
     resolution: {integrity: sha512-OO0pH2lK6a0hZnAdau5ItzHPI6pUlvI7jMVnxUQRtw4owF2wk8lOSabtGDCTP4Ggrg2MbGnWO9X8K1t4+fGMDw==}
     dev: true
@@ -2972,14 +2963,6 @@ packages:
     resolution: {integrity: sha512-XmOWe7eyHYH14cLdVPoyg+GOH3rYX++KpzrylJwSW98t3Nk+U8XOl8FWKOgwtzdb8lXGf6zYwDUzeHMWfxasyg==}
     engines: {node: '>=6'}
     hasBin: true
-    dev: true
-
-  /jsonfile/6.1.0:
-    resolution: {integrity: sha512-5dgndWOriYSm5cnYaJNhalLNDKOqFwyDB/rr1E9ZsGciGvKPs8R2xYGCacuf3z6K1YKDz182fd+fY3cn3pMqXQ==}
-    dependencies:
-      universalify: 2.0.0
-    optionalDependencies:
-      graceful-fs: 4.2.11
     dev: true
 
   /jsx-ast-utils/3.3.3:
@@ -4008,12 +3991,10 @@ packages:
       tslib: 2.5.0
     dev: true
 
-  /tailwindcss/3.2.7_postcss@8.4.21:
+  /tailwindcss/3.2.7:
     resolution: {integrity: sha512-B6DLqJzc21x7wntlH/GsZwEXTBttVSl1FtCzC8WP4oBc/NKef7kaax5jeihkkCEWc831/5NDJ9gRNDK6NEioQQ==}
     engines: {node: '>=12.13.0'}
     hasBin: true
-    peerDependencies:
-      postcss: ^8.0.9
     dependencies:
       arg: 5.0.2
       chokidar: 3.5.3
@@ -4090,7 +4071,7 @@ packages:
     dev: true
 
   /to-array/0.1.4:
-    resolution: {integrity: sha512-LhVdShQD/4Mk4zXNroIQZJC+Ap3zgLcDuwEdcmLv9CCO73NWockQDwyUnW/m8VX/EElfL6FcYx7EeutN4HJA6A==}
+    resolution: {integrity: sha1-F+bBH3PdTz10zaek/zI46a2b+JA=}
     dev: false
 
   /to-fast-properties/2.0.0:
@@ -4211,11 +4192,6 @@ packages:
     engines: {node: '>= 4.0.0'}
     dev: true
 
-  /universalify/2.0.0:
-    resolution: {integrity: sha512-hAZsKq7Yy11Zu1DE0OzWjw7nnLZmJZYTDZZyEFHZdUhV8FkH5MCfoU1XMaxXovpyW5nq5scPqq0ZDP9Zyl04oQ==}
-    engines: {node: '>= 10.0.0'}
-    dev: true
-
   /update-browserslist-db/1.0.10_browserslist@4.21.5:
     resolution: {integrity: sha512-OztqDenkfFkbSG+tRxBeAnCVPckDBcvibKd35yDONx6OU8N7sqgwc7rCbkJ/WcYtVRZ4ba68d6byhC21GFh7sQ==}
     hasBin: true
@@ -4257,35 +4233,23 @@ packages:
     resolution: {integrity: sha512-T1ab131NkP3BfXB7KUSgV7Rhu81R2id+L6NaJ7NypAAG5iV6gXnPpQE5RK1fvb+3JYsPTL+ihWna5sr5RN9gaQ==}
     dev: true
 
-  /vite-plugin-checker/0.5.6_srqatnge7i6fjgragebmqon44y:
-    resolution: {integrity: sha512-ftRyON0gORUHDxcDt2BErmsikKSkfvl1i2DoP6Jt2zDO9InfvM6tqO1RkXhSjkaXEhKPea6YOnhFaZxW3BzudQ==}
+  /vite-plugin-checker/0.5.1_srqatnge7i6fjgragebmqon44y:
+    resolution: {integrity: sha512-NFiO1PyK9yGuaeSnJ7Whw9fnxLc1AlELnZoyFURnauBYhbIkx9n+PmIXxSFUuC9iFyACtbJQUAEuQi6yHs2Adg==}
     engines: {node: '>=14.16'}
     peerDependencies:
       eslint: '>=7'
-      meow: ^9.0.0
-      optionator: ^0.9.1
-      stylelint: '>=13'
       typescript: '*'
-      vite: '>=2.0.0'
+      vite: ^2.0.0 || ^3.0.0-0
       vls: '*'
       vti: '*'
-      vue-tsc: '*'
     peerDependenciesMeta:
       eslint:
-        optional: true
-      meow:
-        optional: true
-      optionator:
-        optional: true
-      stylelint:
         optional: true
       typescript:
         optional: true
       vls:
         optional: true
       vti:
-        optional: true
-      vue-tsc:
         optional: true
     dependencies:
       '@babel/code-frame': 7.18.6
@@ -4295,7 +4259,6 @@ packages:
       commander: 8.3.0
       eslint: 8.36.0
       fast-glob: 3.2.12
-      fs-extra: 11.1.1
       lodash.debounce: 4.0.8
       lodash.pick: 4.4.0
       npm-run-path: 4.0.1
@@ -4625,7 +4588,7 @@ packages:
     dev: true
 
   /yeast/0.1.2:
-    resolution: {integrity: sha512-8HFIh676uyGYP6wP13R/j6OJ/1HwJ46snpvzE7aHAN3Ryqh2yX6Xox2B4CUmTwwOIzlG3Bs7ocsP5dZH/R1Qbg==}
+    resolution: {integrity: sha1-AI4G2AlDIMNy28L47XagymyKxBk=}
     dev: false
 
   /yocto-queue/0.1.0:
