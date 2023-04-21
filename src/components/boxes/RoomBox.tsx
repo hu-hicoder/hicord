@@ -26,7 +26,7 @@ function RoomBox(props: {
   )
 
   onMount(() => {
-    createResizeObserver(divRef!, () => {
+    createResizeObserver(divRef, () => {
       if (divRef === undefined) return
 
       const width = divRef.clientWidth
