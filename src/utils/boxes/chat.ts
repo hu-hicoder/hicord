@@ -53,4 +53,4 @@ export const isChatBoxInfo = (data: unknown): data is ChatBoxInfo =>
   typeof (data as ChatBoxInfo).deg === 'number' &&
   typeof (data as ChatBoxInfo).width === 'number' &&
   typeof (data as ChatBoxInfo).height === 'number' &&
-  typeof (data as ChatBoxInfo).id === 'number'
+  typeof (data as ChatBoxInfo).id === 'string'

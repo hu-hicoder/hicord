@@ -59,10 +59,12 @@
     "@picmo/popup-picker": "^5.8.2",
     "@solid-primitives/resize-observer": "^2.0.15",
     "@solidjs/testing-library": "^0.7.0",
+    "@types/uuid": "^9.0.1",
     "luxon": "^3.3.0",
     "material-symbols": "^0.2.15",
     "picmo": "^5.8.2",
     "skyway-js": "^4.4.5",
-    "solid-js": "^1.7.3"
+    "solid-js": "^1.7.3",
+    "uuid": "^9.0.0"
   }
 }

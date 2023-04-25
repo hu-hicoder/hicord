@@ -1,3 +1,4 @@
+import { v4 as uuidv4 } from 'uuid'
 import {
   setRoomBoxInfo,
   BoxTypes,
@@ -13,7 +14,7 @@ const BoxToolbar = () => {
   const addChatBox = () => {
     const chatBox: ChatBoxInfo = {
       boxType: BoxTypes.CHAT,
-      id: getRoomBoxInfos().length + 1,
+      id: uuidv4(),
       x: localUserInfo.x + 20 + getRandomInt(30),
       y: localUserInfo.y - 20 - getRandomInt(30),
       deg: 0,
@@ -29,7 +30,7 @@ const BoxToolbar = () => {
   const addTalkBox = () => {
     const talkBox: TalkBoxInfo = {
       boxType: BoxTypes.TALK,
-      id: getRoomBoxInfos().length + 1,
+      id: uuidv4(),
       x: localUserInfo.x + 20 + getRandomInt(30),
       y: localUserInfo.y - 20 - getRandomInt(30),
       deg: 0,

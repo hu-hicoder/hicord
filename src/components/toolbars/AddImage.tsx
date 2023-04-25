@@ -1,11 +1,8 @@
+import { v4 as uuidv4 } from 'uuid'
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { sendRoomBoxInfoToAll } from '../../utils/send/sendRoomBoxInfo'
 import { ImageBoxInfo } from '../../utils/boxes/image'
-import {
-  BoxTypes,
-  getRoomBoxInfos,
-  setRoomBoxInfo,
-} from '../../utils/boxes/box'
+import { BoxTypes, setRoomBoxInfo } from '../../utils/boxes/box'
 import { localUserInfo } from '../../utils/user'
 
 const getImageSize = async (
@@ -59,7 +56,7 @@ const AddImage = () => {
 
     const roomBox: ImageBoxInfo = {
       boxType: BoxTypes.IMAGE,
-      id: getRoomBoxInfos().length + 1,
+      id: uuidv4(),
       x: 2048,
       y: 2048,
       deg: 0,

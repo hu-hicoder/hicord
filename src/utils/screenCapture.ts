@@ -1,7 +1,8 @@
+import { v4 as uuidv4 } from 'uuid'
 import { localUserInfo } from './user'
 import { setScreenInfo, ScreenInfo, ScreenBoxInfo } from './boxes/screen'
 import { sendRoomBoxInfoToAll } from './send/sendRoomBoxInfo'
-import { BoxTypes, getRoomBoxInfos, setRoomBoxInfo } from './boxes/box'
+import { BoxTypes, setRoomBoxInfo } from './boxes/box'
 
 export const screenCapture = async () => {
   const mStream: MediaStream = await navigator.mediaDevices.getDisplayMedia({
@@ -19,7 +20,7 @@ export const screenCapture = async () => {
   // Room Box
   const roomBox: ScreenBoxInfo = {
     boxType: BoxTypes.SCREEN,
-    id: getRoomBoxInfos().length + 1,
+    id: uuidv4(),
     x: 2048,
     y: 2048,
     deg: 0,

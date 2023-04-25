@@ -62,4 +62,4 @@ export const isScreenBoxInfo = (data: unknown): data is ScreenBoxInfo =>
   typeof (data as ScreenBoxInfo).deg === 'number' &&
   typeof (data as ScreenBoxInfo).width === 'number' &&
   typeof (data as ScreenBoxInfo).height === 'number' &&
-  typeof (data as ScreenBoxInfo).id === 'number'
+  typeof (data as ScreenBoxInfo).id === 'string'

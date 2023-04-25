@@ -20,7 +20,7 @@ export const AllBoxType = Object.values(BoxTypes)
 export type BoxInfo = Coordinate &
   Size & {
     boxType: BoxType
-    id: number
+    id: string
     editorPeerId?: string
   }
 

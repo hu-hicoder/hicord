@@ -16,4 +16,4 @@ export const isImageBoxInfo = (data: unknown): data is ImageBoxInfo =>
   typeof (data as ImageBoxInfo).deg === 'number' &&
   typeof (data as ImageBoxInfo).width === 'number' &&
   typeof (data as ImageBoxInfo).height === 'number' &&
-  typeof (data as ImageBoxInfo).id === 'number'
+  typeof (data as ImageBoxInfo).id === 'string'

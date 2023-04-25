@@ -1,3 +1,4 @@
+import { NIL as NIL_UUID } from 'uuid'
 import { createMemo } from 'solid-js'
 import { collision, Coordinate } from '../coordinate'
 import {
@@ -17,7 +18,7 @@ export const isTalkBoxInfo = (data: unknown): data is TalkBoxInfo =>
   typeof (data as TalkBoxInfo).deg === 'number' &&
   typeof (data as TalkBoxInfo).width === 'number' &&
   typeof (data as TalkBoxInfo).height === 'number' &&
-  typeof (data as TalkBoxInfo).id === 'number'
+  typeof (data as TalkBoxInfo).id === 'string'
 
 // on a talk box
 export const getTalkBoxInfos = createMemo(() => {
@@ -29,7 +30,7 @@ export const getTalkBoxInfos = createMemo(() => {
 export const talkBoxIdFromUser = (
   x: Coordinate['x'],
   y: Coordinate['y']
-): number => {
+): string => {
   const talkBoxInfos = getTalkBoxInfos()
   for (let index = 0; index < talkBoxInfos.length; index++) {
     const talkBoxInfo = talkBoxInfos[index]
@@ -49,5 +50,5 @@ export const talkBoxIdFromUser = (
       return talkBoxInfo.id
     }
   }
-  return 0
+  return NIL_UUID
 }
