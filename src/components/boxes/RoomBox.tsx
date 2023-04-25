@@ -1,9 +1,17 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { createEffect, createMemo, JSX, onMount } from 'solid-js'
 import { createResizeObserver } from '@solid-primitives/resize-observer'
-import { RoomBoxInfo, setRoomBoxInfo, BoxInfo } from '../../utils/boxes/box'
+import {
+  RoomBoxInfo,
+  setRoomBoxInfo,
+  deleteRoomBoxInfo,
+  BoxInfo,
+} from '../../utils/boxes/box'
 import { getUserNameFromPeerId, localUserInfo } from '../../utils/user'
-import { sendRoomBoxInfoToAll } from '../../utils/send/sendRoomBoxInfo'
+import {
+  sendRoomBoxInfoToAll,
+  sendDeleteRoomBoxInfoToAll,
+} from '../../utils/send/sendRoomBoxInfo'
 import clickOutsideDirective from '../../directives/clickOutside'
 const clickOutside = clickOutsideDirective
 
@@ -55,6 +63,11 @@ function RoomBox(props: {
     divRef!.style.width = `${props.boxInfo.width}px`
     divRef!.style.height = `${props.boxInfo.height}px`
   })
+
+  const deleteBoxInfo = () => {
+    deleteRoomBoxInfo(props.boxInfo)
+    sendDeleteRoomBoxInfoToAll({ deleteId: props.boxInfo.id })
+  }
 
   //
   // Move Box
@@ -131,6 +144,16 @@ function RoomBox(props: {
           onTouchStart={onTouchStart}
         >
           <span class="material-symbols-outlined">open_with</span>
+        </div>
+      ) : null}
+      {/* Delete RoomBox */}
+      {isEditing() ? (
+        <div
+          class="absolute cursor-pointer z-20"
+          style={{ right: '-1.5rem', top: '-1.5rem' }}
+          onClick={deleteBoxInfo}
+        >
+          <span class="material-symbols-outlined text-red-500">delete</span>
         </div>
       ) : null}
       {/* Editor */}

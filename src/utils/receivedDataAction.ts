@@ -1,5 +1,10 @@
 import { setPanner } from './audio'
-import { setRoomBoxInfo } from './boxes/box'
+import {
+  setRoomBoxInfo,
+  isDeleteRoomBoxInfo,
+  deleteRoomBoxInfo,
+  RoomBoxInfo,
+} from './boxes/box'
 import { isChatBoxInfo, isChatInfo, setChatInfos } from './boxes/chat'
 import { isImageBoxInfo } from './boxes/image'
 import { isScreenBoxInfo } from './boxes/screen'
@@ -56,6 +61,9 @@ export const receivedDataAction = (data: unknown, sourcePeerId: string) => {
   } else if (isChatInfo(data)) {
     console.log('get chat info')
     setChatInfos((prev) => [...prev, { ...data, date: new Date(data.date) }])
+  } else if (isDeleteRoomBoxInfo(data)) {
+    console.log('delete room box info')
+    deleteRoomBoxInfo({ id: data.deleteId } as RoomBoxInfo)
   } else if (isChatBoxInfo(data)) {
     console.log('chat box info')
     setRoomBoxInfo(data)

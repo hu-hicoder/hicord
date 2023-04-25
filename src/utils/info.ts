@@ -21,3 +21,12 @@ export function addOrUpdateInfoFromPrev<T>(
     return infos
   }
 }
+
+export function deleteInfoFromPrev<T>(
+  info: T,
+  isEqual: (curr: T, info: T) => boolean
+): returnType<T> {
+  return (prev) => {
+    return prev.filter((curr) => !isEqual(curr, info))
+  }
+}
