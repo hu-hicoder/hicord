@@ -7,6 +7,7 @@ import {
   muteOtherTalkBox,
   setUpAudioListener,
   setUpLocalUserAudioAnalyzer,
+  playDoorbell,
 } from '../utils/audio'
 import { BoxTypes, getRoomBoxInfos } from '../utils/boxes/box'
 import { ChatBoxInfo } from '../utils/boxes/chat'
@@ -105,6 +106,7 @@ export const Room: Component<{ roomId: string }> = (props) => {
     })
     _room.on('peerJoin', (peerId) => {
       console.log(`=== ${peerId} が入室しました ===\n`)
+      playDoorbell()
       // Send data
       sendLocalUserNameTo(peerId)
       sendLocalUserCoordinateTo(peerId)

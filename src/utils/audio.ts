@@ -24,7 +24,7 @@ function directionZ(deg: LocalUserInfo['deg']) {
   return Math.sin(Math.PI / 2 + (deg * Math.PI) / 180)
 }
 
-// Aucio Context
+// Audio Context
 export let audioCtx: AudioContext
 declare global {
   interface Window {
@@ -145,4 +145,20 @@ export const muteOtherTalkBox = () => {
       })
     }
   })
+}
+
+// Doorbell
+export const playDoorbell = () => {
+  const gainNode = audioCtx.createGain()
+  gainNode.gain.setValueAtTime(0.1, audioCtx.currentTime)
+
+  const oscillatorNode = audioCtx.createOscillator()
+  oscillatorNode.type = 'sine'
+  oscillatorNode.frequency.setValueAtTime(1000, audioCtx.currentTime)
+
+  oscillatorNode.connect(gainNode)
+  gainNode.connect(audioCtx.destination)
+
+  oscillatorNode.start()
+  oscillatorNode.stop(audioCtx.currentTime + 0.4)
 }
